@@ -107,6 +107,62 @@ s'allonge à mesure qu'elles finissent.
 vérification : les dépôts d'origine ne contiennent aucun chiffre auquel les
 comparer.
 
+## AutoGP en Python : une loi a posteriori sur les structures
+
+`autostat.smc` porte AutoGP.jl (Saad, Patton, Hoffman, Saurous et
+Mansinghka, ICML 2023) en Python et `torch`. Les recherches de 2013 et de
+2014 gardent la seule structure de meilleur BIC ; celle-ci garde un
+échantillon pondéré de structures tiré de leur loi a posteriori, par
+Monte-Carlo séquentiel (SMC) : les données entrent par dixièmes, les
+particules sont repondérées selon leur prévision de chaque lot,
+rééchantillonnées, puis déplacées par des mouvements de structure
+(remplacement de sous-arbre, détachement et rattachement) et par Monte-Carlo
+hamiltonien (HMC) sur les paramètres. Les prévisions moyennent les
+particules : les intervalles s'élargissent là où les données ne départagent
+pas les structures. On peut ajouter des observations plus tard sans tout
+réajuster. Les deux recherches précédentes restent telles quelles.
+
+```python
+from autostat.smc import AutoGP, linear_schedule
+
+model = AutoGP(t, y, n_particles=8, seed=0)
+model.fit_smc(linear_schedule(len(t), 0.10), n_mcmc=75, n_hmc=10)
+model.structures()[:3]          # [(poids, formule), ...]
+mean, bounds = model.predict(t_future, quantiles=(0.05, 0.95))
+model.add_data(t_new, y_new)    # puis model.mcmc_structure(...)
+```
+
+**Vérifié contre l'original, chiffre pour chiffre.** `tests/test_smc_julia.py`
+charge AutoGP.jl v0.1.19 par `juliacall` et compare toutes les quantités
+déterministes sur la série des passagers aériens :
+
+| quantité | cas | plus grand écart relatif |
+|---|---|---|
+| log-densité jointe d'une trace (a priori, bruit, vraisemblance) | 30 structures tirées par Julia | 1e-14 |
+| matrice de covariance | les mêmes 30 | 1e-15 |
+| densités aller et retour d'un mouvement de structure | 400 mouvements tirés par Julia (218 remplacements, 165 rattachements, 17 détachements) | 1e-15 |
+| rapport des densités du modèle pour ce mouvement | les mêmes 400 | 4e-13 |
+| moyenne et covariance prédictives | 20 structures, 15 points futurs | 3e-12 |
+
+**Ce que la comparaison a révélé dans AutoGP.jl.** Le gradient que Gen
+calcule pour chaque paramètre de noyau vaut `-z`, le gradient de sa loi a
+priori normale, sur les 359 paramètres testés : `covariance_prior` n'est pas
+déclarée dérivable (`Gen.accepts_output_grad` vaut faux), si bien que la
+vraisemblance n'atteint jamais les pas de saute-mouton. Le test
+d'acceptation utilise la densité complète, donc l'échantillonneur reste
+exact, mais son HMC déplace les paramètres de noyau comme une marche
+aléatoire guidée par l'a priori. Le portage reproduit ce comportement par
+défaut (`HMCConfig(gradient="prior")`) et propose le comportement voulu avec
+`gradient="full"`. Le bruit reçoit le gradient complet dans les deux cas,
+comme en Julia.
+
+**Comparé en loi.** Les tirages aléatoires diffèrent entre les deux
+langages : des exécutions complètes ne peuvent concorder que
+statistiquement. `scripts/compare_autogp.py` ajuste AutoGP.jl, le portage et
+le portage à gradient complet sur les mêmes séries, avec plusieurs graines
+chacun ; le même code note les trois ; les résultats vont dans
+`results/autogp_comparison.parquet`.
+
 ## Prévoir face aux méthodes de 2026
 
 L'article de 2014 jugeait aussi son système en extrapolation : apprendre sur
@@ -140,7 +196,8 @@ successeurs de 2026, avec ce que ce dépôt reprend de chacun. Chaque dépôt a
 | [autostat (sutoiku)](https://github.com/sutoiku/autostat) | 2022 | Réimplémentation d'ABCD en Mathematica. Licence MIT. | cité |
 | [autostat_gpflow](https://github.com/DavidJanz/autostat_gpflow) | 2018 | Implémentation élémentaire sur GPflow. Licence MIT. | cité |
 | [GPy-ABCD](https://github.com/T-Flet/GPy-ABCD) | 2021 | ABCD configurable sur GPy (Fletcher, Bundy et Nuamah, atelier AutoML d'ICML 2021). BSD 3 clauses. | cité |
-| [AutoGP.jl](https://github.com/probsys/AutoGP.jl) | 2023 | Monte-Carlo séquentiel (SMC, *sequential Monte Carlo*) sur les structures de noyaux (Saad et al., ICML 2023, arXiv 2307.09607). Julia, Apache 2.0, maintenu. | cité |
+| [AutoGP.jl](https://github.com/probsys/AutoGP.jl) | 2023 | Monte-Carlo séquentiel (SMC, *sequential Monte Carlo*) sur les structures de noyaux (Saad et al., ICML 2023, arXiv 2307.09607). Julia, Apache 2.0, maintenu. | porté : `autostat.smc`, vérifié contre l'original par `juliacall` |
+| [gallifrey](https://github.com/ChrisBoettner/gallifrey) | 2025 | Réimplémentation JAX d'AutoGP.jl pour l'astronomie (Boettner, A&A 2025, arXiv 2505.20394). Apache 2.0. | cité |
 | [AutoBNN](https://github.com/tensorflow/probability/tree/main/spinoffs/autobnn) | 2024 | Réseaux de neurones bayésiens compositionnels en JAX (Google). Apache 2.0. | cité |
 
 Trois travaux voisins n'ont pas de code public à notre connaissance : BoxLM,
@@ -203,6 +260,10 @@ décimales, séries longues regroupées), `search` avec une `Experiment`,
   départs aléatoires, d'écart 4, manquent souvent une période : sur la série
   tendance plus cycle de `tests/test_search.py`, il s'arrête sur `SE` là où le
   préréglage 2014 trouve le cycle.
+- **AutoGP a sa propre grammaire.** `autostat.smc` garde les noyaux de base
+  d'AutoGP.jl (linéaire, gamma-exponentiel, périodique) et sa rupture, qui
+  diffèrent de la grammaire de 2014 ; son rapport en anglais n'est pas encore
+  écrit.
 - **La vérification est un crible.** Une p-valeur faible dit que les données
   contredisent l'hypothèse d'une composante sur une statistique. Elle ne dit
   pas quel modèle est le bon.
@@ -218,7 +279,9 @@ BibTeX figurent dans [README.md](README.md#citing) ;
 Licence MIT ([LICENSE](LICENSE)). La conception portée ici, les données de
 référence et les résultats publiés sont de James Robert Lloyd, David Duvenaud
 et Roger Grosse, sous la licence MIT reproduite dans
-[LICENSE-ORIGINAL](LICENSE-ORIGINAL). La plupart des séries de référence
+[LICENSE-ORIGINAL](LICENSE-ORIGINAL). `autostat.smc` porte AutoGP.jl, (c) 2023
+Google LLC, sous la licence Apache 2.0 reproduite dans
+[LICENSE-AUTOGP](LICENSE-AUTOGP). La plupart des séries de référence
 viennent de la *Time Series Data Library* de Rob Hyndman.
 [PORTING.md](PORTING.md) recense ce qui a changé au portage et les défauts du
 code d'origine relevés en chemin.

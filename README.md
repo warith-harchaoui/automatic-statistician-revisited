@@ -97,6 +97,57 @@ grows as they finish.
 **What has no published yardstick.** The 2013 preset and the model-checking
 p-values: the original repositories contain no numbers to compare them with.
 
+## AutoGP in Python: a posterior over structures
+
+`autostat.smc` ports AutoGP.jl (Saad, Patton, Hoffman, Saurous and
+Mansinghka, ICML 2023) to Python and `torch`. Where the 2013 and 2014
+searches keep the one structure with the best BIC, it keeps a weighted
+sample of structures from their posterior, found by sequential Monte Carlo
+(SMC): the data enter a tenth at a time, particles are reweighted by how
+well they predicted each batch, resampled, then moved by structure moves
+(subtree replace, detach-attach) and Hamiltonian Monte Carlo (HMC) on the
+parameters. Forecasts average the particles, so the intervals widen where
+the data cannot tell structures apart. New observations can be added later
+without refitting. Both earlier searches stay as they were.
+
+```python
+from autostat.smc import AutoGP, linear_schedule
+
+model = AutoGP(t, y, n_particles=8, seed=0)
+model.fit_smc(linear_schedule(len(t), 0.10), n_mcmc=75, n_hmc=10)
+model.structures()[:3]          # [(weight, formula), ...]
+mean, bounds = model.predict(t_future, quantiles=(0.05, 0.95))
+model.add_data(t_new, y_new)    # then model.mcmc_structure(...)
+```
+
+**Checked against the original, number for number.** `tests/test_smc_julia.py`
+loads AutoGP.jl v0.1.19 through `juliacall` and compares every deterministic
+quantity on the airline series:
+
+| quantity | cases | largest relative difference |
+|---|---|---|
+| joint log density of a trace (prior, noise, likelihood) | 30 structures drawn by Julia | 1e-14 |
+| covariance matrix | the same 30 | 1e-15 |
+| forward and reverse densities of a structure move | 400 moves drawn by Julia (218 replace, 165 attach, 17 detach) | 1e-15 |
+| model density ratio of the move | the same 400 | 4e-13 |
+| predictive mean and covariance | 20 structures, 15 future points | 3e-12 |
+
+**What the comparison found in AutoGP.jl.** Gen's gradient for every kernel
+parameter equals `-z`, the gradient of its standard normal prior, on all 359
+parameters tested: `covariance_prior` is not declared differentiable
+(`Gen.accepts_output_grad` is false), so the likelihood never reaches the
+leapfrog steps. The acceptance test uses the full density, so the sampler
+stays correct, but its HMC moves kernel parameters as a prior-driven random
+walk. The port reproduces this by default (`HMCConfig(gradient="prior")`)
+and offers the intended behaviour as `gradient="full"`. The noise gets the
+full gradient in both, as in Julia.
+
+**Compared in distribution.** Random draws differ between the two
+languages, so whole runs can only agree statistically.
+`scripts/compare_autogp.py` fits AutoGP.jl, the port and the port with full
+gradients on the same benchmark series, several seeds each; the same code
+scores all three; the results go to `results/autogp_comparison.parquet`.
+
 ## Forecasting against the methods of 2026
 
 The 2014 paper also judged its system on extrapolation: train on the first
@@ -129,7 +180,8 @@ GitHub on 7 November 2026.
 | [autostat (sutoiku)](https://github.com/sutoiku/autostat) | 2022 | ABCD reimplementation in Mathematica. MIT licence. | cited |
 | [autostat_gpflow](https://github.com/DavidJanz/autostat_gpflow) | 2018 | Basic GPflow implementation. MIT licence. | cited |
 | [GPy-ABCD](https://github.com/T-Flet/GPy-ABCD) | 2021 | Configurable ABCD on GPy (Fletcher, Bundy and Nuamah, ICML 2021 AutoML workshop). BSD 3-clause. | cited |
-| [AutoGP.jl](https://github.com/probsys/AutoGP.jl) | 2023 | Sequential Monte Carlo (SMC) over kernel structures (Saad et al., ICML 2023, arXiv 2307.09607). Julia, Apache 2.0, maintained. | cited |
+| [AutoGP.jl](https://github.com/probsys/AutoGP.jl) | 2023 | Sequential Monte Carlo (SMC) over kernel structures (Saad et al., ICML 2023, arXiv 2307.09607). Julia, Apache 2.0, maintained. | ported: `autostat.smc`, checked against it through `juliacall` |
+| [gallifrey](https://github.com/ChrisBoettner/gallifrey) | 2025 | A JAX re-implementation of AutoGP.jl for astronomy (Boettner, A&A 2025, arXiv 2505.20394). Apache 2.0. | cited |
 | [AutoBNN](https://github.com/tensorflow/probability/tree/main/spinoffs/autobnn) | 2024 | Compositional Bayesian neural networks in JAX (Google). Apache 2.0. | cited |
 
 Three related lines of work have no public code we could find: BoxLM, where a
@@ -186,6 +238,9 @@ has runnable recipes.
   of 4 often miss a period: on the trend-plus-cycle series of
   `tests/test_search.py` it stops at `SE` where the 2014 preset finds the
   cycle.
+- **AutoGP's grammar is its own.** `autostat.smc` keeps AutoGP.jl's base
+  kernels (linear, gamma-exponential, periodic) and its changepoint, which
+  differ from the 2014 grammar; its English report is not written yet.
 - **Model checking is a screen.** A small p-value says the data disagree with
   a component's prior on one statistic. It does not say which model is right.
 
@@ -227,6 +282,8 @@ Cite the original work, then this port if you use it:
 MIT licence ([LICENSE](LICENSE)). The design ported here, the benchmark data
 and the published results are by James Robert Lloyd, David Duvenaud and Roger
 Grosse, under the MIT licence reproduced in
-[LICENSE-ORIGINAL](LICENSE-ORIGINAL). Most benchmark series come from Rob
+[LICENSE-ORIGINAL](LICENSE-ORIGINAL). `autostat.smc` ports AutoGP.jl, (c) 2023
+Google LLC, under the Apache 2.0 licence reproduced in
+[LICENSE-AUTOGP](LICENSE-AUTOGP). Most benchmark series come from Rob
 Hyndman's Time Series Data Library. [PORTING.md](PORTING.md) lists what
 changed in the port and the defects found in the original along the way.

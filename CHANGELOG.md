@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- `autostat.smc`: AutoGP.jl (ICML 2023) ported to Python. Sequential Monte
+  Carlo over kernel structures, subtree-replace and detach-attach moves,
+  HMC, online `add_data`, mixture forecasts. Checked against AutoGP.jl
+  v0.1.19 through `juliacall` (`tests/test_smc_julia.py`): densities,
+  covariances, move ratios and predictions agree to 1e-12 or better.
+- Found that AutoGP.jl's HMC moves kernel parameters by the prior gradient
+  only; reproduced by default, `HMCConfig(gradient="full")` for the
+  intended sampler.
 - Extrapolation benchmark: the paper's table recomputed from the published
   2014 forecasts; the methods of 2026 are scored on the same thirteen
   series, family by family.

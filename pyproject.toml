@@ -30,6 +30,8 @@ dependencies = [
 
 [project.optional-dependencies]
 parquet = ["pyarrow>=14"]
+# The reference AutoGP.jl, for tests/test_smc_julia.py and scripts/compare_autogp.py.
+julia = ["juliacall>=0.9"]
 dev = [
     "pytest>=8",
     "ruff>=0.6",
