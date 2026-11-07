@@ -7,10 +7,10 @@
 check: format lint prose test
 
 format:
-	ruff format --check src tests scripts
+	ruff format --check src tests scripts benchmark
 
 lint:
-	ruff check src tests scripts
+	ruff check src tests scripts benchmark
 
 prose:
 	python scripts/lint_prose.py

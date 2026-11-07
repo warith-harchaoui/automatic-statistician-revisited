@@ -18,3 +18,5 @@ htmlcov/
 # Reports and searches written by the command line and the scripts.
 autostat_*/
 results/
+.venv-bench/
+benchmark/logs/
