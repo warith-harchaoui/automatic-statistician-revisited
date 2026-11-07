@@ -1,0 +1,74 @@
+# Packaging, dependencies and tool settings: the single source of truth.
+# requirements.txt and requirements-dev.txt install from this file.
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "automatic-statistician-revisited"
+version = "0.1.0"
+description = "The Automatic Statistician's Gaussian process structure search, ported to Python 3 and torch, checked against the published 2014 results."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Warith Harchaoui", email = "warith@deraison.ai" }]
+keywords = ["gaussian processes", "kernel search", "time series", "automatic statistician", "ABCD"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "pandas>=2.1",
+    "torch>=2.2",
+    "joblib>=1.3",
+    "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+parquet = ["pyarrow>=14"]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+    "pyarrow>=14",
+]
+
+[project.scripts]
+autostat = "autostat.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/warith-harchaoui/automatic-statistician-revisited"
+Original = "https://github.com/jamesrobertlloyd/gpss-research"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+# The thirteen benchmark series and the 2014 results the port is checked
+# against travel with the package, so the regression test runs anywhere.
+autostat = ["datasets/*.mat", "reference/*.txt"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = ["slow: runs a real search or a full report (seconds to minutes)"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "RUF", "D"]
+ignore = [
+    "D203",  # conflicts with D211
+    "D213",  # conflicts with D212
+    "D401",  # numpydoc allows a noun phrase for accessors
+    "E501",  # the formatter owns line length; long sentences stay whole
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"

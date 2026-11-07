@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # The checks of `make check`, on the oldest and newest Python the package
+  # declares. Format, lint and prose cannot differ between interpreters, so
+  # only the first leg runs them.
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      # The CPU (central processing unit) build of torch: the package needs
+      # no GPU; the default wheel downloads gigabytes of CUDA libraries.
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements-dev.txt
+      - name: Format, lint and prose
+        if: matrix.python-version == '3.11'
+        run: |
+          ruff format --check src tests scripts
+          ruff check src tests scripts
+          python scripts/lint_prose.py
+      - name: Fast tests
+        run: pytest -m "not slow"
+
+  # Runtime install only: catches an accidental dependency on a development
+  # package; also checks that the command line starts.
+  runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Install runtime dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt
+      - name: Command line starts
+        run: autostat --version

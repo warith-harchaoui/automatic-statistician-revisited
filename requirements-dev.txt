@@ -1,0 +1,2 @@
+# Contributor dependencies: runtime plus tests and lint, from pyproject.toml.
+-e .[dev]

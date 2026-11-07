@@ -1,0 +1,77 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the original papers listed under references as well as this port."
+title: "Automatic Statistician, revisited"
+abstract: "The Automatic Statistician's Gaussian process structure search (ICML 2013, AAAI 2014) ported to Python 3 and torch, checked against every model the 2014 system published."
+authors:
+  - family-names: Harchaoui
+    given-names: Warith
+    email: warith@deraison.ai
+version: 0.1.0
+date-released: "2026-11-07"
+license: MIT
+repository-code: "https://github.com/warith-harchaoui/automatic-statistician-revisited"
+keywords:
+  - gaussian processes
+  - kernel structure search
+  - time series
+  - automatic statistician
+references:
+  - type: conference-paper
+    title: "Structure Discovery in Nonparametric Regression through Compositional Kernel Search"
+    authors:
+      - family-names: Duvenaud
+        given-names: David
+      - family-names: Lloyd
+        given-names: James Robert
+      - family-names: Grosse
+        given-names: Roger
+      - family-names: Tenenbaum
+        given-names: Joshua B.
+      - family-names: Ghahramani
+        given-names: Zoubin
+    year: 2013
+    conference:
+      name: "International Conference on Machine Learning (ICML)"
+    identifiers:
+      - type: other
+        value: "arXiv:1302.4922"
+  - type: conference-paper
+    title: "Automatic Construction and Natural-Language Description of Nonparametric Regression Models"
+    authors:
+      - family-names: Lloyd
+        given-names: James Robert
+      - family-names: Duvenaud
+        given-names: David
+      - family-names: Grosse
+        given-names: Roger
+      - family-names: Tenenbaum
+        given-names: Joshua B.
+      - family-names: Ghahramani
+        given-names: Zoubin
+    year: 2014
+    conference:
+      name: "AAAI Conference on Artificial Intelligence"
+    identifiers:
+      - type: other
+        value: "arXiv:1402.4304"
+  - type: conference-paper
+    title: "Statistical Model Criticism using Kernel Two Sample Tests"
+    authors:
+      - family-names: Lloyd
+        given-names: James Robert
+      - family-names: Ghahramani
+        given-names: Zoubin
+    year: 2015
+    conference:
+      name: "Advances in Neural Information Processing Systems (NIPS)"
+  - type: software
+    title: "gpss-research"
+    authors:
+      - family-names: Lloyd
+        given-names: James Robert
+      - family-names: Duvenaud
+        given-names: David
+      - family-names: Grosse
+        given-names: Roger
+    repository-code: "https://github.com/jamesrobertlloyd/gpss-research"
+    license: MIT
