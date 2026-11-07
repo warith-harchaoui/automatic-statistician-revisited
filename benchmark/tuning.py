@@ -373,7 +373,11 @@ def tune(
     )
     results = search.results_.sort_values("mean_test_score", ascending=False)
     best = results.iloc[0]
-    chosen = {name: _plain(best[name]) for name in grid}
+    # A row of the results table is upcast to float when its columns mix
+    # types, so 300 comes back as 300.0; take the grid's own value instead.
+    chosen = {
+        name: _plain(next(v for v in grid[name] if v == best[name])) for name in grid
+    }
 
     learner = X.skb.apply(estimator.set_params(**chosen), y=y).skb.make_learner()
     report = skore.evaluate(learner, data={"series": frame}, splitter=splitter)
