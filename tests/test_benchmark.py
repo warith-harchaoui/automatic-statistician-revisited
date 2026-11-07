@@ -30,7 +30,7 @@ def test_the_paper_table_is_reproduced_from_the_published_predictions():
 
 @pytest.mark.parametrize("name", sorted(score.test_values()["dataset"].unique()))
 def test_the_published_actuals_are_the_held_out_values(name):
-    """The 2014 prediction files and the test CSV files hold the same targets."""
+    """The 2014 predictions and the held-out values in series.parquet agree."""
     published = score.published()
     actual = published[(published.dataset == name) & (published.method == "SE")][
         "actual"

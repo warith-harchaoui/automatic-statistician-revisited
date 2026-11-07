@@ -12,12 +12,16 @@ What this script does
 
     It first recomputes the paper's own table from the published 2014
     predictions, using only the eight methods the paper compared. It checks
-    the result against ``published/paper_table_standardised_rmse.csv``. The
+    the result against ``published/paper_table_standardised_rmse.parquet``. The
     full ranking then puts the 2014 and 2026 methods on one scale.
 
 What it produces
-    ``results/scores.csv`` (one row per method and series),
-    ``results/summary.csv`` (one row per method) and ``RESULTS.md``.
+    ``results/scores.parquet`` (one row per method and series),
+    ``results/summary.parquet`` (one row per method) and ``RESULTS.md``.
+
+    A method run before the move to Parquet left ``results/<method>.csv``;
+    it is converted to ``results/<method>.parquet`` (values checked equal)
+    and the CSV removed.
 
 Author
 ------
@@ -73,16 +77,14 @@ def test_values() -> pd.DataFrame:
     pandas.DataFrame
         Columns ``dataset, step, actual``.
     """
-    frames = []
-    for path in sorted((HERE / "data").glob("*-test.csv")):
-        values = np.loadtxt(path, delimiter=",", ndmin=2)[:, 1]
-        name = path.name.removesuffix("-test.csv")
-        frames.append(
-            pd.DataFrame(
-                {"dataset": name, "step": np.arange(len(values)), "actual": values}
-            )
-        )
-    return pd.concat(frames, ignore_index=True)
+    table = pd.read_parquet(HERE / "data" / "series.parquet")
+    test = table[table["split"] == "test"]
+    return (
+        test[["dataset", "step", "y"]]
+        .rename(columns={"y": "actual"})
+        .sort_values(["dataset", "step"])
+        .reset_index(drop=True)
+    )
 
 
 def rmse_table(predictions: pd.DataFrame) -> pd.DataFrame:
@@ -111,7 +113,7 @@ def published() -> pd.DataFrame:
     pandas.DataFrame
         Columns ``dataset, method, step, actual, prediction``.
     """
-    return pd.read_csv(HERE / "published" / "predictions_2014.csv")
+    return pd.read_parquet(HERE / "published" / "predictions_2014.parquet")
 
 
 def paper_check() -> float:
@@ -124,9 +126,40 @@ def paper_check() -> float:
     """
     rmse = rmse_table(published())[list(PAPER_COLUMNS.values())]
     standardised = rmse.div(rmse.min(axis=1), axis=0)
-    paper = pd.read_csv(HERE / "published" / "paper_table_standardised_rmse.csv")
+    paper = pd.read_parquet(
+        HERE / "published" / "paper_table_standardised_rmse.parquet"
+    ).set_index("dataset")
     paper.columns = [PAPER_COLUMNS[c] for c in paper.columns]
+    paper = paper.loc[standardised.index, standardised.columns]
     return float(np.abs(standardised.to_numpy() - paper.to_numpy()).max())
+
+
+def convert_legacy_csv() -> list[str]:
+    """Turn result CSV files left by earlier runs into Parquet.
+
+    Returns
+    -------
+    list of str
+        Methods converted.
+    """
+    converted = []
+    for csv in sorted(RESULTS.glob("*.csv")):
+        if csv.stem in ("scores", "summary"):
+            csv.unlink()
+            continue
+        try:
+            frame = pd.read_csv(csv, float_precision="round_trip")
+        except pd.errors.EmptyDataError:
+            # A method that failed on every series leaves a blank file.
+            continue
+        target = csv.with_suffix(".parquet")
+        frame.to_parquet(target, index=False)
+        back = pd.read_parquet(target)
+        if not back.equals(frame):
+            raise RuntimeError(f"{csv.name}: Parquet copy differs")
+        csv.unlink()
+        converted.append(csv.stem)
+    return converted
 
 
 def methods_2026() -> tuple[pd.DataFrame, dict[str, str], dict[str, dict]]:
@@ -147,10 +180,10 @@ def methods_2026() -> tuple[pd.DataFrame, dict[str, str], dict[str, dict]]:
         if path.stem in ("summary",):
             continue
         record = json.loads(path.read_text())
-        csv = path.with_suffix(".csv")
-        if not csv.exists() or csv.stat().st_size == 0:
+        table = path.with_suffix(".parquet")
+        if not table.exists():
             continue
-        frame = pd.read_csv(csv)
+        frame = pd.read_parquet(table)
         if frame.empty:
             continue
         frame["method"] = path.stem
@@ -179,6 +212,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     if deviation > 1e-6:
         return 1
 
+    for name in convert_legacy_csv():
+        LOGGER.info("converted results/%s.csv to Parquet", name)
     new, families, meta = methods_2026()
     families = {**FAMILIES_2014, **families}
     combined = pd.concat([published(), new], ignore_index=True)
@@ -190,7 +225,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     scores["rmse"] = [
         rmse.loc[d, m] for d, m in zip(scores["dataset"], scores["method"], strict=True)
     ]
-    scores.to_csv(RESULTS / "scores.csv", index=False)
+    scores.to_parquet(RESULTS / "scores.parquet", index=False)
 
     interval = (
         combined.dropna(subset=["lower", "upper"])
@@ -217,7 +252,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         },
         index=standardised.columns,
     ).sort_values("median_standardised_rmse")
-    summary.to_csv(RESULTS / "summary.csv")
+    summary.rename_axis("method").reset_index().to_parquet(
+        RESULTS / "summary.parquet", index=False
+    )
     incomplete = sorted(set(rmse.columns) - set(complete))
     lines = [
         "# Extrapolation benchmark results",

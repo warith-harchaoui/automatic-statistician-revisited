@@ -107,6 +107,21 @@ s'allonge à mesure qu'elles finissent.
 vérification : les dépôts d'origine ne contiennent aucun chiffre auquel les
 comparer.
 
+## Prévoir face aux méthodes de 2026
+
+L'article de 2014 jugeait aussi son système en extrapolation : apprendre sur
+les premiers 90 % de chacune des treize séries, prévoir les 10 % restants.
+Le dossier [benchmark](benchmark/README.md) refait cette comparaison. Il
+recalcule d'abord le tableau de l'article à partir des prévisions publiées
+en 2014 (à 2e-10 près), puis ajoute les méthodes de 2026, famille par
+famille : classiques (ETS, ARIMA, Theta), LightGBM, réseaux profonds
+(N-HiTS, N-BEATS, PatchTST), modèles de fondation (Chronos-2, Chronos-Bolt,
+TimesFM 2.5, TabPFN-TS, NVIDIA KumoTabular) et les deux portages de ce
+dépôt. Les méthodes à hyper-paramètres libres sont réglées par validation
+croisée à origine glissante sur la seule partie d'apprentissage, avec skrub
+et skore. Le tableau du moment est dans
+[benchmark/RESULTS.md](benchmark/RESULTS.md).
+
 ## La famille Automatic Statistician
 
 Tous les projets que nous avons trouvés, des articles d'origine aux

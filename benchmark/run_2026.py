@@ -9,8 +9,8 @@ What this script does
     The AAAI 2014 paper scored its methods on thirteen series split into a
     training part (the first 90 %) and a held-out tail (the last 10 %). This
     script trains each method on the training part, forecasts the tail and
-    writes one CSV of predictions per method, with a 90 % interval when the
-    method gives one.
+    writes one Parquet file of predictions per method, with a 90 % interval
+    when the method gives one.
 
 The families
     * ``classical``: naive, seasonal naive, automatic exponential smoothing
@@ -20,6 +20,11 @@ The families
       forecasting recursively.
     * ``deep learning``: N-HiTS, N-BEATS and PatchTST from ``neuralforecast``,
       each trained on the one series.
+
+    LightGBM and the deep models have hyper-parameters that nothing inside
+    them chooses: ``tuning.py`` picks them per series by rolling-origin
+    cross-validation on the training part (skrub grid search, skore report).
+    The statistical models choose their own form by AIC and are left so.
     * ``foundation``: Chronos-2, Chronos-Bolt (base), TimesFM 2.5 and
       TabPFN-TS used zero-shot; NVIDIA's KumoTabular in context on lags.
     * ``structure search``: this repository's ports of the 2014 and 2013
@@ -31,9 +36,10 @@ The families
     imports with current JAX.
 
 What it produces
-    ``benchmark/results/<method>.csv`` with columns ``dataset, step,
+    ``benchmark/results/<method>.parquet`` with columns ``dataset, step,
     prediction, lower, upper``; also ``benchmark/results/<method>.json`` with
-    the family, the time taken and any failure.
+    the family, the time taken, any failure and, for a tuned method, the
+    chosen hyper-parameters with their cross-validated RMSE.
 
 Author
 ------
@@ -116,23 +122,34 @@ class Series:
         return len(self.y_test)
 
 
-Forecast = tuple[np.ndarray, np.ndarray | None, np.ndarray | None]
+#: Mean, lower and upper 90 % bounds; a tuned method appends the record of
+#: its cross-validation.
+Forecast = tuple
 
 
 def load_series() -> list[Series]:
-    """Read the thirteen train and test CSV files.
+    """Read the thirteen train and test splits from ``data/series.parquet``.
 
     Returns
     -------
     list of Series
         In name order.
     """
+    table = pd.read_parquet(DATA / "series.parquet")
     out = []
     for name, season in sorted(SEASONS.items()):
-        train = np.loadtxt(DATA / f"{name}-train.csv", delimiter=",", ndmin=2)
-        test = np.loadtxt(DATA / f"{name}-test.csv", delimiter=",", ndmin=2)
+        part = table[table["dataset"] == name]
+        train = part[part["split"] == "train"].sort_values("step")
+        test = part[part["split"] == "test"].sort_values("step")
         out.append(
-            Series(name, train[:, 0], train[:, 1], test[:, 0], test[:, 1], season)
+            Series(
+                name,
+                train["x"].to_numpy(),
+                train["y"].to_numpy(),
+                test["x"].to_numpy(),
+                test["y"].to_numpy(),
+                season,
+            )
         )
     return out
 
@@ -272,54 +289,50 @@ def _lags_for(s: Series) -> int:
     return int(np.clip(2 * max(s.season, 6), 4, len(s.y_train) // 3))
 
 
-def lightgbm_lags(s: Series) -> Forecast:
-    """Gradient-boosted trees on lags, forecasting recursively.
-
-    Trees do not extrapolate a trend, so the series is differenced first and
-    the forecasts are integrated back.
+def lightgbm_lags(s: Series, n_jobs: int = 1) -> Forecast:
+    """LightGBM on lagged differences, hyper-parameters chosen by CV.
 
     Parameters
     ----------
     s : Series
         One benchmark series.
+    n_jobs : int, optional
+        Parallel fits in the search.
 
     Returns
     -------
     tuple
-        Mean only.
+        Mean only, then the tuning record.
     """
-    import lightgbm as lgb
+    import tuning
 
-    diff = np.diff(s.y_train)
-    lags = _lags_for(s)
-    x, y = _lag_matrix(diff, lags)
-    model = lgb.LGBMRegressor(
-        n_estimators=300, learning_rate=0.05, num_leaves=15, verbose=-1, random_state=0
-    )
-    model.fit(x, y)
-    steps = _recursive(lambda v: model.predict(v[None, :])[0], diff, lags, s.horizon)
-    return s.y_train[-1] + np.cumsum(steps), None, None
+    estimator = tuning.LightGBMForecaster()
+    grid = tuning.lightgbm_grid(s.season, len(s.y_train))
+    mean, info = tuning.tune(estimator, grid, s.y_train, s.horizon, n_jobs)
+    return mean, None, None, info
 
 
 # Deep learning
 
 
-def _neuralforecast(model_name: str) -> Callable[[Series], Forecast]:
-    """Wrap a neuralforecast model trained on the one series.
+def _neuralforecast(model_name: str, n_jobs: int) -> Callable[[Series], Forecast]:
+    """Wrap a neuralforecast model, hyper-parameters chosen by CV.
 
     Parameters
     ----------
     model_name : str
         ``"NHITS"``, ``"NBEATS"`` or ``"PatchTST"``.
+    n_jobs : int
+        Parallel fits in the search.
 
     Returns
     -------
     callable
-        Method returning the mean forecast.
+        Method returning the mean forecast and the tuning record.
     """
 
     def method(s: Series) -> Forecast:
-        """Train on the training part and forecast the tail.
+        """Tune on the training part, then forecast the tail.
 
         Parameters
         ----------
@@ -329,30 +342,14 @@ def _neuralforecast(model_name: str) -> Callable[[Series], Forecast]:
         Returns
         -------
         tuple
-            Mean only.
+            Mean only, then the tuning record.
         """
-        import neuralforecast.models as models
-        from neuralforecast import NeuralForecast
+        import tuning
 
-        h = s.horizon
-        input_size = int(min(max(2 * h, 2 * s.season, 24), len(s.y_train) // 2))
-        cls = getattr(models, model_name)
-        model = cls(
-            h=h,
-            input_size=input_size,
-            max_steps=500,
-            random_seed=0,
-            scaler_type="standard",
-            enable_progress_bar=False,
-            logger=False,
-        )
-        frame = pd.DataFrame(
-            {"unique_id": "s", "ds": np.arange(len(s.y_train)), "y": s.y_train}
-        )
-        nf = NeuralForecast(models=[model], freq=1)
-        nf.fit(frame)
-        out = nf.predict()
-        return out[model_name].to_numpy(), None, None
+        estimator = tuning.NeuralForecaster(model_name=model_name, h=s.horizon)
+        grid = tuning.neural_grid()
+        mean, info = tuning.tune(estimator, grid, s.y_train, s.horizon, n_jobs)
+        return mean, None, None, info
 
     return method
 
@@ -626,9 +623,11 @@ def registry(n_jobs: int, max_depth: int) -> dict[str, Method]:
     methods: dict[str, Method] = {}
     for name in ("naive", "seasonal_naive", "auto_ets", "auto_arima", "auto_theta"):
         methods[name] = Method("classical", lambda s, n=name: _classical()[n](s))
-    methods["lightgbm_lags"] = Method("machine learning", lightgbm_lags)
+    methods["lightgbm_lags"] = Method(
+        "machine learning", lambda s: lightgbm_lags(s, n_jobs)
+    )
     for name in ("NHITS", "NBEATS", "PatchTST"):
-        methods[name.lower()] = Method("deep learning", _neuralforecast(name))
+        methods[name.lower()] = Method("deep learning", _neuralforecast(name, n_jobs))
     methods["chronos2"] = Method("foundation", _chronos("amazon/chronos-2"))
     methods["chronos_bolt_base"] = Method(
         "foundation", _chronos("amazon/chronos-bolt-base")
@@ -657,14 +656,16 @@ def run_method(name: str, method: Method, series: list[Series]) -> None:
     series : list of Series
         The benchmark.
     """
-    rows, failures = [], {}
+    rows, failures, tuned = [], {}, {}
     started = time.perf_counter()
     for s in series:
         tic = time.perf_counter()
         try:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                mean, lower, upper = method.run(s)
+                mean, lower, upper, *extra = method.run(s)
+            if extra:
+                tuned[s.name] = extra[0]
             mean = np.asarray(mean, float).ravel()[: s.horizon]
             lo = (
                 np.full(s.horizon, np.nan)
@@ -691,12 +692,14 @@ def run_method(name: str, method: Method, series: list[Series]) -> None:
             failures[s.name] = f"{type(error).__name__}: {error}"[:300]
             LOGGER.warning("%s %s failed: %s", name, s.name, failures[s.name])
     RESULTS.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(rows).to_csv(RESULTS / f"{name}.csv", index=False)
+    pd.DataFrame(rows).to_parquet(RESULTS / f"{name}.parquet", index=False)
     meta = {
         "family": method.family,
         "seconds": time.perf_counter() - started,
         "failures": failures,
     }
+    if tuned:
+        meta["tuning"] = tuned
     (RESULTS / f"{name}.json").write_text(json.dumps(meta, indent=2))
 
 
@@ -716,7 +719,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--methods", nargs="*")
     parser.add_argument(
-        "--n-jobs", type=int, default=-1, help="structure-search workers"
+        "--n-jobs", type=int, default=-1, help="workers for the search and the CV"
     )
     parser.add_argument(
         "--max-depth", type=int, default=10, help="structure-search levels"

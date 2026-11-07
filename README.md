@@ -97,6 +97,20 @@ grows as they finish.
 **What has no published yardstick.** The 2013 preset and the model-checking
 p-values: the original repositories contain no numbers to compare them with.
 
+## Forecasting against the methods of 2026
+
+The 2014 paper also judged its system on extrapolation: train on the first
+90 % of each of the thirteen series, forecast the last 10 %. The
+[benchmark](benchmark/README.md) folder reruns that comparison. It first
+recomputes the paper's table from the published 2014 forecasts (to within
+2e-10), then adds the methods of 2026 family by family: classical (ETS,
+ARIMA, Theta), LightGBM, deep networks (N-HiTS, N-BEATS, PatchTST),
+foundation models (Chronos-2, Chronos-Bolt, TimesFM 2.5, TabPFN-TS, NVIDIA
+KumoTabular) and this repository's own ports. Methods with free
+hyper-parameters are tuned by rolling-origin cross-validation on the
+training part only, with skrub and skore. The current table is in
+[benchmark/RESULTS.md](benchmark/RESULTS.md).
+
 ## The Automatic Statistician family
 
 Every project we found, from the original papers to the 2026 successors,
