@@ -509,6 +509,8 @@ class _Census:
     per: int = 0
     noise: int = 0
     unknown: int = 0
+    ge: int = 0
+    gamma: float = 2.0
     lengthscale: float = math.inf
     lin_location: float | None = None
     periodic: list[ff.PeriodicKernel] = field(default_factory=list)
@@ -536,6 +538,14 @@ def _census(kernels: list[ff.Kernel]) -> _Census:
             log_ell = -0.5 * math.log(
                 math.exp(-2 * log_ell) + math.exp(-2 * k.lengthscale)
             )
+        elif isinstance(k, ff.GammaExpKernel):
+            # Counted as smooth; its correlation falls to exp(-1/2) at
+            # l 2**(-1/gamma), where an SE's does at its lengthscale.
+            c.se += 1
+            c.ge += 1
+            c.gamma = min(c.gamma, k.gamma)
+            ell = k.lengthscale - math.log(2) / k.gamma
+            log_ell = -0.5 * math.log(math.exp(-2 * log_ell) + math.exp(-2 * ell))
         elif isinstance(k, ff.LinearKernel):
             c.lin += 1
             c.lin_location = k.location
@@ -610,10 +620,58 @@ def _describe_smooth(
     return summary, desc, extrap
 
 
+#: Below this exponent a gamma-exponential factor is described as rough.
+ROUGH_GAMMA = 1.95
+
+
 def translate_product(
     prod: ff.Kernel, x: np.ndarray, monotonic: int, gradient: float, unit: str
 ) -> Description:
-    """Describe one product of base kernels.
+    """Describe one product of base kernels, gamma-exponential factors included.
+
+    A product with a gamma-exponential factor of exponent below
+    :data:`ROUGH_GAMMA` is described as the same product with an SE factor,
+    with "smooth" turned into "rough" and one sentence on the exponent.
+
+    Parameters
+    ----------
+    prod : Kernel
+        A product of base kernels, or one base kernel.
+    x : numpy.ndarray
+        Inputs.
+    monotonic : int
+        -1, 0 or 1.
+    gradient : float
+        Average slope where the component is active.
+    unit : str
+        Input unit.
+
+    Returns
+    -------
+    tuple
+        Summary, description sentences, extrapolation sentences.
+    """
+    summary, desc, extrap = _translate_product(prod, x, monotonic, gradient, unit)
+    factors = prod.canonical()
+    census = _census(factors.operands if factors.is_operator else [factors])
+    if not census.ge or census.gamma >= ROUGH_GAMMA:
+        return summary, desc, extrap
+
+    def rough(text: str) -> str:
+        return text.replace("smoothly", "roughly").replace("smooth", "rough")
+
+    desc = [rough(d) for d in desc]
+    desc.append(
+        "Its sample paths are continuous but not differentiable "
+        f"(gamma-exponential exponent {census.gamma:.2f})"
+    )
+    return rough(summary), desc, [rough(e) for e in extrap]
+
+
+def _translate_product(
+    prod: ff.Kernel, x: np.ndarray, monotonic: int, gradient: float, unit: str
+) -> Description:
+    """Describe one product of base kernels, as the 2014 system did.
 
     Parameters
     ----------
@@ -1009,6 +1067,7 @@ class Report:
     texts: list[Description]
     checks: list[ComponentCheck] | None = None
     figures: list[str] = field(default_factory=list)
+    selected_by: str = "The structure search selected"
 
     def markdown(self) -> str:
         """Render the report as Markdown.
@@ -1029,7 +1088,7 @@ class Report:
             "",
             "## Executive summary",
             "",
-            f"The structure search selected `{self.model.kernel.structure()}` "
+            f"{self.selected_by} `{self.model.kernel.structure()}` "
             f"(Bayesian information criterion {self.model.bic:.1f}; negative log "
             f"likelihood {self.model.nll:.1f} on {self.model.ndata} points). It "
             f"decomposes into {n} additive component{plural}, listed by how much "
@@ -1127,6 +1186,7 @@ def describe(
     out_dir: str | Path | None = None,
     check: bool = True,
     seed: int = 0,
+    selected_by: str = "The structure search selected",
 ) -> Report:
     """Decompose, describe and check a fitted model; optionally write the report.
 
@@ -1146,6 +1206,8 @@ def describe(
         Compute the model-checking p-values (slower).
     seed : int, optional
         Seeds the model-checking draws.
+    selected_by : str, optional
+        Opening words of the executive summary, before the structure.
 
     Returns
     -------
@@ -1164,7 +1226,9 @@ def describe(
     ]
     ordered = [parts[j] for j in order["order"]]
     checks = check_model(model, ordered, xs, ys, seed=seed) if check else None
-    report = Report(name, model, parts, order, measured, texts, checks)
+    report = Report(
+        name, model, parts, order, measured, texts, checks, selected_by=selected_by
+    )
     if out_dir is not None:
         out = Path(out_dir)
         out.mkdir(parents=True, exist_ok=True)

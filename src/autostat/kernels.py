@@ -1104,6 +1104,61 @@ class SqExpKernel(_BaseKernel):
         return torch.exp(2 * theta[1]) * torch.exp(-0.5 * r**2)
 
 
+class GammaExpKernel(_BaseKernel):
+    """Gamma-exponential (``GE``): ``sf^2 exp(-(|r| / l)^gamma)``, from AutoGP.
+
+    With ``gamma = 2`` it is a squared exponential of lengthscale
+    ``l / sqrt(2)``. Below 2 its sample paths are continuous but nowhere
+    differentiable; ``gamma = 1`` gives the Ornstein-Uhlenbeck kernel. It is
+    not in the 2013 or 2014 grammar. :mod:`autostat.smc` uses it and the
+    report describes it.
+    """
+
+    id = "GE"
+    param_names = ("lengthscale", "gamma", "sf")
+
+    def initialise_params(
+        self, rng: np.random.Generator, sd: float, shape: dict[str, Any]
+    ) -> None:
+        """Draw the lengthscale and scale as for ``SE``, the exponent in ``(0, 2]``.
+
+        Parameters
+        ----------
+        rng : numpy.random.Generator
+            Source of randomness.
+        sd : float
+            Spread on the log scale.
+        shape : dict
+            Data summary.
+        """
+        if self.lengthscale is None:
+            self.lengthscale = _input_lengthscale(rng, sd, shape, self.dimension)
+        if self.gamma is None:
+            self.gamma = rng.uniform(0.5, 2.0)
+        if self.sf is None:
+            self.sf = _output_scale(rng, sd, shape)
+
+    def cov(self, x: Tensor, z: Tensor, theta: Tensor, same: bool) -> Tensor:
+        """Return ``sf^2 exp(-(|r| / l)^gamma)``.
+
+        Parameters
+        ----------
+        x, z : torch.Tensor
+            Inputs.
+        theta : torch.Tensor
+            ``[log l, gamma, log sf]``; the exponent is not on a log scale.
+        same : bool
+            Ignored.
+
+        Returns
+        -------
+        torch.Tensor
+            Shape ``(n, m)``.
+        """
+        r = torch.abs(_difference(x, z, self.dimension)) / torch.exp(theta[0])
+        return torch.exp(2 * theta[2]) * torch.exp(-(r ** theta[1]))
+
+
 class RQKernel(_BaseKernel):
     """Rational quadratic (``RQ``, GPML ``covRQiso``): a scale mixture of SEs."""
 
@@ -2093,6 +2148,7 @@ BASE_KERNELS: dict[str, type[Kernel]] = {
     "Per": PeriodicKernel,
     "RQ": RQKernel,
     "Noise": NoiseKernel,
+    "GE": GammaExpKernel,
 }
 
 KERNEL_CLASSES: dict[str, type[Kernel]] = {
@@ -2103,6 +2159,7 @@ KERNEL_CLASSES: dict[str, type[Kernel]] = {
         NoiseKernel,
         ConstKernel,
         SqExpKernel,
+        GammaExpKernel,
         RQKernel,
         PeriodicKernel,
         LinearKernel,
