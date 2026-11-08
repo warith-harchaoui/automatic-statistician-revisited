@@ -1,0 +1,28 @@
+# Every human-language string of the GUI, by key and language (CODING.md 21.3).
+# The page itself is generated from the command line's help by
+# sprezzature-cli-gui; these are the strings of the run panel added to it.
+# English is the fallback for a key missing in another language.
+gui.run.button:
+  en: Run on this machine
+  fr: Lancer sur cette machine
+gui.run.running:
+  en: "Running the search. Each level takes several times the last; this page waits."
+  fr: "Recherche en cours. Chaque niveau coûte plusieurs fois le précédent ; la page attend."
+gui.run.failed:
+  en: The analysis failed
+  fr: L'analyse a échoué
+gui.run.structure:
+  en: Selected structure
+  fr: Structure retenue
+gui.run.components:
+  en: Components
+  fr: Composantes
+gui.run.files:
+  en: Report files
+  fr: Fichiers du rapport
+gui.run.network:
+  en: The local host did not answer. Is autostat-gui still running?
+  fr: L'hôte local ne répond pas. autostat-gui tourne-t-il encore ?
+gui.footer:
+  en: "Served from this machine only. Build command prints the command line; Run on this machine runs it here."
+  fr: "Servi depuis cette machine seulement. Build command affiche la ligne de commande ; Lancer sur cette machine l'exécute ici."
