@@ -55,7 +55,7 @@ English sentences, two typos aside.
   component's prior there. QQ (quantile-quantile), autocorrelation and
   periodogram statistics are ported as written and reported as two-sided
   p-values.
-- **Output.** Markdown and PNG (Portable Network Graphics) figures replace
+- **Output.** Markdown and SVG figures (drawn by `sprezzature-figures`) replace
   LaTeX on the NIPS 2013 style file.
 
 ## Not ported

@@ -29,9 +29,17 @@ autostat ventes.csv --time mois --value unites --out rapport/
 ```
 
 Le fichier `rapport/report.md` contient alors le résumé, une section par
-composante avec sa figure, puis le tableau de vérification du modèle.
+composante avec sa figure, la formule trouvée par la recherche (l'expression
+du modèle avec ses paramètres ajustés plus une forme explicite pour chaque
+composante polynomiale), puis le tableau de vérification du modèle ;
+`rapport/report.pdf` est le même document compilé par
+[md2star](https://github.com/warith-harchaoui/md2star). Avec `--format latex`
+(en Python : `report_format="latex"`), le rapport devient `report.tex`,
+compilé par `latexmk`, comme l'écrivait le système de 2014. Les figures sont
+tracées par [sprezzature-figures](https://github.com/warith-harchaoui/sprezzature-figures).
 L'exemple de la série des passagers aériens, dans [EXEMPLES.md](EXEMPLES.md),
-montre le résultat.
+montre le résultat ; [examples/](examples/) contient le script de chaque
+exemple et le rapport qu'il a écrit, dans les deux formats.
 
 ## Ce que fait la recherche
 
@@ -211,9 +219,13 @@ ne propose aucun code.
 
 ## Installation
 
-Python 3.11 ou plus récent. Les dépendances sont des roues Python
-disponibles sur toutes les plateformes : aucun paquet système n'est requis
-sous macOS, Ubuntu ou Windows.
+Python 3.11 ou plus récent. La recherche, les sources des rapports et
+leurs figures ne demandent que des roues Python. Compiler le PDF demande,
+pour un rapport Markdown, [Pandoc](https://pandoc.org/installing.html) et
+[LibreOffice](https://www.libreoffice.org/download/) (`md2star doctor` vérifie
+les deux) ; pour un rapport LaTeX, une distribution TeX avec `latexmk`
+(MacTeX, TeX Live ou MiKTeX). Sans eux, la source est écrite et un
+avertissement nomme l'outil manquant ; `--no-pdf` saute l'étape.
 
 ```bash
 pip install git+https://github.com/warith-harchaoui/automatic-statistician-revisited
@@ -228,18 +240,46 @@ La lecture des fichiers Parquet demande
 
 ## Utilisation
 
+La même analyse s'atteint de six façons. Chacune appelle `autostat.service` :
+toutes valident et se comportent de même.
+
+| Surface | Lancement | Pour |
+|---|---|---|
+| Bibliothèque Python | `from autostat import analyse` | carnets et autre code |
+| Ligne de commande (Click) | `autostat donnees.csv ...` | un terminal, un script |
+| Interface graphique (sprezzature-cli-gui) | `autostat-gui` | un formulaire dans le navigateur, sur cette machine seulement |
+| API HTTP (FastAPI) | `uvicorn autostat.api:app` | un autre programme ; OpenAPI sur `/docs` |
+| Serveur MCP (FastAPI-MCP) | `autostat-mcp` | un hôte d'agents ; point d'accès `/mcp` |
+| Compétence d'agent | [skills/autostat/SKILL.md](skills/autostat/SKILL.md) | Claude Code, OpenCode ; aiguillage dans [TRIGGERS.md](TRIGGERS.md) |
+
 La ligne de commande lit un fichier CSV ou Parquet :
 
 ```bash
 autostat donnees.csv --time date --value y --out rapport/
+autostat donnees.csv --time date --value y --format latex --out rapport/
 autostat donnees.csv --time date --value y --preset cks-2013 --max-depth 4
-autostat donnees.csv --time date --value y --no-check --json
+autostat donnees.csv --time date --value y --max-depth 20 --patience 2
+autostat donnees.csv --time date --value y --no-check --no-pdf --json
 ```
+
+La configuration publiée cherche toujours `--max-depth` niveaux.
+`--patience 2` s'arrête quand le BIC n'a pas baissé deux niveaux de suite ;
+le rapport étudie ces deux niveaux : chaque rapport a une section sur le
+chemin de recherche avec la courbe du BIC, la structure de chaque niveau et
+ce qu'un arrêt plus précoce aurait gardé.
 
 L'interface Python donne accès à chaque étape : `prepare` (dates en années
 décimales, séries longues regroupées), `search` avec une `Experiment`,
 `describe` pour le rapport, `fit` et `posterior` pour un modèle seul.
-[EXEMPLES.md](EXEMPLES.md) rassemble des recettes prêtes à lancer.
+[EXEMPLES.md](EXEMPLES.md) rassemble des recettes prêtes à lancer pour
+chaque surface.
+
+L'API et le serveur MCP partagent une application : `autostat-mcp` sert les
+routes HTTP et `/mcp` sur le port 8000. Les outils MCP sont `list_series`,
+`describe_published`, `analyse_series` et `get_report` ; l'API borne une
+recherche à six niveaux et 1 000 points. Les deux écoutent 127.0.0.1 par
+défaut, sans authentification : placez-les derrière une avant de les
+exposer.
 
 ## Limites
 

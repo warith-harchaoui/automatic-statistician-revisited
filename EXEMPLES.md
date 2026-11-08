@@ -7,6 +7,27 @@ durées ont été mesurées sur un ordinateur portable partagé avec d'autres
 calculs. Le code est identique à celui d'[EXAMPLES.md](EXAMPLES.md) ; seuls
 les commentaires changent de langue.
 
+Chaque exemple qui écrit un rapport a son script dans
+[examples/](examples/) ; le rapport écrit l'accompagne deux fois :
+`markdown/` contient `report.md`, ses figures SVG et `report.pdf` compilé
+par md2star ; `latex/` contient `report.tex`, ses figures PDF et
+`report.pdf` compilé par `latexmk`. Un rapport est décrit une fois, puis
+écrit dans les deux formats par `report.write`.
+
+| # | Script | Rapport |
+|---|---|---|
+| 1 | [01_rescore_published.py](examples/01_rescore_published.py) | aucun |
+| 2 | [02_describe_airline.py](examples/02_describe_airline.py) | [markdown](examples/02_airline_report/markdown/report.md), [LaTeX](examples/02_airline_report/latex/report.tex) |
+| 3 | [03_search_airline.py](examples/03_search_airline.py) | [markdown](examples/03_search_report/markdown/report.md), [LaTeX](examples/03_search_report/latex/report.tex) |
+| 4 | [04_make_sales.py](examples/04_make_sales.py), [04_sales_cli.sh](examples/04_sales_cli.sh) | [markdown](examples/04_sales_report/markdown/report.md), [LaTeX](examples/04_sales_report/latex/report.tex) |
+| 5 | [05_sales_pandas.py](examples/05_sales_pandas.py) | [markdown](examples/05_sales_report/markdown/report.md), [LaTeX](examples/05_sales_report/latex/report.tex) |
+| 6 | [06_cks_2013.py](examples/06_cks_2013.py) | [markdown](examples/06_cks_2013_report/markdown/report.md), [LaTeX](examples/06_cks_2013_report/latex/report.tex) |
+| 7 | [07_autogp_airline.py](examples/07_autogp_airline.py) | [markdown](examples/07_autogp_report/markdown/report.md), [LaTeX](examples/07_autogp_report/latex/report.tex) |
+| 8 | [08_published_2014.py](examples/08_published_2014.py) | [un dossier par série](examples/08_published_2014/) |
+
+Chaque script se lance depuis la racine du dépôt, par exemple
+`python examples/02_describe_airline.py`.
+
 ## 1. Recalculer un modèle publié par le système de 2014
 
 Le paquet livre les treize séries de référence de l'article d'AAAI 2014 et
@@ -33,12 +54,13 @@ with torch.no_grad():
 # 534.518
 ```
 
-## 2. Décrire ce modèle en anglais
+## 2. Décrire ce modèle en anglais, en Markdown et en LaTeX
 
 ```python
 from autostat import describe
 
-report = describe(model, x, y, name="airline passengers", out_dir="airline_report")
+report = describe(model, x, y, name="airline passengers", out_dir="airline_report/markdown")
+report.write("airline_report/latex", "latex")
 for summary, _, _ in report.texts:
     print(summary)
 # A linearly increasing function
@@ -47,8 +69,10 @@ for summary, _, _ in report.texts:
 # Uncorrelated noise with linearly increasing standard deviation
 ```
 
-`airline_report/report.md` contient le rapport complet, cinq figures et le
-tableau de vérification. Seize secondes, vérification comprise.
+Chaque dossier contient le rapport complet, cinq figures et le tableau de
+vérification, avec son PDF. Les deux ensemble : 51 secondes, vérification
+et deux compilations comprises. `describe(..., report_format="latex")`
+n'écrit que la version LaTeX ; `pdf=False` saute la compilation.
 
 ## 3. Chercher depuis zéro, brièvement
 
@@ -67,7 +91,7 @@ atteignent un BIC de 1123,7 ; les dix niveaux de ce portage atteignent
 ## 4. Votre propre CSV, en ligne de commande
 
 ```python
-# make_sales.py : huit ans de ventes mensuelles, tendance + cycle annuel + bruit
+# examples/04_make_sales.py : huit ans de ventes mensuelles, tendance + cycle annuel + bruit
 import numpy as np, pandas as pd
 
 rng = np.random.default_rng(0)
@@ -84,10 +108,12 @@ autostat sales.csv --time month --value units --max-depth 3 --no-check --out sal
 #   2. An approximately periodic function with a period of 1.0 years
 #   3. Uncorrelated noise
 # report: sales_report/report.md
+# pdf: sales_report/report.pdf
 ```
 
-Sept minutes. La progression part sur la sortie d'erreur ; les lignes
-ci-dessus, sur la sortie standard. `--json` les remplace par une ligne
+Deux minutes, sept sur un portable chargé. La progression part sur la sortie d'erreur ; les lignes
+ci-dessus, sur la sortie standard. `--format latex` écrit `report.tex` à
+la place, `--no-pdf` saute la compilation et `--json` imprime une ligne
 lisible par une machine.
 
 ## 5. Votre propre série pandas, en Python
@@ -102,6 +128,7 @@ result, report = analyse(
     name="monthly sales",
     out_dir="sales_report",
     experiment=Experiment.abcd_2014(max_depth=3),
+    report_format="latex",
 )
 ```
 
@@ -114,8 +141,98 @@ longueur.
 
 ```python
 result = search(x, y, Experiment.cks_2013(max_depth=3, n_jobs=4))
+print(result.best.kernel.structure(), round(result.best.bic, 1))
+# Lin x RQ + RQ 1370.4
 ```
 
 Ajouter, multiplier, remplacer, rien d'autre ; la quadratique rationnelle
 parmi les noyaux de base ; le bruit dans la vraisemblance. En ligne de
 commande : `--preset cks-2013`.
+
+## 7. Une loi a posteriori sur les structures avec AutoGP
+
+```python
+from autostat.smc import AutoGP, linear_schedule
+from autostat.smc.report import describe_posterior
+
+model = AutoGP(x.ravel(), y.ravel(), n_particles=8, seed=0)
+model.fit_smc(linear_schedule(len(x), 0.10), n_mcmc=75, n_hmc=10)
+for weight, formula in model.structures()[:3]:
+    print(f"{weight:.3f}  {formula}")
+# 0.543  (Lin * (((Lin * Per) + ((Lin * Lin) * (Lin + (Per + GE)))) + Lin))
+# 0.276  ((Lin * (((Per + (GE * Lin)) + Lin) + Lin)) * Lin)
+# 0.089  ((Lin * ((Per + (((Lin + GE) * Lin) * GE)) + Lin)) * Lin)
+
+posterior = describe_posterior(model, name="airline passengers", out_dir="autogp_report")
+```
+
+La page de synthèse liste les structures avec leurs poids ; chacune des
+plus lourdes a son propre rapport, avec la décomposition et les
+vérifications de 2014. Le script entier a pris 21 minutes sur huit
+particules, les deux formats de rapport compris.
+
+## 8. Les treize modèles publiés en 2014
+
+`examples/08_published_2014.py` décrit le modèle final de chaque série de
+référence, des passagers aériens aux salaires, dans les deux formats. La
+série solaire montre les fenêtres de changement : ses composantes
+s'appliquent « until 1643 and from 1716 onwards », les années qui
+entourent le minimum de Maunder.
+
+## 9. L'interface graphique
+
+```bash
+autostat-gui
+# autostat GUI: http://127.0.0.1:8765/
+```
+
+Le navigateur ouvre un formulaire généré depuis la ligne de commande par
+sprezzature-cli-gui : un champ par option, valeurs par défaut remplies.
+« Build command » affiche la ligne de commande équivalente ; « Lancer sur
+cette machine » lance l'analyse par l'hôte local et liste les fichiers du
+rapport. L'hôte n'écoute que 127.0.0.1.
+
+## 10. L'API HTTP
+
+```bash
+uvicorn autostat.api:app
+```
+
+```python
+import httpx
+
+api = httpx.Client(base_url="http://127.0.0.1:8000", timeout=3600)
+print(api.get("/v1/series").json()[:3])
+# ['01-airline', '02-solar', '03-mauna']
+body = api.post("/v1/published", json={"series": "02-solar", "report_format": "latex", "check": False}).json()
+print(body["structure"])
+# C + CW(SE + SE + WN x Lin + WN x Lin + SE x Per, WN + C)
+print(body["components"][3])
+# An approximately periodic function with a period of 10.8 years. This function applies until 1643 and from 1716 onwards
+pdf = api.get(f"/v1/reports/{body['report_id']}/files/report.pdf").content
+```
+
+38 secondes sans vérification ni PDF. `POST /v1/analyses` prend `values`
+(3 à 1 000), des `times` facultatifs, `max_depth` (1 à 6) et les options du
+rapport. Les erreurs partagent un même corps, par exemple
+`{"error": {"code": "invalid_input", "message": "values: List should have
+at least 3 items after validation, not 2"}}`. Les rapports vont sous
+`AUTOSTAT_REPORTS_DIR` (par défaut `./autostat_reports`).
+
+## 11. Le serveur MCP
+
+```bash
+autostat-mcp            # routes HTTP et /mcp sur 127.0.0.1:8000
+```
+
+Déclarez `http://127.0.0.1:8000/mcp` dans l'hôte d'agents. Il publie
+quatre outils : `list_series`, `describe_published`, `analyse_series` et
+`get_report`, avec les noms d'arguments et les bornes de l'API.
+
+## 12. La compétence d'agent
+
+Copiez ou liez [skills/autostat](skills/autostat) dans le dossier des
+compétences de l'environnement (`~/.claude/skills/` pour Claude Code).
+L'agent oriente alors « que contient cette série », « décompose cette
+série » ou « écris un rapport LaTeX de ce CSV » vers autostat, selon
+[TRIGGERS.md](TRIGGERS.md).

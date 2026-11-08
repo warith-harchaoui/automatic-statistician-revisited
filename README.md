@@ -28,8 +28,16 @@ autostat sales.csv --time month --value units --out report/
 ```
 
 `report/report.md` then holds the executive summary, one section per
-component with its figure, then the model-checking table. The airline example
-in [EXAMPLES.md](EXAMPLES.md) shows the output.
+component with its figure, the formula the search found (the model's
+expression with its fitted parameters plus a closed form for each polynomial
+component), then the model-checking table; `report/report.pdf`
+is the same document compiled by [md2star](https://github.com/warith-harchaoui/md2star).
+With `--format latex` (Python: `report_format="latex"`) the report is
+`report.tex` compiled by `latexmk` instead, as the 2014 system wrote it. The
+figures are drawn by [sprezzature-figures](https://github.com/warith-harchaoui/sprezzature-figures).
+The airline example in [EXAMPLES.md](EXAMPLES.md) shows the output;
+[examples/](examples/) holds every example's script and the report it wrote,
+in both formats.
 
 ## What the search does
 
@@ -194,8 +202,13 @@ original authors and offers no code.
 
 ## Install
 
-Python 3.11 or later. The dependencies are pure Python wheels on every
-platform, so no system package is needed on macOS, Ubuntu or Windows.
+Python 3.11 or later. The search, the reports' sources and their figures
+need Python wheels only. Compiling the PDF needs, for a Markdown report,
+[Pandoc](https://pandoc.org/installing.html) and
+[LibreOffice](https://www.libreoffice.org/download/) (`md2star doctor` checks
+both); for a LaTeX report, a TeX distribution with `latexmk` (MacTeX, TeX
+Live or MiKTeX). Without them the source is written and a warning names the
+missing tool; `--no-pdf` skips the step.
 
 ```bash
 pip install git+https://github.com/warith-harchaoui/automatic-statistician-revisited
@@ -209,18 +222,44 @@ On Windows without `make`, run the four commands of the `Makefile` by hand.
 
 ## Usage
 
+The same analysis is reachable in six ways. Each one calls
+`autostat.service`, so they validate and behave alike.
+
+| Surface | Start it with | For |
+|---|---|---|
+| Python library | `from autostat import analyse` | notebooks and other code |
+| Command line (Click) | `autostat data.csv ...` | a shell, a script |
+| GUI (sprezzature-cli-gui) | `autostat-gui` | a form in the browser, on this machine only |
+| HTTP API (FastAPI) | `uvicorn autostat.api:app` | another program; OpenAPI at `/docs` |
+| MCP server (FastAPI-MCP) | `autostat-mcp` | an agent host; endpoint `/mcp` |
+| Agent Skill | [skills/autostat/SKILL.md](skills/autostat/SKILL.md) | Claude Code, OpenCode; routing in [TRIGGERS.md](TRIGGERS.md) |
+
 The command line reads a CSV or Parquet file:
 
 ```bash
 autostat data.csv --time date --value y --out report/
+autostat data.csv --time date --value y --format latex --out report/
 autostat data.csv --time date --value y --preset cks-2013 --max-depth 4
-autostat data.csv --time date --value y --no-check --json
+autostat data.csv --time date --value y --max-depth 20 --patience 2
+autostat data.csv --time date --value y --no-check --no-pdf --json
 ```
+
+The published configuration always searches `--max-depth` levels.
+`--patience 2` stops once BIC has not fallen for two levels in a row; the
+report studies those two levels: each report has a section on the search
+path with the BIC curve, the structure of every level and what stopping
+earlier would have kept.
 
 The Python interface exposes each stage: `prepare` (dates to decimal years,
 long series binned), `search` with an `Experiment`, `describe` for the
 report, `fit` and `posterior` for a single model. [EXAMPLES.md](EXAMPLES.md)
-has runnable recipes.
+has runnable recipes for every surface.
+
+The API and the MCP server share one application: `autostat-mcp` serves the
+HTTP routes and `/mcp` on port 8000. The MCP tools are `list_series`,
+`describe_published`, `analyse_series` and `get_report`; the API bounds a
+search to six levels and 1,000 points. Both bind to 127.0.0.1 by default and
+carry no authentication: put them behind one before exposing them.
 
 ## Limits
 
