@@ -318,7 +318,7 @@ get. On request (`symbolic=True`), PySR reads each smooth component and its
 shortest formula is shown, marked $\approx$, only if it reproduces the
 component to within 1 %. The covariance remains the model; the formula is
 its reading. On the thirteen published models, PySR could try 13 smooth
-components and found a formula within 1 % for 4 of them (largest gaps 0.54 to
+components and found a formula within 1 % for 4 of them (largest gaps 0.083 to
 0.72 %, the others kept their covariance): 20 of the 76 components then read as
 a formula. The other 9 include fast-varying curves such as the airline's
 smooth term, whose length scale is 0.68 years.
