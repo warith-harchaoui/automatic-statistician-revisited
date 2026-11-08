@@ -202,6 +202,8 @@ def command(
             "components": outcome.components,
             "report": outcome.report,
             "pdf": outcome.pdf,
+            "formula": outcome.formula,
+            "search_path": outcome.search_path,
         }
         click.echo(json.dumps(payload))
         return 0

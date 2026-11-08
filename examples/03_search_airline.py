@@ -25,7 +25,13 @@ result = search(x, y, experiment)
 print(result.best.kernel.structure(), round(result.best.bic, 1))
 path = search_path(result.best_per_level(), x, y, rule_of(result.experiment))
 report = describe(
-    result.best, x, y, name="airline passengers", out_dir=OUT / "markdown", path=path
+    result.best,
+    x,
+    y,
+    name="airline passengers",
+    out_dir=OUT / "markdown",
+    path=path,
+    symbolic=True,
 )
 report.write(OUT / "latex", "latex")
 result.save(OUT / "search.json")  # the search, to re-describe it without rerunning

@@ -216,6 +216,8 @@ def create_gui_app() -> FastAPI:
     """
     host = FastAPI(title="autostat GUI", version=__version__, docs_url=None)
     runs: dict[str, tuple[Path, list[str]]] = {}
+    # Generating the page compiles its stylesheet: once per host, not per visit.
+    built: list[str] = []
 
     @host.get("/", response_class=HTMLResponse)
     def index() -> str:
@@ -226,7 +228,9 @@ def create_gui_app() -> FastAPI:
         str
             The HTML document.
         """
-        return page()
+        if not built:
+            built.append(page())
+        return built[0]
 
     @host.get("/run.js")
     def script() -> Response:

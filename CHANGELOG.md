@@ -49,6 +49,11 @@
   Pandoc), built by `doc/build.sh`.
 - Examples 3 and 6 search the full ten levels: the BIC improved until the
   ninth level on both.
+- The API and the MCP tools return the formula and the search path; they take
+  `patience` and `symbolic`. The GUI builds its page once per host.
+- The Agent Skill follows Anthropic's skills guide: `<` and `>` out of its
+  frontmatter, examples, a validation script, a set of trigger queries, a zip
+  built by `scripts/build_skill.py`, rules held by `tests/test_skill.py`.
 - Every module and function carries a NumPy-style docstring; modules are
   signed `warithmetics@deraison.ai`.
 

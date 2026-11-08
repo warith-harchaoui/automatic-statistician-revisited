@@ -2,8 +2,19 @@
 
 [En français](EXEMPLES.md)
 
-Every output below was produced by the code in this repository on
-7 November 2026. Times were measured on a laptop shared with other jobs.
+Every output below was produced by the code in this repository on 7 and
+8 November 2026. Times were measured on a laptop shared with other jobs.
+
+The same analysis is reachable in six ways.
+
+| Surface | Start it with | Example |
+|---|---|---|
+| Python library | `from autostat import analyse` | sections 1 to 8, 13 |
+| Command line (Click) | `autostat data.csv ...` | section 4 |
+| GUI (sprezzature-cli-gui) | `autostat-gui` | section 9 |
+| HTTP API (FastAPI) | `uvicorn autostat.api:app` | section 10 |
+| MCP server (FastAPI-MCP) | `autostat-mcp` | section 11 |
+| Agent Skill | `skills/autostat` with `TRIGGERS.md` | section 12 |
 
 Each example that writes a report has a script in [examples/](examples/),
 and the report it wrote sits beside it twice: `markdown/` holds `report.md`
@@ -72,19 +83,22 @@ component with its figure and the model-checking table. Both together took
 about a minute, model checking and the two compilations included. `describe(..., report_format="latex")` writes
 the LaTeX one alone; `pdf=False` skips the compilation.
 
-## 3. Search from scratch, briefly
+## 3. Search from scratch
 
 ```python
 from autostat import Experiment, search
 
-result = search(x, y, Experiment.abcd_2014(max_depth=2, n_jobs=4))
+result = search(x, y, Experiment.abcd_2014(max_depth=10, n_jobs=6))
 print(result.best.kernel.structure(), round(result.best.bic, 1))
-# WN + Per x SE + SE 1236.4
+# Lin x Lin + Lin x Lin x WN + Lin x Per x SE + SE 1108.9
 ```
 
-Two levels already find the yearly cycle. The published ten levels reach
-BIC 1123.7; this port's ten levels reach 1108.9, in 4.1 hours with six
-worker processes.
+Ten levels on 144 points took 4.1 hours with six worker processes; the
+published search reached BIC 1123.7. Two levels stop at `WN + Per x SE + SE`
+(BIC 1236.4): the yearly cycle without the growth. `Experiment.abcd_2014(
+max_depth=20, stopping_criteria=["no_improvement"], patience=2)` searches
+until BIC has not fallen for two levels, as
+[03_search_airline.py](examples/03_search_airline.py) does.
 
 ## 4. Your own CSV, from the command line
 
@@ -195,9 +209,11 @@ autostat-gui
 
 The browser opens a form generated from the command line by
 sprezzature-cli-gui: one field per option, defaults filled in. "Build
-command" prints the equivalent command line; "Run on this machine" runs
-the analysis through the local host and lists the report's files as links.
-The host listens on 127.0.0.1 only.
+command" prints the equivalent command line; "Run on this machine" runs the
+analysis through the local host and lists the report's files as links. The
+host listens on 127.0.0.1 only. The page loads nothing from another host:
+its first build downloads Tailwind's CLI (about 45 MB) then compiles only the
+classes it uses.
 
 ## 10. The HTTP API
 
@@ -211,52 +227,98 @@ import httpx
 api = httpx.Client(base_url="http://127.0.0.1:8000", timeout=3600)
 print(api.get("/v1/series").json()[:3])
 # ['01-airline', '02-solar', '03-mauna']
-body = api.post("/v1/published", json={"series": "02-solar", "report_format": "latex", "check": False}).json()
-print(body["structure"])
-# C + CW(SE + SE + WN x Lin + WN x Lin + SE x Per, WN + C)
-print(body["components"][3])
-# An approximately periodic function with a period of 10.8 years. This function applies until 1643 and from 1716 onwards
-pdf = api.get(f"/v1/reports/{body['report_id']}/files/report.pdf").content
+body = api.post("/v1/published", json={"series": "12-births", "check": False, "pdf": False}).json()
+print(sorted(body))
+# ['bic', 'components', 'files', 'formula', 'report_format', 'report_id', 'search_path', 'structure']
+print(body["structure"], round(body["bic"], 1))
+# WN + SE + Per + Per 9398.3
+print(body["search_path"]["settled_level"])
+# 5
+print(body["formula"]["explicit"][1][:70])
+# f_{2}(t) \approx 38.53\cos\!\left(\frac{2\pi \cdot (t - 1977)}{0.01917}
 ```
 
-38 seconds without checks or PDF. `POST /v1/analyses` takes `values` (3 to
-1,000), optional `times`, `max_depth` (1 to 6) and the report options.
-Errors share one body, e.g. `{"error": {"code": "invalid_input", "message":
-"values: List should have at least 3 items after validation, not 2"}}`.
-Reports go under `AUTOSTAT_REPORTS_DIR` (default `./autostat_reports`).
+The response holds the formula as LaTeX strings and the search level by level.
+Births has a weekly cycle: its period, 0.01917 years, is seven days.
+`POST /v1/analyses` takes `values` (3 to 1,000), optional `times`, `max_depth`
+(1 to 6, or up to 20 with a `patience`), `patience`, `symbolic` and the report
+options. Errors share one body, e.g. `{"error": {"code": "invalid_input",
+"message": "values: List should have at least 3 items after validation, not
+2"}}`. Reports go under `AUTOSTAT_REPORTS_DIR` (default `./autostat_reports`).
 
 ## 11. The MCP server
 
 ```bash
 autostat-mcp            # HTTP routes and /mcp on 127.0.0.1:8000
+claude mcp add --transport http autostat http://127.0.0.1:8000/mcp
 ```
 
-Register `http://127.0.0.1:8000/mcp` in the agent host. It publishes four
-tools: `list_series`, `describe_published`, `analyse_series` and
-`get_report`, with the API's argument names and bounds.
+A session over the protocol, from `tests/test_mcp.py`:
+
+```text
+tools/list   list_series, describe_published, analyse_series, get_report
+tools/call   list_series -> ["01-airline", "02-solar", "03-mauna", ...]
+tools/call   get_report {"report_id": "x"} -> isError: true,
+             {"error":{"code":"not_found","message":"no report 'x'"}}
+```
+
+Four tools are published, with the API's argument names and bounds. `health`
+and the binary download stay out of the agent's tools.
 
 ## 12. The Agent Skill
 
-Copy or link [skills/autostat](skills/autostat) into the runtime's skills
-folder (`~/.claude/skills/` for Claude Code). The agent then routes "what
-is in this series", « décompose cette série » or "write a LaTeX report of
-this CSV" to autostat, following [TRIGGERS.md](TRIGGERS.md).
+```bash
+python scripts/build_skill.py
+# wrote dist/autostat-skill.zip
+cp -r skills/autostat ~/.claude/skills/      # Claude Code
+```
+
+Upload the zip in Claude under Settings > Capabilities > Skills. The agent then
+routes "what is in this series", "fit a formula to this noisy curve" or
+« décompose cette série » to autostat, following [TRIGGERS.md](TRIGGERS.md).
+The skill checks its own work:
+
+```bash
+python skills/autostat/scripts/check_report.py examples/02_airline_report/markdown
+# report OK
+```
+
+[evals/triggers.yaml](skills/autostat/evals/triggers.yaml) lists 14 queries that
+should load the skill and 7 that should not, for the triggering test of
+Anthropic's skills guide. `tests/test_skill.py` holds the skill to the guide's
+rules.
 
 ## 13. Reading the formula and the search path
 
 Every report states the formula the search found and studies where the
-search should stop. For the sales of examples 4 and 5:
+search should stop. On the sales of examples 4 and 5:
 
 ```python
-print(report.formula().explicit)
-# ['f_{1}(t) = 99.63 + 6.095\\,(t - 2016)', None,
-#  'f_{3}(t) \\approx 7.95\\cos\\!\\left(\\frac{2\\pi \\cdot (t - 2016)}{1} - 1.807\\right) + ...']
+import pandas as pd
+from autostat import Experiment, analyse, findings
+
+series = pd.read_csv("sales.csv", parse_dates=["month"]).set_index("month")["units"]
+experiment = Experiment.abcd_2014(max_depth=20, stopping_criteria=["no_improvement"], patience=2)
+result, report = analyse(series, name="monthly sales", out_dir="sales_report", experiment=experiment)
+
+for closed_form, note in zip(report.formula().explicit, report.formula().notes):
+    print(closed_form, "|", note)
+# f_{1}(t) = 99.63 + 6.095\,(t - 2016) | exact polynomial of degree 1
+# f_{2}(t) \approx 7.95\cos\!\left(\frac{2\pi \cdot (t - 2016)}{1} - 1.807\right) + 0.3961\cos\!\left(...\right) | Fourier series, 2 harmonics, largest gap 0.027 % of the component
+# None | None
+
 for sentence in findings(report.path, report.model.ndata):
     print(sentence)
-# The search ran 7 levels (stopping after 2 level(s) without a BIC fall above 0.1, at most 20) ...
-# BIC stopped falling at level 5. The 2 level(s) searched past it kept its structure ...
+# The search ran 7 levels (stopping after 2 level(s) without a BIC fall above 0.1, at most 20) and keeps the model of level 7, Lin + WN + Per, BIC 449.2.
+# That structure was first reached at level 5; the levels after it only refitted its parameters, lowering BIC by 0.0 in all.
+# The best different structure, Lin + WN + Per x SE (level 4), is 4.6 above it: positive evidence for the kept one on the Kass and Raftery scale.
+# BIC stopped falling at level 5. The 2 level(s) searched past it kept its structure and lowered BIC by 0.00 in all, less than the tolerance of 0.1: going on buys nothing the data pay for.
+# A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 6 and kept the same structure, less refitted.
+# A rule stopping after 2 level(s) without a fall above 0.1 would have ended the search at level 7 and kept the same model.
+# The kept expression has 6 parameters for 96 points: its BIC is a fit term 2 NLL = 421.9 plus a complexity term p ln n = 27.4, each extra parameter costing 4.56; it splits into 3 components, 2 of them with a closed form.
 ```
 
-`findings` comes from `autostat.stopping`. The data were drawn from a slope
-of 6 per year from 100, a sine of amplitude 8 and period one year plus a
-noise of variance 4; the formula reads 6.095, 7.95, one year and 3.578.
+The data were drawn from a slope of 6 per year from 100, a sine of amplitude 8
+and period one year plus a noise of variance 4. The formula reads 6.095, 7.95,
+one year and 3.578.
+

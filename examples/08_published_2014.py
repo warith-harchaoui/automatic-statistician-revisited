@@ -22,7 +22,13 @@ for name in benchmarks.names():
     published = benchmarks.published(name)
     path = search_path(published, x, y, RULE)
     report = describe(
-        published[-1], x, y, name=name, out_dir=OUT / name / "markdown", path=path
+        published[-1],
+        x,
+        y,
+        name=name,
+        out_dir=OUT / name / "markdown",
+        path=path,
+        symbolic=True,
     )
     report.write(OUT / name / "latex", "latex")
     print(name, published[-1].kernel.structure())

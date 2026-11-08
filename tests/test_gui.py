@@ -172,3 +172,20 @@ def test_files_outside_a_run_are_not_served(client):
         Fixture: the GUI host.
     """
     assert client.get("/runs/unknown/../../etc/passwd").status_code == 404
+
+
+def test_the_page_is_built_once_per_host(monkeypatch):
+    """Building the page compiles its stylesheet, so a second visit must not.
+
+    Parameters
+    ----------
+    monkeypatch : pytest.MonkeyPatch
+        Counts the builds.
+    """
+    import autostat.gui as gui
+
+    built = []
+    monkeypatch.setattr(gui, "page", lambda: built.append(1) or "page")
+    host = TestClient(gui.create_gui_app())
+    assert [host.get("/").text, host.get("/").text] == ["page", "page"]
+    assert len(built) == 1

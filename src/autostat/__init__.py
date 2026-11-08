@@ -23,7 +23,9 @@ Why it exists
 What it exposes
     :func:`analyse` for one series end to end. The building blocks:
     :func:`prepare`, :func:`search`, :class:`Experiment`, :func:`describe`,
-    :func:`fit`, :func:`posterior`, :class:`GPModel`.
+    :func:`fit`, :func:`posterior`, :class:`GPModel`. A report's formula is
+    :meth:`Report.formula`; :func:`search_path` and :func:`findings` study
+    where a search should stop.
 
 Author
 ------
@@ -40,24 +42,30 @@ import numpy as np
 import pandas as pd
 
 from .describe import SECONDS_PER_YEAR, Report, describe
+from .formula import Formula
 from .model import GPModel, fit, posterior
 from .search import Experiment, SearchResult, search
-from .stopping import rule_of, search_path
+from .stopping import SearchPath, findings, rule_of, search_path
 
 __version__ = "0.1.0"
 
 __all__ = [
     "Experiment",
+    "Formula",
     "GPModel",
     "Report",
+    "SearchPath",
     "SearchResult",
     "__version__",
     "analyse",
     "describe",
+    "findings",
     "fit",
     "posterior",
     "prepare",
+    "rule_of",
     "search",
+    "search_path",
 ]
 
 

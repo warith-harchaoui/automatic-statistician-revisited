@@ -9,7 +9,7 @@
 set -e
 cd "$(dirname "$0")"
 [ -f sales.csv ] || python 04_make_sales.py
-autostat sales.csv --time month --value units --max-depth 20 --patience 2 --no-check \
+autostat sales.csv --time month --value units --max-depth 20 --patience 2 --symbolic --no-check \
     --out 04_sales_report/markdown
-autostat sales.csv --time month --value units --max-depth 20 --patience 2 --no-check \
+autostat sales.csv --time month --value units --max-depth 20 --patience 2 --symbolic --no-check \
     --format latex --out 04_sales_report/latex

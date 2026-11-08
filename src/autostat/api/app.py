@@ -119,6 +119,8 @@ def _analysis(report_id: str, outcome: service.Outcome, report_format: str) -> A
         components=outcome.components,
         report_format=report_format,
         files=outcome.files,
+        formula=outcome.formula,
+        search_path=outcome.search_path,
     )
 
 
@@ -188,6 +190,7 @@ def describe_published(request: PublishedRequest) -> Analysis:
         check=request.check,
         report_format=request.report_format,
         pdf=request.pdf,
+        symbolic=request.symbolic,
     )
     return _analysis(report_id, outcome, request.report_format)
 
@@ -203,8 +206,10 @@ def describe_published(request: PublishedRequest) -> Analysis:
 def analyse_series(request: AnalysisRequest) -> Analysis:
     """Run the structure search on values sent in the request and write a report.
 
-    The search is bounded to six levels and 1,000 points; two levels take
-    seconds to minutes, each further level several times the last.
+    The search is bounded to 1,000 points and six levels, or twenty with a
+    patience, which stops it once BIC has not fallen for that many levels.
+    Two levels take seconds to minutes, each further level several times the
+    last. The response holds the formula found and the search path.
 
     Parameters
     ----------
@@ -224,6 +229,8 @@ def analyse_series(request: AnalysisRequest) -> Analysis:
         folder,
         preset=request.preset,
         max_depth=request.max_depth,
+        patience=request.patience,
+        symbolic=request.symbolic,
         n_jobs=1,
         check=request.check,
         report_format=request.report_format,

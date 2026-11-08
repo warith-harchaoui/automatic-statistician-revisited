@@ -1,0 +1,26 @@
+# Queries for the skill's triggering test, from the Anthropic skills guide:
+# run each in a fresh conversation and record whether the skill loads.
+# Target: at least 90 % of should_trigger, none of should_not_trigger.
+should_trigger:
+  - What is going on in these eight years of monthly sales?
+  - Find the trend and the seasonality in sales.csv
+  - Is there a yearly cycle in this file?
+  - What is the period of this signal?
+  - Decompose this time series into components
+  - Fit a formula to this noisy curve
+  - Which equation describes these measurements over time?
+  - Write me a PDF report explaining this series
+  - Give me a LaTeX report of this time series
+  - What did the Automatic Statistician find on the airline series?
+  - Run a compositional kernel search on this data
+  - « Décompose cette série en tendance et saisonnalité »
+  - « Quelle formule pour cette courbe bruitée ? »
+  - « Que contient cette série temporelle ? »
+should_not_trigger:
+  - What is the weather in Paris?
+  - Write a Python function that reverses a string
+  - Plot this column as a bar chart
+  - Compare the forecast RMSE of ten models on 500 series
+  - Train a gradient-boosted classifier on this table
+  - Predict house prices from these twelve features
+  - Convert this Markdown file to PDF

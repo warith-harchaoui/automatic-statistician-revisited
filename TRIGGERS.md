@@ -22,6 +22,10 @@ Humans are welcome, but the routing rules below are the point.
 >   kernel, Gaussian process, « tendance », « saisonnalité », « décomposer »,
 >   « expliquer », « rapport ».
 >
+> A request for **the formula of a noisy curve over time** routes here too:
+> the structure search is a symbolic regression over kernels and every report
+> states the expression it found.
+>
 > Words naming the original work route here on their own: Automatic
 > Statistician, ABCD, compositional kernel search, Lloyd 2014, Duvenaud
 > 2013, AutoGP.
@@ -48,13 +52,15 @@ a few thousand points that must keep every point (the search bins to 1,000).
 |---|---|---|
 | `autostat FILE --time T --value V` | CLI | "Explain the series in this CSV or Parquet file." Writes a report directory and prints the structure and one line per component. |
 | `autostat ... --format latex` | CLI | Same, with a LaTeX report compiled by `latexmk` instead of Markdown compiled by md2star. |
-| `autostat ... --json` | CLI | Same, one JSON object on standard output for a script. |
+| `autostat ... --max-depth 20 --patience 2` | CLI | "Search until it stops improving." Runs two levels past the last BIC fall so the report can show what going on finds. |
+| `autostat ... --symbolic` | CLI | "Give me a formula for the smooth part too." PySR reads each smooth component, about a minute each. |
+| `autostat ... --json` | CLI | Same, one JSON object on standard output for a script, with the formula and the search path. |
 | `autostat-gui` | GUI | "I would rather fill in a form." Opens the command line as a web form on 127.0.0.1 that runs it. |
 | `analyse`, `describe`, `search` | Library | The same jobs from Python, on a `pandas.Series` or arrays. |
 | `autostat.smc.AutoGP` + `describe_posterior` | Library | "Give me a posterior over structures, not one winner." |
 | `list_series` | MCP / HTTP `GET /v1/series` | "Which benchmark series are there?" The thirteen of the 2014 paper. |
 | `describe_published` | MCP / HTTP `POST /v1/published` | "Show me what the 2014 system said about the airline series." No search; about a minute. |
-| `analyse_series` | MCP / HTTP `POST /v1/analyses` | "Explain these values." Values (and optional times) in JSON; search bounded to 6 levels and 1,000 points. |
+| `analyse_series` | MCP / HTTP `POST /v1/analyses` | "Explain these values." Values (and optional times) in JSON, 1,000 points at most, 6 levels or 20 with a `patience`. Returns `formula` and `search_path`. |
 | `get_report` | MCP / HTTP `GET /v1/reports/{id}` | "Show me the report." The Markdown or LaTeX source of a report written earlier. |
 | `get_report_file` | HTTP `GET /v1/reports/{id}/files/{name}` | "Give me the PDF / a figure." Not an MCP tool: binary. |
 | `health` | HTTP `GET /health` | "Is the server up?" Not an MCP tool. |
@@ -71,10 +77,15 @@ a few thousand points that must keep every point (the search bins to 1,000).
 | "write me a report", "a PDF I can send", « un rapport PDF » | same, `pdf` on (default) |
 | "in LaTeX", "for my paper", « en LaTeX » | same, `report_format="latex"` / `--format latex` |
 | "the airline example", "what did the 2014 paper find" | `describe_published` with a name from `list_series` |
+| "fit a formula to this curve", « quelle formule pour cette courbe » | same; read `formula.explicit` |
+| "when should the search stop", "is the depth enough" | same with a `patience`; read `search_path.findings` |
 | "explain it without the command line", « une interface » | `autostat-gui` |
 
 ## Before a long call
 
 A search of depth *d* costs several times depth *d − 1*. Two levels take
 seconds to minutes; ten levels on 144 points took four hours on six
-processes. Start at depth 2 or 3 and say so; raise it only if asked.
+processes. A shallow search can miss most of the structure: on the sales
+example, three levels gave an approximation and five the formula the data
+were drawn from. Up to about 100 points, use a patience. Beyond, start at
+depth 3 and say so.

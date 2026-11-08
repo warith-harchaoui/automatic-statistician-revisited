@@ -24,6 +24,7 @@ result, report = analyse(
     series,
     name="monthly sales",
     out_dir=OUT / "markdown",
+    symbolic=True,
     experiment=Experiment.abcd_2014(
         max_depth=20, stopping_criteria=["no_improvement"], patience=2
     ),

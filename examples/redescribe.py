@@ -60,6 +60,7 @@ def redescribe(
         out_dir=folder / "markdown",
         check=check,
         path=path,
+        symbolic=True,
     )
     report.write(folder / "latex", "latex")
     print(folder.name, result.best.kernel.structure(), round(result.best.bic, 1))

@@ -167,8 +167,23 @@ def test_a_published_model_is_described_and_read_back(client):
         },
     ).json()
     assert body["structure"] == "SE + Lin + WN x Lin + SE x Per x Lin"
+    assert body["formula"]["explicit"][0].startswith("f_{1}(t) =")
+    assert body["search_path"]["settled_level"] == 9
     source = client.get(f"/v1/reports/{body['report_id']}").json()
     assert source["report_format"] == "latex"
     assert source["source"].startswith(r"\documentclass")
     figure = client.get(f"/v1/reports/{body['report_id']}/files/fit.pdf")
     assert figure.content.startswith(b"%PDF")
+
+
+def test_a_deep_search_needs_a_patience(client):
+    """Over six levels, something must be able to stop the search.
+
+    Parameters
+    ----------
+    client : fastapi.testclient.TestClient
+        Fixture: the API.
+    """
+    body = {"values": [1.0, 2.0, 3.0], "max_depth": 7}
+    refused = client.post("/v1/analyses", json=body).json()
+    assert "patience" in refused["error"]["message"]

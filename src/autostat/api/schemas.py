@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 ReportFormat = Literal["markdown", "latex"]
 Preset = Literal["abcd-2014", "cks-2013"]
@@ -31,6 +31,8 @@ class ReportOptions(BaseModel):
         Compute the model-checking section.
     pdf : bool
         Compile ``report.pdf``.
+    symbolic : bool
+        Look for a formula for each smooth component with PySR.
     """
 
     report_format: ReportFormat = Field(
@@ -39,6 +41,10 @@ class ReportOptions(BaseModel):
     )
     check: bool = Field(True, description="Compute the model-checking section.")
     pdf: bool = Field(True, description="Compile report.pdf.")
+    symbolic: bool = Field(
+        False,
+        description="Look for a formula for each smooth component with PySR; slower.",
+    )
 
 
 class PublishedRequest(ReportOptions):
@@ -71,7 +77,10 @@ class AnalysisRequest(ReportOptions):
     preset : {"abcd-2014", "cks-2013"}
         Search configuration.
     max_depth : int
-        Search levels, 1 to 6.
+        Search levels: 1 to 6, or up to 20 with a patience.
+    patience : int
+        Levels searched past the last BIC fall before stopping; 0 searches
+        all ``max_depth`` levels.
     """
 
     values: list[float] = Field(..., min_length=3, max_length=1000)
@@ -81,8 +90,116 @@ class AnalysisRequest(ReportOptions):
     name: str = Field("data", max_length=200)
     preset: Preset = "abcd-2014"
     max_depth: int = Field(
-        2, ge=1, le=6, description="Search levels; each costs several times the last."
+        2,
+        ge=1,
+        le=20,
+        description="Search levels, each costing several times the last; over 6 needs a patience.",
     )
+    patience: int = Field(
+        0,
+        ge=0,
+        le=3,
+        description="Levels searched past the last BIC fall before stopping; 0 for none.",
+    )
+
+    @model_validator(mode="after")
+    def bounded(self) -> AnalysisRequest:
+        """Refuse a deep search with nothing to stop it.
+
+        Returns
+        -------
+        AnalysisRequest
+            The request, unchanged.
+
+        Raises
+        ------
+        ValueError
+            When ``max_depth`` is over 6 with no patience.
+        """
+        if self.max_depth > 6 and self.patience == 0:
+            raise ValueError("max_depth over 6 needs a patience of at least 1")
+        return self
+
+
+class FormulaBody(BaseModel):
+    """The expression a search kept, as LaTeX strings.
+
+    Parameters
+    ----------
+    model : str
+        ``y(t) = ...``, one term per component.
+    laws : list of str
+        Each component's Gaussian process with its covariance written out.
+    explicit : list of str or None
+        Each component's closed form, or None when it has none.
+    noise : str or None
+        The likelihood's noise, when the model has one outside its kernel.
+    switches : list of str
+        Definitions of the change-of-regime weights the laws use.
+    unit : str
+        What ``t`` is measured in.
+    notes : list of str or None
+        How each closed form was obtained and how close it is.
+    """
+
+    model: str
+    laws: list[str]
+    explicit: list[str | None]
+    noise: str | None
+    switches: list[str]
+    unit: str
+    notes: list[str | None]
+
+
+class StepBody(BaseModel):
+    """One level of a search.
+
+    Parameters
+    ----------
+    level : int
+        Level number, from 1.
+    bic, nll : float
+        The winner's BIC and negative log likelihood.
+    parameters : int
+        Parameters BIC charges for.
+    structure : str
+        The winner's structure.
+    components, closed_forms : int
+        Additive components; how many have a closed form.
+    """
+
+    level: int
+    bic: float
+    nll: float
+    parameters: int
+    structure: str
+    components: int
+    closed_forms: int
+
+
+class SearchPathBody(BaseModel):
+    """A search level by level, with what it shows about stopping.
+
+    Parameters
+    ----------
+    rule : str
+        How the search was told to stop.
+    tolerance : float
+        The BIC fall that counts as an improvement.
+    kept_level, settled_level : int
+        The level kept; the level where BIC stopped falling.
+    steps : list of StepBody
+        One per level.
+    findings : list of str
+        The readings, as sentences.
+    """
+
+    rule: str
+    tolerance: float
+    kept_level: int
+    settled_level: int
+    steps: list[StepBody]
+    findings: list[str]
 
 
 class Analysis(BaseModel):
@@ -102,6 +219,10 @@ class Analysis(BaseModel):
         The report's format.
     files : list of str
         The report directory's files.
+    formula : FormulaBody
+        The expression found, written as mathematics.
+    search_path : SearchPathBody, optional
+        The search level by level with what it shows about stopping.
     """
 
     report_id: str
@@ -110,6 +231,8 @@ class Analysis(BaseModel):
     components: list[str]
     report_format: ReportFormat
     files: list[str]
+    formula: FormulaBody
+    search_path: SearchPathBody | None = None
 
 
 class ReportSource(BaseModel):

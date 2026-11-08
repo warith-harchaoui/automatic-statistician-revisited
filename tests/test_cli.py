@@ -128,6 +128,19 @@ def test_a_run_prints_one_json_object(tmp_path, capsys):
     payload = json.loads(capsys.readouterr().out)
     assert (status, sorted(payload)) == (
         0,
-        ["bic", "components", "pdf", "report", "structure"],
+        ["bic", "components", "formula", "pdf", "report", "search_path", "structure"],
     )
     assert payload["report"].endswith("report.tex")
+
+
+def test_importing_the_library_loads_no_surface():
+    """``import autostat`` needs neither Click nor FastAPI nor the MCP server."""
+    import subprocess
+    import sys
+
+    code = (
+        "import sys, autostat; "
+        "print([m for m in ('click', 'fastapi', 'fastapi_mcp', 'uvicorn') if m in sys.modules])"
+    )
+    done = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
+    assert done.stdout.strip() == "[]", done.stderr

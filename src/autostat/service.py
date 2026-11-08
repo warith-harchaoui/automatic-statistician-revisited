@@ -37,6 +37,10 @@ import pandas as pd
 from . import analyse, benchmarks, describe
 from .describe import REPORT_FORMATS
 from .search import Experiment
+from .stopping import findings, search_path
+
+#: How a published 2014 search was told to stop, in words.
+PUBLISHED_RULE = "the published 2014 search: ten levels, no stopping rule"
 
 #: Search configurations, by the name every surface uses.
 PRESETS = ("abcd-2014", "cks-2013")
@@ -60,6 +64,10 @@ class Outcome:
         The compiled PDF, when one was written.
     files : list of str
         Every file of the report directory, relative to it.
+    formula : dict or None
+        The model as mathematics: see :class:`autostat.formula.Formula`.
+    search_path : dict or None
+        The search level by level with what it shows about stopping.
     """
 
     structure: str
@@ -68,6 +76,8 @@ class Outcome:
     report: str | None = None
     pdf: str | None = None
     files: list[str] = field(default_factory=list)
+    formula: dict[str, Any] | None = None
+    search_path: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """Return the outcome as JSON-ready data.
@@ -220,6 +230,32 @@ def series_from_values(
     return pd.Series([float(v) for v in values], index=index, name="value")
 
 
+def _path_summary(report: Any) -> dict[str, Any] | None:
+    """Turn a report's search path into JSON-ready data.
+
+    Parameters
+    ----------
+    report : Report
+        A description, with or without a search path.
+
+    Returns
+    -------
+    dict or None
+        The levels, the rule, the kept and settled levels, the findings.
+    """
+    path = report.path
+    if path is None:
+        return None
+    return {
+        "rule": path.rule,
+        "tolerance": path.tolerance,
+        "kept_level": path.kept.level,
+        "settled_level": path.settled.level,
+        "steps": [asdict(step) for step in path.steps],
+        "findings": findings(path, report.model.ndata),
+    }
+
+
 def _outcome(result_best: Any, report: Any, out_dir: Path | None) -> Outcome:
     """Summarise a described model and list its report files.
 
@@ -241,6 +277,8 @@ def _outcome(result_best: Any, report: Any, out_dir: Path | None) -> Outcome:
         structure=result_best.kernel.structure(),
         bic=float(result_best.bic),
         components=[summary for summary, _, _ in report.texts],
+        formula=asdict(report.formula()),
+        search_path=_path_summary(report),
     )
     if out_dir is not None:
         source = next(
@@ -368,6 +406,7 @@ def describe_published(
     check: bool = True,
     report_format: str = "markdown",
     pdf: bool = True,
+    symbolic: bool = False,
 ) -> Outcome:
     """Describe the model the 2014 system published for a benchmark series.
 
@@ -383,6 +422,8 @@ def describe_published(
         See :func:`analyse_series`.
     pdf : bool, optional
         Compile ``report.pdf``.
+    symbolic : bool, optional
+        Look for a formula for each smooth component with PySR.
 
     Returns
     -------
@@ -398,7 +439,8 @@ def describe_published(
     if series not in benchmarks.names():
         raise ValueError(f"unknown series {series!r}; see list_series()")
     x, y = benchmarks.load(series)
-    model = benchmarks.published(series)[-1]
+    published = benchmarks.published(series)
+    model = published[-1]
     report = describe(
         model,
         x,
@@ -408,6 +450,8 @@ def describe_published(
         check=check,
         report_format=report_format,
         pdf=pdf,
+        path=search_path(published, x, y, PUBLISHED_RULE),
+        symbolic=symbolic,
     )
     return _outcome(model, report, None if out_dir is None else Path(out_dir))
 
