@@ -309,15 +309,19 @@ Markov chain Monte Carlo, as AutoGP does for kernels.
 
 **Readability.** Here symbolic regression wins: a smooth component has no
 closed form in this repository, only its covariance and a sentence ("A smooth
-function"). Of the 76 components of the thirteen published models, 16 have a
-closed form.
+function"). Of the 76 components of the thirteen published models, 16 have an
+exact or Fourier closed form.
 
 Symbolic regression also complements the structure search. Each component's
 posterior mean is a denoised, one-dimensional curve: the easiest input it can
 get. On request (`symbolic=True`), PySR reads each smooth component and its
 shortest formula is shown, marked $\approx$, only if it reproduces the
 component to within 1 %. The covariance remains the model; the formula is
-its reading.
+its reading. On the thirteen published models, PySR could try 13 smooth
+components and found a formula within 1 % for 4 of them (largest gaps 0.54 to
+0.72 %, the others kept their covariance): 20 of the 76 components then read as
+a formula. The other 9 include fast-varying curves such as the airline's
+smooth term, whose length scale is 0.68 years.
 
 Methods built for dynamical systems (SINDy
 [@brunton2016sindy]) or driven by a language model (LLM-SR

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420" font-family="Roboto, system-ui, sans-serif" role="img" aria-labelledby="loss-title loss-desc">
+<title id="loss-title">BIC per search level</title>
+<desc id="loss-desc">Loss per epoch for BIC over 10 epochs. BIC reaches its minimum of 307 at epoch 10; the 0 epochs after it are shaded, and over them the loss rises rather than falls.</desc>
+<style>.ep{cursor:default;}.ep:hover,.ep:focus{outline:none;}.tip{opacity:0;pointer-events:none;transition:opacity .12s ease}#ep-0:hover~#eptip-0,#ep-0:focus~#eptip-0{opacity:1}@media (prefers-reduced-motion:reduce){.tip{transition:none}}</style>
+<rect width="900" height="420" fill="#FFFFFF"/>
+<text x="82.0" y="46" font-size="22" font-weight="700" fill="#1D1D1F" letter-spacing="-0.3">BIC per search level</text>
+<text x="82.0" y="72" font-size="14" fill="#6E6E73">Lower is better. Shaded: levels searched after BIC stopped falling (within 0.1 of its lowest, drawn at it).</text>
+<text x="82.0" y="142.0" font-size="12" fill="#6E6E73">BIC of the level's best structure</text>
+<line x1="82.0" y1="344.0" x2="782.0" y2="344.0" stroke="#E5E5EA" stroke-width="1"/>
+<text x="72.0" y="348.0" font-size="11" fill="#6E6E73" text-anchor="end" font-family="Roboto Mono, ui-monospace, monospace">0</text>
+<line x1="82.0" y1="312.7" x2="782.0" y2="312.7" stroke="#E5E5EA" stroke-width="1"/>
+<text x="72.0" y="316.7" font-size="11" fill="#6E6E73" text-anchor="end" font-family="Roboto Mono, ui-monospace, monospace">500</text>
+<line x1="82.0" y1="281.3" x2="782.0" y2="281.3" stroke="#E5E5EA" stroke-width="1"/>
+<text x="72.0" y="285.3" font-size="11" fill="#6E6E73" text-anchor="end" font-family="Roboto Mono, ui-monospace, monospace">1000</text>
+<line x1="82.0" y1="250.0" x2="782.0" y2="250.0" stroke="#E5E5EA" stroke-width="1"/>
+<text x="72.0" y="254.0" font-size="11" fill="#6E6E73" text-anchor="end" font-family="Roboto Mono, ui-monospace, monospace">1500</text>
+<line x1="82.0" y1="218.7" x2="782.0" y2="218.7" stroke="#E5E5EA" stroke-width="1"/>
+<text x="72.0" y="222.7" font-size="11" fill="#6E6E73" text-anchor="end" font-family="Roboto Mono, ui-monospace, monospace">2000</text>
+<line x1="82.0" y1="187.3" x2="782.0" y2="187.3" stroke="#E5E5EA" stroke-width="1"/>
+<text x="72.0" y="191.3" font-size="11" fill="#6E6E73" text-anchor="end" font-family="Roboto Mono, ui-monospace, monospace">2500</text>
+<line x1="82.0" y1="156.0" x2="782.0" y2="156.0" stroke="#E5E5EA" stroke-width="1"/>
+<text x="72.0" y="160.0" font-size="11" fill="#6E6E73" text-anchor="end" font-family="Roboto Mono, ui-monospace, monospace">3000</text>
+<text x="82.0" y="366.0" font-size="11" fill="#6E6E73" text-anchor="middle" font-family="Roboto Mono, ui-monospace, monospace">1</text>
+<text x="159.8" y="366.0" font-size="11" fill="#6E6E73" text-anchor="middle" font-family="Roboto Mono, ui-monospace, monospace">2</text>
+<text x="237.6" y="366.0" font-size="11" fill="#6E6E73" text-anchor="middle" font-family="Roboto Mono, ui-monospace, monospace">3</text>
+<text x="315.3" y="366.0" font-size="11" fill="#6E6E73" text-anchor="middle" font-family="Roboto Mono, ui-monospace, monospace">4</text>
+<text x="393.1" y="366.0" font-size="11" fill="#6E6E73" text-anchor="middle" font-family="Roboto Mono, ui-monospace, monospace">5</text>
+<text x="470.9" y="366.0" font-size="11" fill="#6E6E73" text-anchor="middle" font-family="Roboto Mono, ui-monospace, monospace">6</text>
+<text x="548.7" y="366.0" font-size="11" fill="#6E6E73" text-anchor="middle" font-family="Roboto Mono, ui-monospace, monospace">7</text>
+<text x="626.4" y="366.0" font-size="11" fill="#6E6E73" text-anchor="middle" font-family="Roboto Mono, ui-monospace, monospace">8</text>
+<text x="704.2" y="366.0" font-size="11" fill="#6E6E73" text-anchor="middle" font-family="Roboto Mono, ui-monospace, monospace">9</text>
+<text x="782.0" y="366.0" font-size="11" fill="#6E6E73" text-anchor="middle" font-family="Roboto Mono, ui-monospace, monospace">10</text>
+<text x="432.0" y="398.0" font-size="12" fill="#6E6E73" text-anchor="middle">Search level</text>
+<polyline points="82.0,192.1 159.8,288.0 237.6,312.9 315.3,320.7 393.1,321.9 470.9,322.3 548.7,322.5 626.4,323.1 704.2,324.3 782.0,324.8" fill="none" stroke="#007AFF" stroke-width="2.2" stroke-linejoin="round"/>
+<text x="792.0" y="328.8" font-size="12" font-weight="700" fill="#007AFF">BIC</text>
+<rect id="ep-0" class="ep hit" tabindex="0" role="img" aria-label="BIC: from 2424 at epoch 1 to 307 at epoch 10" x="82.0" y="186.1" width="700.0" height="12" fill="transparent"><title>BIC: 307 at the last epoch</title></rect>
+<line x1="782.0" y1="156.0" x2="782.0" y2="344.0" stroke="#1D1D1F" stroke-width="1.2" stroke-dasharray="4 3"/>
+<circle cx="782.0" cy="324.8" r="4.6" fill="#007AFF" stroke="#FFFFFF" stroke-width="2"/>
+<rect x="790.0" y="162.0" width="148.6" height="19" fill="#FFFFFF" opacity="0.9" rx="3"/>
+<text x="795.0" y="176.0" font-size="11" font-weight="700" fill="#1D1D1F" font-family="Roboto Mono, ui-monospace, monospace">BIC settles: level 10</text>
+<text x="774.0" y="200.0" font-size="11" fill="#6E6E73" text-anchor="end" font-family="Roboto Mono, ui-monospace, monospace">no level searched past it</text>
+<g id="eptip-0" class="tip"><rect x="353" y="324.8" width="158" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="362" y="346.3" font-size="12.5" font-weight="700" fill="#1D1D1F">BIC</text><text x="362" y="362.3" font-size="12.5" font-weight="400" fill="#6E6E73">start 2424 · end 307</text><text x="362" y="378.3" font-size="12.5" font-weight="400" fill="#6E6E73">over 10 epochs</text></g>
+
+</svg>
