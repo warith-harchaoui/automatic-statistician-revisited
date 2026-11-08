@@ -2,7 +2,7 @@
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -30,7 +30,15 @@ def test_mmd_rejects_two_shifted_samples():
 
 @pytest.mark.slow
 def test_every_airline_check_is_a_probability(airline, airline_final):
-    """All seven statistics of every component lie in [0, 1]."""
+    """All seven statistics of every component lie in [0, 1].
+
+    Parameters
+    ----------
+    airline : tuple of numpy.ndarray
+        Fixture: the airline inputs and passenger counts.
+    airline_final : GPModel
+        Fixture: the final published airline model.
+    """
     x, y = airline
     model = airline_final.simplified()
     checks = check_model(model, components(model), x, y, samples=200)

@@ -8,7 +8,7 @@ moves drawn by Julia, predictive distributions.
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 import math
@@ -55,7 +55,13 @@ def data():
 
 
 def test_scores_and_covariances_match_on_prior_draws(data):
-    """30 structures drawn by Julia: same joint density, same kernel matrix."""
+    """30 structures drawn by Julia: same joint density, same kernel matrix.
+
+    Parameters
+    ----------
+    data : tuple
+        Fixture: raw times, raw values, scaled times, scaled values, scaling.
+    """
     _, _, t, y, _ = data
     config = Config()
     tt, yy = torch.tensor(t), torch.tensor(y)
@@ -74,7 +80,13 @@ def test_scores_and_covariances_match_on_prior_draws(data):
 
 
 def test_structure_moves_have_the_same_densities(data):
-    """200 moves drawn by Julia: same forward, reverse and model ratios."""
+    """200 moves drawn by Julia: same forward, reverse and model ratios.
+
+    Parameters
+    ----------
+    data : tuple
+        Fixture: raw times, raw values, scaled times, scaled values, scaling.
+    """
     _, _, t, y, _ = data
     config = Config()
     tt, yy = torch.tensor(t), torch.tensor(y)
@@ -115,6 +127,11 @@ def test_julia_moves_kernel_parameters_by_the_prior_gradient_only(data):
 
     This is why :class:`autostat.smc.HMCConfig` defaults to
     ``gradient="prior"``.
+
+    Parameters
+    ----------
+    data : tuple
+        Fixture: raw times, raw values, scaled times, scaled values, scaling.
     """
     _, _, t, y, _ = data
     for seed in range(20):
@@ -127,7 +144,13 @@ def test_julia_moves_kernel_parameters_by_the_prior_gradient_only(data):
 
 
 def test_the_noise_gradient_includes_the_likelihood(data):
-    """For the noise, Gen's gradient is the full one, as the port's."""
+    """For the noise, Gen's gradient is the full one, as the port's.
+
+    Parameters
+    ----------
+    data : tuple
+        Fixture: raw times, raw values, scaled times, scaled values, scaling.
+    """
     _, _, t, y, _ = data
     config = Config()
     tt, yy = torch.tensor(t), torch.tensor(y)
@@ -142,7 +165,13 @@ def test_the_noise_gradient_includes_the_likelihood(data):
 
 
 def test_predictive_distributions_match(data):
-    """Same predictive mean and covariance, 20 structures, 15 future times."""
+    """Same predictive mean and covariance, 20 structures, 15 future times.
+
+    Parameters
+    ----------
+    data : tuple
+        Fixture: raw times, raw values, scaled times, scaled values, scaling.
+    """
     x, y, t, yy, scaling = data
     t_new = np.linspace(1.0, 1.2, 15)
     x_new = (t_new - scaling.t_intercept) / scaling.t_slope
@@ -160,7 +189,13 @@ def test_predictive_distributions_match(data):
 
 
 def test_round_trip_through_julia_keeps_the_tree(data):
-    """Python tree to Gen trace and back is the identity."""
+    """Python tree to Gen trace and back is the identity.
+
+    Parameters
+    ----------
+    data : tuple
+        Fixture: raw times, raw values, scaled times, scaled values, scaling.
+    """
     _, _, t, y, _ = data
     for seed in range(10):
         tree, z_noise = J.tree_from_trace(J.simulate(seed, t, y))

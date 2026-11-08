@@ -27,7 +27,7 @@ Provenance
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>. The ported design is (c) 2012-2015
+Warith Harchaoui <warithmetics@deraison.ai>. The ported design is (c) 2012-2015
 James Robert Lloyd, David Duvenaud and Roger Grosse, MIT licence, reproduced
 in ``LICENSE-ORIGINAL``.
 """

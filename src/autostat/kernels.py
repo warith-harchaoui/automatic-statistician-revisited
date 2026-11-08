@@ -36,7 +36,7 @@ Provenance
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>. The ported design is (c) 2013-2015
+Warith Harchaoui <warithmetics@deraison.ai>. The ported design is (c) 2013-2015
 James Robert Lloyd, David Duvenaud and Roger Grosse, MIT licence, reproduced
 in ``LICENSE-ORIGINAL``.
 """
@@ -305,6 +305,11 @@ class Kernel:
         -------
         torch.Tensor
             Shape ``(n, m)``.
+
+        Raises
+        ------
+        NotImplementedError
+            Always: every concrete kernel overrides it.
         """
         raise NotImplementedError
 
@@ -339,6 +344,11 @@ class Kernel:
         -------
         Kernel
             Shares no mutable state with ``self``.
+
+        Raises
+        ------
+        NotImplementedError
+            Always: every concrete kernel overrides it.
         """
         raise NotImplementedError
 
@@ -1798,6 +1808,11 @@ class _Switch(_Operator):
         -------
         torch.Tensor
             Values in ``[0, 1]``, shape ``(n,)``.
+
+        Raises
+        ------
+        NotImplementedError
+            Always: the change-point and change-window operators override it.
         """
         raise NotImplementedError
 

@@ -31,7 +31,7 @@ Faithfulness
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -268,30 +268,83 @@ class Tree(Mapping[int, Node]):
     """
 
     def __init__(self, nodes: Mapping[int, Node]) -> None:
+        """Store a copy of the nodes.
+
+        Parameters
+        ----------
+        nodes : mapping of int to Node
+            Every node, the root at index 1.
+        """
         self._nodes = dict(nodes)
 
     def __getitem__(self, idx: int) -> Node:
-        """The node at ``idx``."""
+        """The node at ``idx``.
+
+        Parameters
+        ----------
+        idx : int
+            Heap index.
+
+        Returns
+        -------
+        Node
+            The node stored there.
+        """
         return self._nodes[idx]
 
     def __iter__(self) -> Iterator[int]:
-        """Heap indices in increasing order."""
+        """Heap indices in increasing order.
+
+        Returns
+        -------
+        iterator of int
+            The sorted indices.
+        """
         return iter(sorted(self._nodes))
 
     def __len__(self) -> int:
-        """Number of nodes, AutoGP's ``size``."""
+        """Number of nodes, AutoGP's ``size``.
+
+        Returns
+        -------
+        int
+            The node count.
+        """
         return len(self._nodes)
 
     def __eq__(self, other: object) -> bool:
-        """Same nodes at the same indices."""
+        """Same nodes at the same indices.
+
+        Parameters
+        ----------
+        other : object
+            The object to compare with.
+
+        Returns
+        -------
+        bool
+            Whether ``other`` is a :class:`Tree` with the same nodes.
+        """
         return isinstance(other, Tree) and self._nodes == other._nodes
 
     def __hash__(self) -> int:
-        """Hash of the node set."""
+        """Hash of the node set.
+
+        Returns
+        -------
+        int
+            Hash of the ``(index, node)`` pairs.
+        """
         return hash(frozenset(self._nodes.items()))
 
     def __repr__(self) -> str:
-        """The formula, with parameters."""
+        """The formula, with parameters.
+
+        Returns
+        -------
+        str
+            ``Tree(<formula>)``.
+        """
         return f"Tree({self.formula()})"
 
     def subtree(self, idx: int) -> list[int]:
@@ -612,10 +665,36 @@ def covariance(
         position += len(tree[i].z)
 
     def param(i: int, name: str) -> torch.Tensor:
+        """One parameter of a node, on its constrained scale.
+
+        Parameters
+        ----------
+        i : int
+            Heap index of the node.
+        name : str
+            Parameter name, a field of the node's kind.
+
+        Returns
+        -------
+        torch.Tensor
+            The transformed value of that entry of ``z``.
+        """
         k = FIELDS[tree[i].kind].index(name)
         return config.transform(name, z[offsets[i] + k])
 
     def evaluate(i: int) -> torch.Tensor:
+        """Covariance matrix of the subtree rooted at ``i``, recursively.
+
+        Parameters
+        ----------
+        i : int
+            Heap index of the subtree's root.
+
+        Returns
+        -------
+        torch.Tensor
+            ``(n, m)`` matrix between ``t`` and ``s``.
+        """
         kind = tree[i].kind
         dt = t[:, None] - s[None, :]
         if kind == CONSTANT:
@@ -752,11 +831,33 @@ class Scaling:
         return cls(t_slope, -t_slope * t.min(), y_slope, -y_slope * y.mean())
 
     def t(self, t: np.ndarray) -> np.ndarray:
-        """Scaled times."""
+        """Scaled times.
+
+        Parameters
+        ----------
+        t : numpy.ndarray
+            Raw times.
+
+        Returns
+        -------
+        numpy.ndarray
+            ``t_slope * t + t_intercept``.
+        """
         return self.t_slope * np.asarray(t, dtype=float) + self.t_intercept
 
     def y(self, y: np.ndarray) -> np.ndarray:
-        """Scaled values."""
+        """Scaled values.
+
+        Parameters
+        ----------
+        y : numpy.ndarray
+            Raw values.
+
+        Returns
+        -------
+        numpy.ndarray
+            ``y_slope * y + y_intercept``.
+        """
         return self.y_slope * np.asarray(y, dtype=float) + self.y_intercept
 
     def y_back(

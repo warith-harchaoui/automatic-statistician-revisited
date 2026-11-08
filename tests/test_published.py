@@ -8,7 +8,7 @@ GPML's all at once.
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -42,6 +42,13 @@ def test_a_published_model_reproduces_its_likelihood(name, level):
     Solar's covariances reach a condition number of 1e14, where the nine
     printed digits of the hyperparameters limit agreement to about 5e-3
     nats; every other series agrees to 5e-5 or better.
+
+    Parameters
+    ----------
+    name : str
+        Benchmark series.
+    level : int
+        Search level of the published model.
     """
     x, y = benchmarks.load(name)
     model = benchmarks.published(name)[level]

@@ -27,7 +27,7 @@ Numerical choices
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>. The ported design is (c) 2013-2015
+Warith Harchaoui <warithmetics@deraison.ai>. The ported design is (c) 2013-2015
 James Robert Lloyd, David Duvenaud and Roger Grosse, MIT licence, reproduced
 in ``LICENSE-ORIGINAL``.
 """
@@ -426,6 +426,11 @@ def _minimise(model: GPModel, x: torch.Tensor, y: torch.Tensor, iters: int) -> N
         Training data.
     iters : int
         Maximum optimiser iterations.
+
+    Returns
+    -------
+    None
+        The result is written into ``model``.
     """
     theta0 = model.theta_vector()
     if theta0.size == 0 or iters <= 0:

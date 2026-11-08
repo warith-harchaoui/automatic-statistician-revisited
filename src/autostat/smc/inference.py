@@ -38,7 +38,7 @@ Faithfulness
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -113,13 +113,30 @@ class HMCConfig:
     gradient: str = "prior"
 
     def __post_init__(self) -> None:
-        """Reject an unknown gradient mode."""
+        """Reject an unknown gradient mode.
+
+        Raises
+        ------
+        ValueError
+            When ``gradient`` is neither ``"prior"`` nor ``"full"``.
+        """
         if self.gradient not in ("prior", "full"):
             raise ValueError("gradient must be 'prior' or 'full'")
 
 
 def _tensor(values: np.ndarray) -> torch.Tensor:
-    """Float64 tensor."""
+    """Float64 tensor.
+
+    Parameters
+    ----------
+    values : numpy.ndarray
+        Values to convert.
+
+    Returns
+    -------
+    torch.Tensor
+        The values as a float64 tensor.
+    """
     return torch.as_tensor(np.asarray(values, dtype=float), dtype=torch.float64)
 
 
@@ -194,6 +211,22 @@ def _hmc(
         start = np.array([tree[i].z[k] for i, k in parameter_slots(tree)])
 
     def log_density(values: np.ndarray, gradient: bool) -> tuple[float, np.ndarray]:
+        """Log likelihood plus standard normal prior at ``values``, with a gradient.
+
+        Parameters
+        ----------
+        values : numpy.ndarray
+            The moved coordinates (noise or kernel parameters).
+        gradient : bool
+            Return the full gradient (True) or the prior's gradient
+            ``-values`` alone (False).
+
+        Returns
+        -------
+        tuple
+            The log density (``-inf`` when not finite) and the gradient
+            (NaN when the density is not finite).
+        """
         z = _tensor(values).requires_grad_(gradient)
         if noise:
             ll = log_likelihood(tree, config, t, y, z[0])
@@ -208,6 +241,19 @@ def _hmc(
         return float(value.detach()), grad.numpy()
 
     def step_gradient(values: np.ndarray) -> tuple[float, np.ndarray]:
+        """Gradient that drives one leapfrog step.
+
+        Parameters
+        ----------
+        values : numpy.ndarray
+            The moved coordinates.
+
+        Returns
+        -------
+        tuple
+            The log density (NaN when only the prior's gradient is used) and
+            the gradient: ``-values`` with ``prior_gradient``, else the full one.
+        """
         if prior_gradient:
             return math.nan, -values
         return log_density(values, True)
@@ -335,6 +381,20 @@ def rejuvenate_structure(
         move = moves.propose(rng, particle.tree, config)
 
         def score(tree: Tree, current: Particle = particle) -> float:
+            """Log joint density of a tree with the current particle's noise.
+
+            Parameters
+            ----------
+            tree : Tree
+                The structure to score.
+            current : Particle, optional
+                The particle whose noise is kept, bound at definition time.
+
+            Returns
+            -------
+            float
+                Structure prior plus likelihood, see :func:`_score`.
+            """
             return _score(replace(current, tree=tree), config, t_, y_)
 
         alpha = moves.log_acceptance(move, score, current)
@@ -394,6 +454,11 @@ def linear_schedule(n: int, percent: float) -> list[int]:
     -------
     list of int
         Cumulative counts, ending at ``n``.
+
+    Raises
+    ------
+    ValueError
+        Unless ``n > 0`` and ``0 < percent < 1``.
     """
     if not (n > 0 and 0 < percent < 1):
         raise ValueError("need n > 0 and 0 < percent < 1")
@@ -425,6 +490,11 @@ def logarithmic_schedule(n: int, base: float, start: int) -> list[int]:
     -------
     list of int
         Cumulative counts, ending at ``n``.
+
+    Raises
+    ------
+    ValueError
+        Unless ``n > 0``, ``base >= 1`` and ``0 < start <= n``.
     """
     if not (n > 0 and base >= 1 and 0 < start <= n):
         raise ValueError("need n > 0, base >= 1 and 0 < start <= n")
@@ -466,6 +536,27 @@ class AutoGP:
         seed: int = 0,
         n_jobs: int = -1,
     ) -> None:
+        """Check and store the series, then draw the first population from the prior.
+
+        Parameters
+        ----------
+        t, y : array-like
+            Times and values, finite, 1-D, same length, at least two.
+        n_particles : int, optional
+            Population size.
+        config : Config, optional
+            The prior; AutoGP.jl's defaults when omitted.
+        seed : int, optional
+            Seed of every random draw.
+        n_jobs : int, optional
+            Worker processes for the particles; -1 uses every core.
+
+        Raises
+        ------
+        ValueError
+            When ``t`` and ``y`` are not 1-D arrays of one length of at least
+            2, or hold a non-finite value.
+        """
         self.t = np.asarray(t, dtype=float).copy()
         self.y = np.asarray(y, dtype=float).copy()
         if self.t.shape != self.y.shape or self.t.ndim != 1 or len(self.t) < 2:
@@ -485,7 +576,20 @@ class AutoGP:
     # Population bookkeeping -------------------------------------------------
 
     def _prior_particles(self, n: int) -> list[Particle]:
-        """Draw ``n`` particles from the prior."""
+        """Draw ``n`` particles from the prior.
+
+        The noise is drawn too, unless the config fixes it.
+
+        Parameters
+        ----------
+        n : int
+            Number of particles.
+
+        Returns
+        -------
+        list of Particle
+            The new particles.
+        """
         out = []
         for _ in range(n):
             tree = sample_tree(self._rng, self.config)
@@ -498,15 +602,33 @@ class AutoGP:
 
     @property
     def n_particles(self) -> int:
-        """Population size."""
+        """Population size.
+
+        Returns
+        -------
+        int
+            Number of particles.
+        """
         return len(self.particles)
 
     def particle_weights(self) -> np.ndarray:
-        """Normalised weights."""
+        """Normalised weights.
+
+        Returns
+        -------
+        numpy.ndarray
+            One weight per particle, summing to one.
+        """
         return np.exp(self.log_weights - special.logsumexp(self.log_weights))
 
     def effective_sample_size(self) -> float:
-        """``1 / sum(w**2)`` of the normalised weights."""
+        """``1 / sum(w**2)`` of the normalised weights.
+
+        Returns
+        -------
+        float
+            The effective sample size.
+        """
         w = self.particle_weights()
         return float(1.0 / (w @ w))
 
@@ -522,7 +644,13 @@ class AutoGP:
         return self.log_ml_est
 
     def log_mean_weight(self) -> float:
-        """``log mean exp(log_weights)``, the part not yet in :attr:`log_ml_est`."""
+        """``log mean exp(log_weights)``, the part not yet in :attr:`log_ml_est`.
+
+        Returns
+        -------
+        float
+            The log mean weight.
+        """
         return float(special.logsumexp(self.log_weights) - math.log(self.n_particles))
 
     def maybe_resample(self, ess_threshold: float) -> bool:
@@ -549,12 +677,34 @@ class AutoGP:
         return True
 
     def _scaled(self, order: np.ndarray | None = None) -> tuple[np.ndarray, np.ndarray]:
-        """Scaled data, optionally reordered."""
+        """Scaled data, optionally reordered.
+
+        Parameters
+        ----------
+        order : numpy.ndarray, optional
+            Indices to reorder by; the stored order when omitted.
+
+        Returns
+        -------
+        tuple of numpy.ndarray
+            Scaled times and values.
+        """
         t, y = self.scaling.t(self.t), self.scaling.y(self.y)
         return (t, y) if order is None else (t[order], y[order])
 
     def _reweight(self, t_old, y_old, t_new, y_new) -> None:
-        """Add each particle's predictive log likelihood of the new data."""
+        """Add each particle's predictive log likelihood of the new data.
+
+        The increment is the log likelihood of the new data minus that of
+        the old, each computed in full.
+
+        Parameters
+        ----------
+        t_old, y_old : numpy.ndarray
+            Scaled data already accounted for in the weights.
+        t_new, y_new : numpy.ndarray
+            Scaled data including the new observations.
+        """
         self.log_weights += _log_likelihoods(
             self.particles, self.config, t_new, y_new
         ) - _log_likelihoods(self.particles, self.config, t_old, y_old)
@@ -562,7 +712,25 @@ class AutoGP:
     def _rejuvenate(
         self, t: np.ndarray, y: np.ndarray, n_mcmc: int, n_hmc: int, hmc: HMCConfig
     ) -> dict[str, int]:
-        """Run the structure moves on every particle, in parallel."""
+        """Run the structure moves on every particle, in parallel.
+
+        Each particle gets its own seed spawned from the model's seed.
+
+        Parameters
+        ----------
+        t, y : numpy.ndarray
+            Scaled data.
+        n_mcmc, n_hmc : int
+            Structure moves; HMC rounds after each accepted one.
+        hmc : HMCConfig
+            Leapfrog settings.
+
+        Returns
+        -------
+        dict
+            Acceptance counts ``mh``, ``hmc``, ``hmc_trials`` summed over
+            the particles.
+        """
         seeds = [
             int(s.generate_state(1)[0]) for s in self._seeds.spawn(self.n_particles)
         ]
@@ -619,6 +787,12 @@ class AutoGP:
         -------
         AutoGP
             ``self``, fitted.
+
+        Raises
+        ------
+        ValueError
+            When the schedule does not start at 1 or more, does not end at
+            ``len(t)`` or does not increase.
         """
         n = len(self.t)
         if not (schedule and schedule[0] >= 1 and schedule[-1] == n):
@@ -701,7 +875,23 @@ class AutoGP:
     def _predict_particle(
         self, particle: Particle, t_new: np.ndarray, noise_pred: float | None
     ) -> tuple[np.ndarray, np.ndarray]:
-        """Mean and covariance at new times on the scaled axis, ``Inference.predict_mvn``."""
+        """Mean and covariance at new times on the scaled axis, ``Inference.predict_mvn``.
+
+        Parameters
+        ----------
+        particle : Particle
+            The hypothesis to predict with.
+        t_new : numpy.ndarray
+            Times to predict, on the original scale.
+        noise_pred : float or None
+            Noise variance added to the predictive covariance, on the scaled
+            axis; the particle's own noise when None.
+
+        Returns
+        -------
+        tuple of numpy.ndarray
+            Predictive mean and covariance, on the scaled axis.
+        """
         t, y = (_tensor(v) for v in self._scaled())
         s = _tensor(self.scaling.t(t_new))
         with torch.no_grad():
@@ -841,6 +1031,11 @@ def _mixture_quantile(
     -------
     numpy.ndarray
         ``(m,)`` quantiles, to about 1e-12 of the range.
+
+    Raises
+    ------
+    ValueError
+        When a quantile level is outside ``(0, 1)``.
     """
     if not 0 < q < 1:
         raise ValueError("quantile levels must be in (0, 1)")

@@ -2,7 +2,7 @@
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -21,7 +21,13 @@ from autostat import legacy
     ],
 )
 def test_a_result_line_with_code_is_refused(line):
-    """Anything beyond constructors and literals raises ValueError."""
+    """Anything beyond constructors and literals raises ValueError.
+
+    Parameters
+    ----------
+    line : str
+        A result line holding code beyond constructors and literals.
+    """
     with pytest.raises(ValueError):
         legacy.parse_model(line)
 

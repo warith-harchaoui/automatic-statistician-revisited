@@ -27,12 +27,13 @@ Why the translation is exact
     ``tests/test_smc_report.py`` checks the covariances and the likelihood.
 
 What it produces
-    :class:`PosteriorReport`; with ``out_dir``, ``report.md`` there and one
-    folder per structure.
+    :class:`PosteriorReport`; with ``out_dir``, a summary page there and one
+    folder per structure, in Markdown (compiled by md2star) or LaTeX
+    (compiled by ``latexmk``), as :meth:`autostat.describe.Report.write`.
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -46,7 +47,14 @@ import torch
 from scipy import special
 
 from .. import kernels as ff
-from ..describe import Report, describe
+from ..describe import (
+    Report,
+    compile_latex,
+    compile_markdown,
+    describe,
+    plot_data,
+    tex,
+)
 from ..model import GPModel, negative_log_likelihood
 from .inference import AutoGP, Particle
 from .tree import (
@@ -69,7 +77,22 @@ from .tree import (
 
 
 def _params(tree: Tree, config: Config, idx: int) -> dict[str, float]:
-    """Transformed parameters of one node."""
+    """Read one node's parameters on their natural scale.
+
+    Parameters
+    ----------
+    tree : Tree
+        The structure.
+    config : Config
+        Holds the transforms from the sampler's unconstrained values.
+    idx : int
+        The node's index in ``tree``.
+
+    Returns
+    -------
+    dict of str to float
+        Parameter values by field name.
+    """
     node = tree[idx]
     return {
         name: float(config.transform(name, z))
@@ -78,7 +101,18 @@ def _params(tree: Tree, config: Config, idx: int) -> dict[str, float]:
 
 
 def _log_sf(variance: float) -> float:
-    """Log standard deviation from a variance."""
+    """Turn a variance into the log standard deviation the 2014 kernels store.
+
+    Parameters
+    ----------
+    variance : float
+        A positive variance.
+
+    Returns
+    -------
+    float
+        ``log(sqrt(variance))``.
+    """
     return 0.5 * math.log(variance)
 
 
@@ -110,6 +144,11 @@ def to_kernel(
     -------
     Kernel
         Same covariance, in original time and value units.
+
+    Raises
+    ------
+    ValueError
+        When the tree holds a node of an unknown kind.
     """
     if variance is None:
         variance = 1.0 / scaling.y_slope**2
@@ -239,12 +278,15 @@ class PosteriorReport:
         One per described structure, in the same order.
     folders : list of str
         Where each report was written, relative to the summary.
+    data_figure : str, optional
+        The data alone, drawn when the summary is written.
     """
 
     name: str
     structures: list[tuple[float, str, str]]
     reports: list[Report] = field(default_factory=list)
     folders: list[str] = field(default_factory=list)
+    data_figure: str | None = None
 
     def markdown(self) -> str:
         """Render the summary page.
@@ -262,7 +304,13 @@ class PosteriorReport:
             "writer and model checks of the Automatic Statistician (Lloyd et "
             "al., AAAI 2014; Lloyd and Ghahramani, NIPS 2015).*",
             "",
+            *([f"![The data]({self.data_figure})", ""] if self.data_figure else []),
             "## Posterior over structures",
+            "",
+            "AutoGP keeps no single best structure and runs no BIC search: its "
+            "stopping point is the end of the data schedule; the weights "
+            "below replace the comparison of BIC between levels. Each "
+            "structure's own report gives its formula.",
             "",
             "Sequential Monte Carlo kept a weighted population of structures. "
             "Forecasts average them by weight. Each structure below is "
@@ -290,6 +338,86 @@ class PosteriorReport:
             lines += [f"{j + 1}. {t[0]}." for j, t in enumerate(report.texts)]
         return "\n".join(lines) + "\n"
 
+    def latex(self) -> str:
+        """Render the summary page as a LaTeX document.
+
+        Returns
+        -------
+        str
+            LaTeX; each structure's report is linked by its folder.
+        """
+        lines = [
+            r"\documentclass[11pt,a4paper]{article}",
+            r"\usepackage[utf8]{inputenc}",
+            r"\usepackage[T1]{fontenc}",
+            r"\usepackage{lmodern}",
+            r"\usepackage[margin=2.5cm]{geometry}",
+            r"\usepackage{booktabs}",
+            r"\usepackage{graphicx}",
+            r"\usepackage[hidelinks]{hyperref}",
+            "",
+            rf"\title{{An automatic report for the dataset: {tex(self.name)}}}",
+            r"\author{\texttt{autostat.smc} (automatic-statistician-revisited)}",
+            r"\date{}",
+            "",
+            r"\begin{document}",
+            r"\maketitle",
+            "",
+            r"\noindent\emph{Produced by \texttt{autostat.smc}, a Python port of "
+            r"AutoGP (Saad et al., ICML 2023), with the report writer and model "
+            r"checks of the Automatic Statistician (Lloyd et al., AAAI 2014; Lloyd "
+            r"and Ghahramani, NIPS 2015).}",
+            "",
+            *(
+                [
+                    r"\begin{center}",
+                    rf"\includegraphics[width=\linewidth]{{{self.data_figure}}}",
+                    r"\end{center}",
+                ]
+                if self.data_figure
+                else []
+            ),
+            r"\section*{Posterior over structures}",
+            "",
+            "AutoGP keeps no single best structure and runs no BIC search: its "
+            "stopping point is the end of the data schedule; the weights "
+            "below replace the comparison of BIC between levels. Each "
+            "structure's own report gives its formula.",
+            "",
+            "Sequential Monte Carlo kept a weighted population of structures. "
+            "Forecasts average them by weight. Each structure below is described "
+            "on its own, with the parameters of its heaviest particle.",
+            "",
+            r"\begin{center}",
+            r"\begin{tabular}{rrll}",
+            r"\toprule",
+            r"\# & weight & as 2014 kernels & report \\",
+            r"\midrule",
+        ]
+        for i, (weight, _, structure) in enumerate(self.structures):
+            link = (
+                rf"\href{{{self.folders[i]}/report.pdf}}"
+                rf"{{\texttt{{{tex(self.folders[i])}}}}}"
+                if i < len(self.folders)
+                else ""
+            )
+            lines.append(
+                rf"{i + 1} & {weight:.3f} & \texttt{{{tex(structure)}}} & {link} \\"
+            )
+        lines += [r"\bottomrule", r"\end{tabular}", r"\end{center}"]
+        for i, report in enumerate(self.reports):
+            lines += [
+                "",
+                rf"\section*{{Structure {i + 1} (weight {self.structures[i][0]:.3f})}}",
+                "",
+                rf"AutoGP formula: \texttt{{{tex(self.structures[i][1])}}}.",
+                r"\begin{enumerate}",
+            ]
+            lines += [rf"  \item {tex(t[0])}." for t in report.texts]
+            lines.append(r"\end{enumerate}")
+        lines += ["", r"\end{document}", ""]
+        return "\n".join(lines)
+
 
 def describe_posterior(
     model: AutoGP,
@@ -300,6 +428,8 @@ def describe_posterior(
     mass: float = 0.95,
     check: bool = True,
     seed: int = 0,
+    report_format: str = "markdown",
+    pdf: bool = True,
 ) -> PosteriorReport:
     """Describe and check the heaviest structures of a fitted population.
 
@@ -312,7 +442,7 @@ def describe_posterior(
     unit : str, optional
         ``"year"`` or ``""``, as :func:`autostat.describe.describe`.
     out_dir : str or pathlib.Path, optional
-        Where to write ``report.md`` and one folder per structure.
+        Where to write the summary page and one folder per structure.
     top : int, optional
         Describe at most this many structures.
     mass : float, optional
@@ -321,6 +451,10 @@ def describe_posterior(
         Compute the model-checking p-values.
     seed : int, optional
         Seeds the checks.
+    report_format : {"markdown", "latex"}, optional
+        See :meth:`autostat.describe.Report.write`.
+    pdf : bool, optional
+        Compile every page to PDF.
 
     Returns
     -------
@@ -355,10 +489,24 @@ def describe_posterior(
             check=check,
             seed=seed,
             selected_by=(f"With posterior weight {structures[i][0]:.3f}, AutoGP kept"),
+            report_format=report_format,
+            pdf=pdf,
         )
         out.reports.append(report)
         out.folders.append(folder)
     if out_dir is not None:
         Path(out_dir).mkdir(parents=True, exist_ok=True)
-        (Path(out_dir) / "report.md").write_text(out.markdown())
+        latex = report_format == "latex"
+        out.data_figure = plot_data(
+            np.asarray(model.t, float).reshape(-1, 1),
+            np.asarray(model.y, float).ravel(),
+            name,
+            Path(out_dir),
+            unit,
+            ".pdf" if latex else ".svg",
+        )
+        source = Path(out_dir) / ("report.tex" if latex else "report.md")
+        source.write_text(out.latex() if latex else out.markdown())
+        if pdf:
+            (compile_latex if latex else compile_markdown)(source)
     return out

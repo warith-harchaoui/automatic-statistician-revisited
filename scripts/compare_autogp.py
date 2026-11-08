@@ -32,7 +32,7 @@ What it produces
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -69,6 +69,11 @@ def load(name: str) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     -------
     tuple of numpy.ndarray
         ``x_train, y_train, x_test, y_test``.
+
+    Raises
+    ------
+    ValueError
+        When ``name`` is not a series of the comparison.
     """
     frame = pd.read_parquet(SERIES)
     frame = frame[frame["dataset"] == name].sort_values("step")
@@ -117,7 +122,24 @@ def score(model: AutoGP, x_test: np.ndarray, y_test: np.ndarray) -> dict[str, fl
 
 
 def run_julia(name, seed, args, data) -> dict[str, float]:
-    """Fit AutoGP.jl and score its particles with the port's predictor."""
+    """Fit AutoGP.jl and score its particles with the port's predictor.
+
+    Parameters
+    ----------
+    name : str
+        Series name; unused here, kept so both runners share a signature.
+    seed : int
+        Julia seed.
+    args : argparse.Namespace
+        Command-line settings: particles, percent, n_mcmc, n_hmc.
+    data : tuple of numpy.ndarray
+        ``(x, y, x_test, y_test)`` from :func:`load`.
+
+    Returns
+    -------
+    dict
+        ``seconds``, ``log_ml`` and the scores of :func:`score`.
+    """
     x, y, x_test, y_test = data
     fitted, seconds = J.fit(
         seed, x, y, args.particles, args.percent, args.n_mcmc, args.n_hmc
@@ -130,7 +152,26 @@ def run_julia(name, seed, args, data) -> dict[str, float]:
 
 
 def run_python(name, seed, args, data, gradient: str) -> dict[str, float]:
-    """Fit the port and score it."""
+    """Fit the port and score it.
+
+    Parameters
+    ----------
+    name : str
+        Series name; unused here, kept so both runners share a signature.
+    seed : int
+        Seed of the population.
+    args : argparse.Namespace
+        Command-line settings: particles, percent, n_mcmc, n_hmc, jobs.
+    data : tuple of numpy.ndarray
+        ``(x, y, x_test, y_test)`` from :func:`load`.
+    gradient : str
+        HMC gradient mode, ``"prior"`` or ``"full"``.
+
+    Returns
+    -------
+    dict
+        ``seconds``, ``log_ml`` and the scores of :func:`score`.
+    """
     x, y, x_test, y_test = data
     start = time.perf_counter()
     model = AutoGP(x, y, n_particles=args.particles, seed=seed, n_jobs=args.jobs)

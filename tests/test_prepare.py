@@ -2,7 +2,7 @@
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -28,24 +28,48 @@ def hourly() -> pd.Series:
 
 
 def test_a_datetime_index_becomes_decimal_years(hourly):
-    """2024-01-01 maps near 2024 on the original's 365-day year."""
+    """2024-01-01 maps near 2024 on the original's 365-day year.
+
+    Parameters
+    ----------
+    hourly : pandas.Series
+        Fixture: 5,000 hourly points, datetime-indexed.
+    """
     x, _, _ = prepare(hourly, max_points=500)
     assert x[0, 0] == pytest.approx(2024.0, abs=0.05)
 
 
 def test_a_datetime_index_reports_the_year_unit(hourly):
-    """The report then speaks in years, months and days."""
+    """The report then speaks in years, months and days.
+
+    Parameters
+    ----------
+    hourly : pandas.Series
+        Fixture: 5,000 hourly points, datetime-indexed.
+    """
     assert prepare(hourly)[2] == "year"
 
 
 def test_a_long_series_is_averaged_into_max_points_bins(hourly):
-    """5,000 points become 500 bins."""
+    """5,000 points become 500 bins.
+
+    Parameters
+    ----------
+    hourly : pandas.Series
+        Fixture: 5,000 hourly points, datetime-indexed.
+    """
     x, y, _ = prepare(hourly, max_points=500)
     assert (x.shape, y.shape) == ((500, 1), (500,))
 
 
 def test_binning_keeps_an_increasing_series_increasing(hourly):
-    """Bin means preserve order."""
+    """Bin means preserve order.
+
+    Parameters
+    ----------
+    hourly : pandas.Series
+        Fixture: 5,000 hourly points, datetime-indexed.
+    """
     assert np.all(np.diff(prepare(hourly, max_points=500)[1]) > 0)
 
 

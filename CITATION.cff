@@ -5,7 +5,7 @@ abstract: "The Automatic Statistician's Gaussian process structure search (ICML 
 authors:
   - family-names: Harchaoui
     given-names: Warith
-    email: warith@deraison.ai
+    email: warithmetics@deraison.ai
 version: 0.1.0
 date-released: "2026-11-07"
 license: MIT

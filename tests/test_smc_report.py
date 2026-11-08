@@ -2,7 +2,7 @@
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 import math
@@ -34,7 +34,13 @@ def series():
 
 
 def test_translated_kernels_have_the_same_covariance(series):
-    """200 prior structures: the 2014 kernel equals AutoGP's, rescaled."""
+    """200 prior structures: the 2014 kernel equals AutoGP's, rescaled.
+
+    Parameters
+    ----------
+    series : tuple of numpy.ndarray
+        Fixture: times in decimal years and values.
+    """
     x, _ = series
     config, scaling = Config(), Scaling.fit(*series)
     t = torch.tensor(scaling.t(x))
@@ -54,7 +60,13 @@ def test_translated_kernels_have_the_same_covariance(series):
 
 
 def test_translated_models_have_the_same_likelihood(series):
-    """The 2014 NLL is AutoGP's on the scaled axis, plus the Jacobian of the scaling."""
+    """The 2014 NLL is AutoGP's on the scaled axis, plus the Jacobian of the scaling.
+
+    Parameters
+    ----------
+    series : tuple of numpy.ndarray
+        Fixture: times in decimal years and values.
+    """
     x, y = series
     config, scaling = Config(), Scaling.fit(x, y)
     t, yy = torch.tensor(scaling.t(x)), torch.tensor(scaling.y(y))
@@ -87,7 +99,15 @@ def test_a_gamma_exponential_of_exponent_two_reads_as_smooth():
 
 @pytest.mark.slow
 def test_a_posterior_report_is_written(series, tmp_path):
-    """A small fit yields a summary page and one checked report per structure."""
+    """A small fit yields a summary page and one checked report per structure.
+
+    Parameters
+    ----------
+    series : tuple of numpy.ndarray
+        Fixture: times in decimal years and values.
+    tmp_path : pathlib.Path
+        Pytest's temporary directory.
+    """
     x, y = series
     model = AutoGP(x, y, n_particles=4, seed=0, n_jobs=1)
     model.fit_smc(linear_schedule(len(x), 0.25), n_mcmc=10, n_hmc=5)
