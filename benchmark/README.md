@@ -22,7 +22,7 @@ proved rather than guessed.
 | SP | `2013-12-17-extrap-SP-bic` | spectral mixture kernels |
 | TCI | `2013-11-11-extrap-TCI` | trend, cyclical and irregular components |
 | MKL | `2013-11-11-extrap-MKL` | Bayesian multiple kernel learning |
-| Eureqa | `eureqa-extrap` | symbolic regression |
+| Eureqa | `eureqa-extrap` | symbolic regression (the 2026 family compares it with PySR and gplearn) |
 | CP | `2013-11-11-extrap-CP` | changepoint kernels |
 | SE | `2014-01-28-extrap-SE` | one squared exponential kernel |
 | LN | `2014-01-28-extrap-LN` | linear regression |
@@ -113,6 +113,12 @@ python benchmark/score.py
 failures and chosen hyper-parameters; `score.py` writes
 `results/scores.parquet`, `results/summary.parquet` and
 [RESULTS.md](RESULTS.md).
+
+The symbolic-regression family needs `.venv-bench/bin/pip install pysr gplearn
+pyoperon`; PySR installs Julia on first use. It fits `y = f(t)` on centred,
+scaled time, continues the formula and records the formulas found in the
+JSON. Operon's macOS wheel does not load (`libxxhash`), so its 13 failures are
+recorded and it is left out of the table.
 
 TabPFN-TS needs a one-time licence acceptance on the Prior Labs site before
 it downloads its weights; without it every series fails and the method is

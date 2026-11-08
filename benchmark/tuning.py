@@ -24,7 +24,7 @@ How
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -73,6 +73,11 @@ class _Forecaster(BaseEstimator, RegressorMixin):
         -------
         numpy.ndarray
             The values, in time order.
+
+        Raises
+        ------
+        ValueError
+            When the training indices are not consecutive.
         """
         t = np.asarray(X["t"])
         if np.any(np.diff(t) != 1):
@@ -130,6 +135,15 @@ class LightGBMForecaster(_Forecaster):
         learning_rate: float = 0.05,
         num_leaves: int = 15,
     ):
+        """Store the settings.
+
+        Parameters
+        ----------
+        lags : int, optional
+            Lagged differences used as features.
+        n_estimators, learning_rate, num_leaves : int, float, int, optional
+            LightGBM's own.
+        """
         self.lags = lags
         self.n_estimators = n_estimators
         self.learning_rate = learning_rate
@@ -215,6 +229,21 @@ class NeuralForecaster(_Forecaster):
         max_steps: int = 500,
         learning_rate: float = 1e-3,
     ):
+        """Store the settings.
+
+        Parameters
+        ----------
+        model_name : str, optional
+            ``"NHITS"``, ``"NBEATS"`` or ``"PatchTST"``.
+        h : int, optional
+            Horizon the network is built for.
+        input_multiple : int, optional
+            Input window, in multiples of ``h``.
+        max_steps : int, optional
+            Training steps.
+        learning_rate : float, optional
+            Adam's step size.
+        """
         self.model_name = model_name
         self.h = h
         self.input_multiple = input_multiple
@@ -276,6 +305,11 @@ class NeuralForecaster(_Forecaster):
         -------
         numpy.ndarray
             Forecasts.
+
+        Raises
+        ------
+        ValueError
+            When ``h`` differs from the horizon the model was built for.
         """
         if h > self.h:
             raise ValueError(f"built for {self.h} steps, asked {h}")
