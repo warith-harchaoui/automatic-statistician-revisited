@@ -2,30 +2,30 @@
 
 [In English](EXAMPLES.md)
 
-Chaque sortie ci-dessous vient du code de ce dépôt, les 7 et 8 novembre 2026. Les
-durées ont été mesurées sur un ordinateur portable partagé avec d'autres
-calculs. Le code est identique à celui d'[EXAMPLES.md](EXAMPLES.md) ; seuls
-les commentaires changent de langue.
+Chaque sortie ci-dessous vient du code de ce dépôt, lancé entre le 7 et le
+9 novembre 2026 sur un ordinateur portable partagé avec d'autres travaux. Les
+durées sont celles de cet ordinateur. Les sorties des programmes restent en
+anglais, la langue dans laquelle ils écrivent.
 
-La même analyse s'atteint de six façons.
+La même analyse s'ouvre de six façons&nbsp;:
 
-| Surface | Lancement | Exemple |
+| surface | pour la lancer | exemples |
 |---|---|---|
-| Bibliothèque Python | `from autostat import analyse` | sections 1 à 8, 13 |
-| Ligne de commande (Click) | `autostat donnees.csv ...` | section 4 |
+| Bibliothèque Python | `from autostat import analyse` | sections 1 à 8 et 13 |
+| Ligne de commande (Click) | `autostat data.csv ...` | section 4 |
 | Interface graphique (sprezzature-cli-gui) | `autostat-gui` | section 9 |
 | API HTTP (FastAPI) | `uvicorn autostat.api:app` | section 10 |
 | Serveur MCP (FastAPI-MCP) | `autostat-mcp` | section 11 |
-| Compétence d'agent | `skills/autostat` avec `TRIGGERS.md` | section 12 |
+| Skill d'agent | `skills/autostat` avec `TRIGGERS.md` | section 12 |
 
-Chaque exemple qui écrit un rapport a son script dans
-[examples/](examples/) ; le rapport écrit l'accompagne deux fois :
-`markdown/` contient `report.md`, ses figures SVG et `report.pdf` compilé
-par md2star ; `latex/` contient `report.tex`, ses figures PDF et
-`report.pdf` compilé par `latexmk`. Un rapport est décrit une fois, puis
-écrit dans les deux formats par `report.write`.
+Chaque exemple qui écrit un rapport a son script dans [examples/](examples/).
+Le rapport se trouve à côté, en deux exemplaires. `markdown/` contient
+`report.md` avec des figures SVG et `report.pdf` compilé par md2star.
+`latex/` contient `report.tex` avec des figures PDF et `report.pdf` compilé
+par `latexmk`. Un rapport se décrit une fois, puis s'écrit dans les deux
+formats avec `report.write`.
 
-| # | Script | Rapport |
+| # | script | rapport |
 |---|---|---|
 | 1 | [01_rescore_published.py](examples/01_rescore_published.py) | aucun |
 | 2 | [02_describe_airline.py](examples/02_describe_airline.py) | [markdown](examples/02_airline_report/markdown/report.md), [LaTeX](examples/02_airline_report/latex/report.tex) |
@@ -41,8 +41,9 @@ Chaque script se lance depuis la racine du dépôt, par exemple
 
 ## 1. Recalculer un modèle publié par le système de 2014
 
-Le paquet livre les treize séries de référence de l'article d'AAAI 2014 et
-les résultats de la recherche d'origine.
+Le paquet contient les treize séries de référence de l'article d'AAAI 2014,
+avec les résultats de la recherche d'origine. Voici son modèle final pour les
+passagers aériens, recalculé&nbsp;:
 
 ```python
 import torch
@@ -53,7 +54,7 @@ print(benchmarks.names()[:3])
 # ['01-airline', '02-solar', '03-mauna']
 
 x, y = benchmarks.load("01-airline")
-model = benchmarks.published("01-airline")[-1]   # le gagnant final de 2014
+model = benchmarks.published("01-airline")[-1]   # le modèle final de 2014
 print(model.kernel.structure())
 # SE + Lin + WN x Lin + SE x Per x Lin
 print(round(model.nll, 3))                        # tel que publié en 2014
@@ -64,6 +65,9 @@ with torch.no_grad():
     print(round(float(negative_log_likelihood(model, torch.as_tensor(x), torch.as_tensor(y), theta)), 3))
 # 534.518
 ```
+
+Les deux nombres concordent jusqu'au dernier chiffre imprimé, à douze ans
+d'écart et dans un autre langage.
 
 ## 2. Décrire ce modèle en anglais, en Markdown et en LaTeX
 
@@ -80,12 +84,13 @@ for summary, _, _ in report.texts:
 # Uncorrelated noise with linearly increasing standard deviation
 ```
 
-Chaque dossier contient le rapport complet avec son PDF : les données
-d'abord, le résumé, la formule trouvée, le chemin de recherche avec sa courbe
-du BIC (ici les dix niveaux publiés en 2014), une section par composante avec
-sa figure et le tableau de vérification. Les deux ensemble : environ une
-minute, vérification et deux compilations comprises. `describe(..., report_format="latex")`
-n'écrit que la version LaTeX ; `pdf=False` saute la compilation.
+Chaque dossier contient le rapport complet avec son PDF. Il s'ouvre sur les
+données, puis donne le résumé, la formule trouvée par la recherche, le chemin
+de la recherche avec sa courbe du BIC (ici les dix niveaux publiés par le
+système de 2014), une section par composante avec sa figure et les
+vérifications du modèle. Les deux formats ont pris environ une minute,
+vérifications et compilations comprises. `describe(..., report_format="latex")`
+écrit le rapport LaTeX seul. `pdf=False` saute la compilation.
 
 ## 3. Chercher depuis zéro
 
@@ -97,17 +102,21 @@ print(result.best.kernel.structure(), round(result.best.bic, 1))
 # Lin x Lin + Lin x Lin x WN + Lin x Per x SE + SE 1108.9
 ```
 
-Dix niveaux sur 144 points ont pris 4,1 heures avec six processus ; la recherche
-publiée atteignait un BIC de 1123,7. Deux niveaux s'arrêtent à
-`WN + Per x SE + SE` (BIC 1236,4) : le cycle annuel sans la croissance.
-`Experiment.abcd_2014(max_depth=20, stopping_criteria=["no_improvement"],
-patience=2)` cherche jusqu'à ce que le BIC n'ait plus baissé deux niveaux de
-suite, comme le fait [03_search_airline.py](examples/03_search_airline.py).
+Dix niveaux sur 144 points ont pris 4,1 heures avec six processus. La
+recherche publiée atteignait un BIC de 1123,7&nbsp;: le portage fait mieux de
+14,8. Arrêtée après deux niveaux, la recherche garde `WN + Per x SE + SE`
+(BIC 1236,4), soit le cycle annuel sans la croissance.
+`Experiment.abcd_2014(max_depth=20, stopping_criteria=["no_improvement"], patience=2)`
+cherche jusqu'à ce que le BIC n'ait pas baissé deux niveaux de suite, comme le
+fait [03_search_airline.py](examples/03_search_airline.py).
 
 ## 4. Votre propre CSV, en ligne de commande
 
+Huit ans de ventes mensuelles, tirées d'une formule connue&nbsp;: une tendance,
+un cycle annuel et du bruit.
+
 ```python
-# examples/04_make_sales.py : huit ans de ventes mensuelles, tendance + cycle annuel + bruit
+# examples/04_make_sales.py
 import numpy as np, pandas as pd
 
 rng = np.random.default_rng(0)
@@ -127,16 +136,16 @@ autostat sales.csv --time month --value units --max-depth 20 --patience 2 --no-c
 # pdf: sales_report/report.pdf
 ```
 
-La recherche s'arrête deux niveaux après que le BIC a cessé de baisser : elle
-trouve `Lin + WN + Per`, la formule dont les données sont tirées, au niveau 5 ;
-les niveaux 6 et 7 ne trouvent rien de mieux. Avec `--max-depth 3`, elle
-s'arrêtait à une approximation, `WN + Lin x SE + Per x SE` (BIC 458.4). Environ
-quinze minutes. La progression part sur la sortie d'erreur ; les lignes
-ci-dessus, sur la sortie standard. `--format latex` écrit `report.tex` à
-la place, `--no-pdf` saute la compilation et `--json` imprime une ligne
-lisible par une machine.
+Au niveau 5, la recherche trouve `Lin + WN + Per`, la formule même dont les
+données sont tirées. Les niveaux 6 et 7 ne trouvent rien de mieux, alors la
+recherche s'arrête. Avec `--max-depth 3`, elle s'était arrêtée sur une
+approximation, `WN + Lin x SE + Per x SE` (BIC 458,4). Le tout prend une
+quinzaine de minutes. La progression s'affiche sur la sortie d'erreur, les
+lignes ci-dessus sur la sortie standard. `--format latex` écrit `report.tex` à
+la place. `--no-pdf` saute la compilation. `--json` imprime une ligne qu'un
+autre programme lira.
 
-## 5. Votre propre série pandas, en Python
+## 5. Votre propre série pandas, depuis Python
 
 ```python
 import pandas as pd
@@ -154,10 +163,10 @@ result, report = analyse(
 )
 ```
 
-Un index de dates devient des années décimales : le rapport parle alors en
-mois et en années. Une série de plus de 1 000 points est d'abord moyennée en
-1 000 classes (`max_points=`), car le coût croît comme le cube de la
-longueur.
+Un index de dates devient des années décimales, si bien que le rapport parle
+de mois et d'années. Une série de plus de 1&nbsp;000 points est d'abord
+regroupée en 1&nbsp;000 paquets moyennés (`max_points=`), puisque le coût croît
+comme le cube de la longueur.
 
 ## 6. La configuration de 2013
 
@@ -168,15 +177,19 @@ print(result.best.kernel.structure(), round(result.best.bic, 1))
 # Lin x Per + (Lin + RQ) x (Lin + Lin x Per) 1112.4
 ```
 
-Ajouter, multiplier, remplacer, rien d'autre ; la quadratique rationnelle parmi
-les noyaux de base ; le bruit dans la vraisemblance. En ligne de commande :
+La grammaire de 2013 additionne, multiplie et remplace. Elle compte la
+quadratique rationnelle parmi ses noyaux de base et garde le bruit dans la
+vraisemblance. En ligne de commande, le même préréglage s'appelle
 `--preset cks-2013`. Le BIC baisse à chaque niveau jusqu'au dixième, puis deux
-niveaux ne trouvent rien de mieux : douze niveaux, 23 minutes. À trois niveaux,
-la recherche gardait `Lin x RQ + RQ` (BIC 1370,4), sans cycle annuel ; le cycle
-apparaît au niveau 4. Le rédacteur de 2014 n'a pas de règle pour la quadratique
-rationnelle : deux composantes portent la phrase « This simple AI is not capable
-of describing the component Lin x RQ », comme dans l'original ; la section sur la
-formule les écrit quand même.
+niveaux ne trouvent rien de mieux&nbsp;: douze niveaux en 23 minutes. Arrêtée à
+trois niveaux, la recherche gardait `Lin x RQ + RQ` (BIC 1370,4), sans cycle
+annuel. Le cycle apparaît au niveau 4.
+
+Le rédacteur de phrases de 2014 n'a pas de règle pour la quadratique
+rationnelle. Deux composantes se lisent donc «&nbsp;This simple AI is not capable
+of describing the component Lin x RQ&nbsp;» (cette IA simple ne sait pas décrire
+la composante Lin x RQ), comme dans l'original. La section de la formule les
+écrit malgré tout.
 
 ## 7. Une loi a posteriori sur les structures avec AutoGP
 
@@ -195,21 +208,22 @@ for weight, formula in model.structures()[:3]:
 posterior = describe_posterior(model, name="airline passengers", out_dir="autogp_report")
 ```
 
-La page de synthèse liste les structures avec leurs poids. AutoGP n'a
-pas de niveaux de recherche, donc pas de courbe BIC : la page trace à la
-place le BIC de chaque structure au-dessus du plus bas et dit si le BIC
-classe les structures comme la loi a posteriori. Chacune des plus lourdes
-a son propre rapport, avec la décomposition et les
-vérifications de 2014. Le script entier a pris 21 minutes sur huit
-particules, les deux formats de rapport compris.
+La page de synthèse liste les structures avec leurs poids. AutoGP n'a pas de
+niveaux de recherche, donc pas de courbe du BIC. La page trace à la place le
+BIC de chaque structure au-dessus du plus bas et dit si le BIC classe les
+structures comme la loi a posteriori. Chacune des structures les plus lourdes
+reçoit son propre rapport, avec la décomposition et les vérifications de 2014.
+Le script entier a pris 21 minutes sur huit particules, les deux formats de
+rapport compris.
 
 ## 8. Les treize modèles publiés en 2014
 
 `examples/08_published_2014.py` décrit le modèle final de chaque série de
 référence, des passagers aériens aux salaires, dans les deux formats. La
-série solaire montre les fenêtres de changement : ses composantes
-s'appliquent « until 1643 and from 1716 onwards », les années qui
-entourent le minimum de Maunder.
+série solaire montre ce que fait une fenêtre de changement. Ses composantes
+s'appliquent «&nbsp;until 1643 and from 1716 onwards&nbsp;» (jusqu'en 1643 et à
+partir de 1716)&nbsp;: les années du minimum de Maunder, quand les taches du
+Soleil avaient presque disparu.
 
 ## 9. L'interface graphique
 
@@ -218,13 +232,14 @@ autostat-gui
 # autostat GUI: http://127.0.0.1:8765/
 ```
 
-Le navigateur ouvre un formulaire généré depuis la ligne de commande par
-sprezzature-cli-gui : un champ par option, valeurs par défaut remplies.
-« Build command » affiche la ligne de commande équivalente ; « Lancer sur cette
-machine » lance l'analyse par l'hôte local et liste les fichiers du rapport.
-L'hôte n'écoute que 127.0.0.1. La page ne charge rien d'un autre hôte : sa
-première construction télécharge le CLI de Tailwind (environ 45 Mo) puis ne
-compile que les classes qu'elle emploie.
+Le navigateur ouvre un formulaire que sprezzature-cli-gui a tiré de la ligne
+de commande&nbsp;: un champ par option, valeurs par défaut remplies. «&nbsp;Build
+command&nbsp;» affiche la ligne de commande correspondante. «&nbsp;Run on this
+machine&nbsp;» lance l'analyse par l'hôte local et liste les fichiers du rapport
+sous forme de liens. L'hôte écoute sur 127.0.0.1 seulement. La page ne charge
+rien depuis un autre hôte&nbsp;: sa première construction télécharge la ligne de
+commande de Tailwind (environ 45 Mo), puis compile les seules classes que la
+page emploie.
 
 ## 10. L'API HTTP
 
@@ -250,13 +265,14 @@ print(body["formula"]["explicit"][1][:70])
 ```
 
 La réponse contient la formule en chaînes LaTeX et la recherche niveau par
-niveau. Les naissances ont un cycle hebdomadaire : leur période, 0,01917 an,
-vaut sept jours. `POST /v1/analyses` prend `values` (3 à 1 000), des `times`
-facultatifs, `max_depth` (1 à 6, ou jusqu'à 20 avec une `patience`), `patience`,
-`symbolic` et les options du rapport. Les erreurs partagent un même corps, par
-exemple `{"error": {"code": "invalid_input", "message": "values: List should
-have at least 3 items after validation, not 2"}}`. Les rapports vont sous
-`AUTOSTAT_REPORTS_DIR` (par défaut `./autostat_reports`).
+niveau. La série des naissances a un cycle hebdomadaire&nbsp;: sa période,
+0,01917 an, vaut sept jours. `POST /v1/analyses` prend `values` (de 3 à
+1&nbsp;000), `times` en option, `max_depth` (de 1 à 6, jusqu'à 20 avec une
+`patience`), `patience`, `symbolic` et les options du rapport. Les erreurs
+partagent un même corps, par exemple `{"error": {"code": "invalid_input",
+"message": "values: List should have at least 3 items after validation, not
+2"}}`. Les rapports vont sous `AUTOSTAT_REPORTS_DIR` (par défaut
+`./autostat_reports`).
 
 ## 11. Le serveur MCP
 
@@ -265,7 +281,7 @@ autostat-mcp            # routes HTTP et /mcp sur 127.0.0.1:8000
 claude mcp add --transport http autostat http://127.0.0.1:8000/mcp
 ```
 
-Une session sur le protocole, tirée de `tests/test_mcp.py` :
+Une session par le protocole, tirée de `tests/test_mcp.py`&nbsp;:
 
 ```text
 tools/list   list_series, describe_published, analyse_series, get_report
@@ -275,9 +291,9 @@ tools/call   get_report {"report_id": "x"} -> isError: true,
 ```
 
 Quatre outils sont publiés, avec les noms d'arguments et les bornes de l'API.
-`health` et le téléchargement binaire restent hors des outils de l'agent.
+`health` et le téléchargement binaire restent hors de portée de l'agent.
 
-## 12. La compétence d'agent
+## 12. Le skill d'agent
 
 ```bash
 python scripts/build_skill.py
@@ -285,25 +301,25 @@ python scripts/build_skill.py
 cp -r skills/autostat ~/.claude/skills/      # Claude Code
 ```
 
-Téléversez le zip dans Claude, sous Settings > Capabilities > Skills. L'agent
-oriente alors « que contient cette série », « quelle formule pour cette courbe »
-ou "fit a formula to this noisy curve" vers autostat, selon
-[TRIGGERS.md](TRIGGERS.md). La compétence vérifie son propre travail :
+Dans Claude, le zip se dépose sous Settings > Capabilities > Skills. L'agent
+envoie alors à autostat des demandes comme «&nbsp;what is in this series&nbsp;»,
+«&nbsp;fit a formula to this noisy curve&nbsp;» ou «&nbsp;décompose cette série&nbsp;»,
+selon [TRIGGERS.md](TRIGGERS.md). Le skill vérifie son propre travail&nbsp;:
 
 ```bash
 python skills/autostat/scripts/check_report.py examples/02_airline_report/markdown
 # report OK
 ```
 
-[evals/triggers.yaml](skills/autostat/evals/triggers.yaml) liste 14 requêtes qui
-doivent charger la compétence et 7 qui ne le doivent pas, pour le test de
-déclenchement du guide d'Anthropic. `tests/test_skill.py` tient la compétence aux
-règles du guide.
+[evals/triggers.yaml](skills/autostat/evals/triggers.yaml) liste 14 demandes
+qui chargent le skill et 7 qui le laissent de côté, pour le test de
+déclenchement du guide des skills d'Anthropic. `tests/test_skill.py` tient le
+skill aux règles du guide.
 
-## 13. Lire la formule et le chemin de recherche
+## 13. Lire la formule et le chemin de la recherche
 
-Chaque rapport énonce la formule trouvée et étudie où la recherche devrait
-s'arrêter. Sur les ventes des exemples 4 et 5 :
+Chaque rapport donne la formule trouvée par la recherche et examine où la
+recherche s'arrête. Sur les ventes des exemples 4 et 5&nbsp;:
 
 ```python
 import pandas as pd
@@ -321,15 +337,18 @@ for closed_form, note in zip(report.formula().explicit, report.formula().notes):
 
 for sentence in findings(report.path, report.model.ndata):
     print(sentence)
-# The search ran 7 levels (stopping after 2 level(s) without a BIC fall above 0.1, at most 20) and keeps the model of level 7, Lin + WN + Per, BIC 449.2.
+# The search ran 7 levels (stopping after 2 level(s) without a BIC fall above 0.1, at most 20) and keeps the model of level 6, Lin + WN + Per, BIC 449.2.
 # That structure was first reached at level 5; the levels after it only refitted its parameters, lowering BIC by 0.0 in all.
 # The best different structure, Lin + WN + Per x SE (level 4), is 4.6 above it: positive evidence for the kept one on the Kass and Raftery scale.
+# Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.899 and the next, Lin + WN + Per x SE, 0.092: the data favour the kept one without ruling the next out.
 # BIC stopped falling at level 5. The 2 level(s) searched past it kept its structure and lowered BIC by 0.00 in all, less than the tolerance of 0.1: going on buys nothing the data pay for.
-# A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 6 and kept the same structure, less refitted.
+# A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 6 and kept the same model.
 # A rule stopping after 2 level(s) without a fall above 0.1 would have ended the search at level 7 and kept the same model.
 # The kept expression has 6 parameters for 96 points: its BIC is a fit term 2 NLL = 421.9 plus a complexity term p ln n = 27.4, each extra parameter costing 4.56; it splits into 3 components, 2 of them with a closed form.
 ```
 
-Les données sont tirées d'une pente de 6 par an depuis 100, d'un sinus
-d'amplitude 8 et de période un an plus un bruit de variance 4. La formule donne
-6,095, 7,95, un an et 3,578.
+Les données sont tirées d'une pente de 6 par an partant de 100, d'une
+sinusoïde d'amplitude 8 et de période un an, plus un bruit de variance 4. La
+formule donne 6,095, 7,95, un an et 3,578. La seconde harmonique, 5&nbsp;% de la
+première, est ce que la recherche ajoute d'elle-même&nbsp;: une part vient des
+mois, que les années décimales n'espacent pas tout à fait également.
