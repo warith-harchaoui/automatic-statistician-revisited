@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/logo-288.png" width="200" alt="Un statisticien à son bureau, l'index levé"></p>
+
 # Automatic Statistician, revisité
 
 [Read in English](README.md)

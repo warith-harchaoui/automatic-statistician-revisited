@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/logo-288.png" width="200" alt="A statistician at a desk, finger raised"></p>
+
 # Automatic Statistician, revisited
 
 [Lire en français](LISEZMOI.md)
