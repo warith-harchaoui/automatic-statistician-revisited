@@ -4,7 +4,10 @@
 What this script does
     It reads a report directory and verifies what an answer will rely on:
     the data figure comes first, the formula and search-path sections are
-    there and every figure the source names exists.
+    there, the BIC figure is drawn unless the report says why it cannot be
+    and every figure the source names exists. An AutoGP summary has no
+    formula or search path of its own: its posterior over structures stands
+    for both.
 
 Usage
     ``python check_report.py REPORT_DIRECTORY``
@@ -27,6 +30,8 @@ from pathlib import Path
 FORMULA = "The formula found"
 PATH = "Search path and stopping criterion"
 SUMMARY = "Executive summary"
+POSTERIOR = "Posterior over structures"
+NO_BIC = ("no BIC curve to draw", "no BIC to compare")
 
 
 def problems(folder: Path) -> list[str]:
@@ -54,7 +59,8 @@ def problems(folder: Path) -> list[str]:
     )
     figures = re.findall(pattern, text)
     found = []
-    for section in (SUMMARY, FORMULA, PATH):
+    required = (POSTERIOR,) if POSTERIOR in text else (SUMMARY, FORMULA, PATH)
+    for section in required:
         if section not in text:
             found.append(f"section missing: {section}")
     data = [name for name in figures if Path(name).stem == "data"]
@@ -62,7 +68,8 @@ def problems(folder: Path) -> list[str]:
         found.append("the data figure is missing")
     elif SUMMARY in text and text.index(data[0]) > text.index(SUMMARY):
         found.append("the data figure does not come first")
-    if not any(Path(name).stem == "bic" for name in figures):
+    explained = any(reason in text for reason in NO_BIC)
+    if not explained and not any(Path(name).stem == "bic" for name in figures):
         found.append("the BIC curve is missing")
     found += [f"figure not found: {n}" for n in figures if not (folder / n).exists()]
     return found

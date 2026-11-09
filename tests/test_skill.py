@@ -134,6 +134,43 @@ def test_the_checker_names_what_is_wrong(tmp_path):
     assert "figure not found: bic.svg" in found
 
 
+def test_the_checker_accepts_an_autogp_summary(tmp_path):
+    """A posterior summary needs its data figure and its BIC figure, no path.
+
+    Parameters
+    ----------
+    tmp_path : pathlib.Path
+        Pytest's temporary directory.
+    """
+    (tmp_path / "data.svg").write_text("x")
+    (tmp_path / "report.md").write_text(
+        "![d](data.svg)\n## Posterior over structures\n"
+    )
+    assert _checker().problems(tmp_path) == ["the BIC curve is missing"]
+    (tmp_path / "bic.svg").write_text("x")
+    (tmp_path / "report.md").write_text(
+        "![d](data.svg)\n## Posterior over structures\n![b](bic.svg)\n"
+    )
+    assert _checker().problems(tmp_path) == []
+
+
+def test_the_checker_accepts_a_missing_curve_the_report_explains(tmp_path):
+    """A one-level search says it has no curve; that is not a defect.
+
+    Parameters
+    ----------
+    tmp_path : pathlib.Path
+        Pytest's temporary directory.
+    """
+    (tmp_path / "data.svg").write_text("x")
+    (tmp_path / "report.md").write_text(
+        "![d](data.svg)\n## Executive summary\n## The formula found\n"
+        "## Search path and stopping criterion\n"
+        "One level was searched: there is no BIC curve to draw.\n"
+    )
+    assert _checker().problems(tmp_path) == []
+
+
 def test_the_checker_needs_no_dependency():
     """It runs in an isolated interpreter, as an uploaded skill would."""
     script = SKILL / "scripts" / "check_report.py"

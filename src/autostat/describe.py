@@ -1317,8 +1317,11 @@ class Report:
         )
         suffix = ".pdf" if latex else ".svg"
         self.data_figure = plot_data(self.x, self.y, self.name, out, self.unit, suffix)
+        # A curve needs two levels at least; one point says nothing.
         self.bic_figure = (
-            None if self.path is None else plot_bic(self.path, out, suffix)
+            plot_bic(self.path, out, suffix)
+            if self.path is not None and len(self.path.steps) > 1
+            else None
         )
         source = out / ("report.tex" if latex else "report.md")
         source.write_text(self.latex() if latex else self.markdown())
@@ -1760,6 +1763,8 @@ class Report:
                 lines += self._latex_figure(self.bic_figure, "BIC per search level")
             else:
                 lines += ["", f"![BIC per search level]({self.bic_figure})"]
+        elif len(self.path.steps) == 1:
+            lines += ["", "One level was searched: there is no BIC curve to draw."]
         weights = self.path.plausibility()
         shown = [w for w in weights if w.weight >= 0.001]
         lines += [

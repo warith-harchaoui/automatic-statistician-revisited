@@ -195,8 +195,11 @@ for weight, formula in model.structures()[:3]:
 posterior = describe_posterior(model, name="airline passengers", out_dir="autogp_report")
 ```
 
-La page de synthèse liste les structures avec leurs poids ; chacune des
-plus lourdes a son propre rapport, avec la décomposition et les
+La page de synthèse liste les structures avec leurs poids. AutoGP n'a
+pas de niveaux de recherche, donc pas de courbe BIC : la page trace à la
+place le BIC de chaque structure au-dessus du plus bas et dit si le BIC
+classe les structures comme la loi a posteriori. Chacune des plus lourdes
+a son propre rapport, avec la décomposition et les
 vérifications de 2014. Le script entier a pris 21 minutes sur huit
 particules, les deux formats de rapport compris.
 

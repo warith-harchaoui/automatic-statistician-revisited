@@ -188,8 +188,10 @@ for weight, formula in model.structures()[:3]:
 posterior = describe_posterior(model, name="airline passengers", out_dir="autogp_report")
 ```
 
-The summary page lists the structures with their weights; each of the
-heaviest has its own report, with the 2014 decomposition and checks. The
+The summary page lists the structures with their weights. AutoGP has no
+search levels, so no BIC curve: the page draws instead each structure's BIC
+above the lowest and says whether BIC ranks the structures as the posterior
+does. Each of the heaviest has its own report, with the 2014 decomposition and checks. The
 whole script took 21 minutes on eight particles, both report formats
 included.
 

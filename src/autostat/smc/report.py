@@ -38,6 +38,8 @@ Warith Harchaoui <warithmetics@deraison.ai>
 
 from __future__ import annotations
 
+import contextlib
+import io
 import math
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -263,6 +265,22 @@ def to_model(
     return model
 
 
+def _weight(weight: float) -> str:
+    """Write a posterior weight, as "< 0.001" when it rounds to zero.
+
+    Parameters
+    ----------
+    weight : float
+        A weight in [0, 1].
+
+    Returns
+    -------
+    str
+        Three decimals.
+    """
+    return "< 0.001" if weight < 0.0005 else f"{weight:.3f}"
+
+
 @dataclass
 class PosteriorReport:
     """The posterior's structures, their weights and one report per structure.
@@ -280,6 +298,12 @@ class PosteriorReport:
         Where each report was written, relative to the summary.
     data_figure : str, optional
         The data alone, drawn when the summary is written.
+    bics : list of float, optional
+        The BIC of each structure's heaviest particle, in the order of
+        ``structures``.
+    bic_figure : str, optional
+        Each structure's BIC above the lowest, drawn when the summary is
+        written and there are at least two structures.
     """
 
     name: str
@@ -287,6 +311,41 @@ class PosteriorReport:
     reports: list[Report] = field(default_factory=list)
     folders: list[str] = field(default_factory=list)
     data_figure: str | None = None
+    bics: list[float] = field(default_factory=list)
+    bic_figure: str | None = None
+
+    def bic_sentences(self) -> list[str]:
+        """Say whether BIC ranks the structures as the posterior weights do.
+
+        Returns
+        -------
+        list of str
+            Plain sentences; none when no structure was scored.
+        """
+        if len(self.bics) == 1:
+            return ["One structure only: there is no BIC to compare."]
+        if not self.bics:
+            return []
+        lowest = int(np.argmin(self.bics))
+        out = [
+            "Each structure's BIC is that of its heaviest particle, whose "
+            "parameters the sampler drew rather than optimised: the BIC the "
+            "structure could reach is at most this one."
+        ]
+        if lowest == 0:
+            gap = sorted(self.bics)[1] - self.bics[0]
+            out.append(
+                "BIC agrees with the posterior: the heaviest structure also has "
+                f"the lowest BIC, {gap:.1f} below the next."
+            )
+        else:
+            out.append(
+                f"BIC and the posterior disagree: BIC ranks structure {lowest + 1} "
+                f"first (weight {_weight(self.structures[lowest][0])}), "
+                f"{self.bics[0] - self.bics[lowest]:.1f} below the heaviest "
+                "structure."
+            )
+        return out
 
     def markdown(self) -> str:
         """Render the summary page.
@@ -329,6 +388,11 @@ class PosteriorReport:
             lines.append(
                 f"| {i + 1} | {weight:.3f} | `{formula}` | `{structure}` | {link} |"
             )
+        if self.bic_figure:
+            lines += ["", f"![BIC of each structure]({self.bic_figure})"]
+        sentences = self.bic_sentences()
+        if sentences:
+            lines += ["", " ".join(sentences)]
         for i, report in enumerate(self.reports):
             lines += [
                 "",
@@ -405,6 +469,15 @@ class PosteriorReport:
                 rf"{i + 1} & {weight:.3f} & \texttt{{{tex(structure)}}} & {link} \\"
             )
         lines += [r"\bottomrule", r"\end{tabular}", r"\end{center}"]
+        if self.bic_figure:
+            lines += [
+                r"\begin{center}",
+                rf"\includegraphics[width=\linewidth]{{{self.bic_figure}}}",
+                r"\end{center}",
+            ]
+        sentences = self.bic_sentences()
+        if sentences:
+            lines += ["", tex(" ".join(sentences))]
         for i, report in enumerate(self.reports):
             lines += [
                 "",
@@ -465,14 +538,15 @@ def describe_posterior(
     for weight, particle in zip(model.particle_weights(), model.particles, strict=True):
         groups.setdefault(particle.tree.formula(), []).append((float(weight), particle))
     ranked = sorted(groups.items(), key=lambda item: -sum(w for w, _ in item[1]))
-    structures, chosen = [], []
+    structures, chosen, bics = [], [], []
     for formula, members in ranked:
         weight = sum(w for w, _ in members)
         heaviest = max(members, key=lambda member: member[0])[1]
         gp = to_model(heaviest, model.config, model.scaling, model.t, model.y)
         structures.append((weight, formula, gp.kernel.simplified().structure()))
         chosen.append(gp)
-    out = PosteriorReport(name, structures)
+        bics.append(float(gp.bic))
+    out = PosteriorReport(name, structures, bics=bics)
     held = 0.0
     for i, gp in enumerate(chosen[:top]):
         if held >= mass:
@@ -505,8 +579,61 @@ def describe_posterior(
             unit,
             ".pdf" if latex else ".svg",
         )
+        if len(bics) >= 2:
+            out.bic_figure = plot_structure_bic(
+                out, Path(out_dir), ".pdf" if latex else ".svg"
+            )
         source = Path(out_dir) / ("report.tex" if latex else "report.md")
         source.write_text(out.latex() if latex else out.markdown())
         if pdf:
             (compile_latex if latex else compile_markdown)(source)
     return out
+
+
+def plot_structure_bic(report: PosteriorReport, out: Path, suffix: str) -> str:
+    """Draw each structure's BIC above the lowest, labelled with its weight.
+
+    AutoGP has no search levels, so there is no BIC curve to draw; what BIC
+    can still say is how it ranks the structures the posterior kept, next
+    to the weights the posterior gives them.
+
+    Parameters
+    ----------
+    report : PosteriorReport
+        Holds the structures, their weights and their BIC.
+    out : pathlib.Path
+        Destination directory.
+    suffix : str
+        ``".svg"`` or ``".pdf"``.
+
+    Returns
+    -------
+    str
+        The file name.
+    """
+    from sprezzature_figures import make_figure
+
+    lowest = min(report.bics)
+    rows = [
+        {"c": f"{i + 1} (weight {_weight(weight)})", "v": round(bic - lowest, 2)}
+        for i, ((weight, _, _), bic) in enumerate(
+            zip(report.structures, report.bics, strict=True)
+        )
+    ]
+    fname = f"bic{suffix}"
+    with contextlib.redirect_stdout(io.StringIO()):
+        make_figure(
+            "lollipop",
+            rows,
+            out=str(out / fname),
+            title="BIC of each structure, above the lowest",
+            subtitle=(
+                "Structures numbered by posterior weight. Score: BIC minus the "
+                "lowest, 0 for the structure BIC prefers."
+            ),
+            width=900,
+            height=120 + 40 * len(rows),
+            mode="static",
+            embed_fonts=False,
+        )
+    return fname

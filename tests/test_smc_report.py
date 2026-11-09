@@ -14,7 +14,12 @@ import torch
 from autostat import kernels as ff
 from autostat.describe import translate_product
 from autostat.smc import AutoGP, Config, Particle, Scaling, linear_schedule
-from autostat.smc.report import describe_posterior, to_kernel, to_model
+from autostat.smc.report import (
+    PosteriorReport,
+    describe_posterior,
+    to_kernel,
+    to_model,
+)
 from autostat.smc.tree import covariance, log_likelihood, sample_tree
 
 
@@ -117,3 +122,22 @@ def test_a_posterior_report_is_written(series, tmp_path):
     assert (tmp_path / "structure_1" / "report.md").exists()
     assert report.reports[0].checks is not None
     assert abs(sum(w for w, _, _ in report.structures) - 1) < 1e-9
+    assert len(report.bics) == len(report.structures)
+    text = (tmp_path / "report.md").read_text()
+    if len(report.structures) > 1:
+        assert (tmp_path / report.bic_figure).exists()
+        assert "BIC" in " ".join(report.bic_sentences())
+    else:
+        assert "no BIC to compare" in text
+
+
+def test_the_summary_says_whether_bic_agrees_with_the_posterior():
+    """BIC ranking the heaviest structure first agrees; ranking another disagrees."""
+    structures = [(0.6, "a", "A"), (0.4, "b", "B")]
+    agree = PosteriorReport("toy", structures, bics=[100.0, 104.0])
+    assert "BIC agrees" in " ".join(agree.bic_sentences())
+    differ = PosteriorReport("toy", structures, bics=[104.0, 100.0])
+    text = " ".join(differ.bic_sentences())
+    assert "ranks structure 2 first (weight 0.400), 4.0 below" in text
+    single = PosteriorReport("toy", structures[:1], bics=[100.0])
+    assert single.bic_sentences() == ["One structure only: there is no BIC to compare."]

@@ -168,3 +168,26 @@ def test_the_search_path_section_weighs_the_structures(latex):
     text = "\n".join(Report._path_lines(report, latex))
     assert "Posterior weight of each structure met" in text
     assert "0.713" in text and "0.281" in text
+
+
+def test_a_one_level_search_draws_no_bic_curve(airline, airline_final, tmp_path):
+    """One point is no curve: the report says so instead of drawing it.
+
+    Parameters
+    ----------
+    airline : tuple
+        Fixture: the airline data.
+    airline_final : GPModel
+        Fixture: the published model.
+    tmp_path : pathlib.Path
+        Pytest's temporary directory.
+    """
+    from autostat.stopping import search_path
+
+    x, y = airline
+    path = search_path([airline_final], x, y, "one level")
+    report = describe(airline_final, x, y, check=False, path=path)
+    source = report.write(tmp_path, "markdown", pdf=False).read_text()
+    assert report.bic_figure is None
+    assert not (tmp_path / "bic.svg").exists()
+    assert "no BIC curve to draw" in source
