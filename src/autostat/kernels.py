@@ -431,6 +431,22 @@ class Kernel:
         """
         return {"Noise": "WN", "Const": "C"}.get(self.id, self.id)
 
+    def structure_key(self) -> str:
+        """Render the structure with commutative operands sorted by structure.
+
+        :meth:`structure` follows the operand order of :meth:`canonical`,
+        which sorts by representation, parameters included: two fits of one
+        structure can then print their terms in different orders. This key
+        sorts by structure alone, so equal structures give equal strings.
+
+        Returns
+        -------
+        str
+            E.g. ``Per x SE + SE + WN`` for both ``WN + SE + SE x Per`` and
+            ``SE + Per x SE + WN``.
+        """
+        return self.structure()
+
     def to_dict(self) -> dict[str, Any]:
         """Describe the kernel as JSON-serialisable data.
 
@@ -1642,6 +1658,16 @@ class SumKernel(_Operator):
         """
         return " + ".join(o.structure() for o in self.operands)
 
+    def structure_key(self) -> str:
+        """Render the summands' keys, sorted, joined by ``+``.
+
+        Returns
+        -------
+        str
+            Equal for sums of the same structures in any order.
+        """
+        return " + ".join(sorted(o.structure_key() for o in self.operands))
+
 
 class ProductKernel(_Operator):
     """Product ``k1 x k2 x ...``."""
@@ -1776,6 +1802,20 @@ class ProductKernel(_Operator):
         ]
         return " x ".join(parts)
 
+    def structure_key(self) -> str:
+        """Render the factors' keys, sorted, joined by ``x``.
+
+        Returns
+        -------
+        str
+            Equal for products of the same structures in any order.
+        """
+        parts = [
+            f"({o.structure_key()})" if isinstance(o, SumKernel) else o.structure_key()
+            for o in self.operands
+        ]
+        return " x ".join(sorted(parts))
+
 
 class _Switch(_Operator):
     """Shared code for the two operators that switch between two kernels."""
@@ -1873,6 +1913,16 @@ class _Switch(_Operator):
             The structure.
         """
         return f"{self.id}({', '.join(o.structure() for o in self.operands)})"
+
+    def structure_key(self) -> str:
+        """Render ``CP(k1, k2)`` or ``CW(k1, k2)`` from the operands' keys.
+
+        Returns
+        -------
+        str
+            The operands keep their order: a switch is not commutative.
+        """
+        return f"{self.id}({', '.join(o.structure_key() for o in self.operands)})"
 
 
 class ChangePointKernel(_Switch):

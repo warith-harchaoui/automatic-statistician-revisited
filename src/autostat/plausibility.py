@@ -249,7 +249,7 @@ def plausibility(
     """
     best: dict[str, GPModel] = {}
     for model in models:
-        key = model.kernel.simplified().structure()
+        key = model.kernel.simplified().structure_key()
         if key not in best or model.bic < best[key].bic:
             best[key] = model
     return weigh(
@@ -325,7 +325,7 @@ def grammar_pool(depth: int = 2, limit: int = 3000) -> list[ff.Kernel]:
             # Unfitted kernels have no parameters to simplify with; their
             # canonical form is enough to tell structures apart.
             canonical = kernel.canonical()
-            seen.setdefault(canonical.structure(), canonical)
+            seen.setdefault(canonical.structure_key(), canonical)
         frontier = frontier[:limit]
         if len(seen) >= limit:
             break

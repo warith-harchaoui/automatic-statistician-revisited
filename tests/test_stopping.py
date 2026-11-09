@@ -158,3 +158,17 @@ def test_the_weight_sentence_reads_the_gap(second_bic, reading):
     """
     path = _path([second_bic, 100.0], ["B", "A"])
     assert reading in " ".join(findings(path, 100))
+
+
+def test_one_structure_in_two_orders_is_one_structure():
+    """Two fits of one structure print alike, so the path does not weigh it twice."""
+    from autostat import kernels as ff
+
+    first = ff.SqExpKernel() + ff.ProductKernel(
+        [ff.LinearKernel(), ff.PeriodicKernel()]
+    )
+    second = (
+        ff.ProductKernel([ff.PeriodicKernel(), ff.LinearKernel()]) + ff.SqExpKernel()
+    )
+    assert first.structure() != second.structure()
+    assert first.structure_key() == second.structure_key()

@@ -55,7 +55,8 @@ class Step:
     parameters : int
         Parameters BIC charges for.
     structure : str
-        The winner's simplified structure.
+        The winner's simplified structure, commutative terms sorted
+        (``structure_key``).
     components : int
         Additive components it splits into.
     closed_forms : int
@@ -244,7 +245,7 @@ def search_path(
                 bic=float(model.bic),
                 nll=float(model.nll),
                 parameters=int(simple.kernel.effective_params),
-                structure=simple.kernel.structure(),
+                structure=simple.kernel.structure_key(),
                 components=len(parts),
                 closed_forms=sum(e is not None for e in written.explicit),
             )
@@ -316,7 +317,7 @@ def findings(path: SearchPath, ndata: int) -> list[str]:
         richer = max(s.components for s in beyond)
         changed = sorted({s.structure for s in beyond} - {settled.structure})
         what = (
-            f"tried {len(changed)} other structure(s), with up to {richer} components,"
+            f"tried {len(changed)} other structure(s) with up to {richer} components"
             if changed
             else "kept its structure"
         )
