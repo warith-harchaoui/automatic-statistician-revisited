@@ -1760,6 +1760,28 @@ class Report:
                 lines += self._latex_figure(self.bic_figure, "BIC per search level")
             else:
                 lines += ["", f"![BIC per search level]({self.bic_figure})"]
+        weights = self.path.plausibility()
+        shown = [w for w in weights if w.weight >= 0.001]
+        lines += [
+            "",
+            "Posterior weight of each structure met, exp(-BIC/2) normalised under "
+            "a flat prior, after the Bayesian machine scientist (Guimerà et al., "
+            "2020): where the search keeps one structure, the weights say how "
+            "much the data prefer it to the others."
+            + (
+                f" The {len(weights) - len(shown)} structure(s) under 0.001 are "
+                "left out."
+                if len(shown) < len(weights)
+                else ""
+            ),
+            "",
+        ]
+        lines += _table(
+            ["structure", "lowest BIC", "weight"],
+            [(w.structure, f"{w.bic:.1f}", f"{w.weight:.3f}") for w in shown],
+            latex,
+            wide=0,
+        )
         sentences = findings(self.path, self.model.ndata)
         if latex:
             lines += ["", r"\begin{itemize}"]

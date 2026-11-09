@@ -115,3 +115,24 @@ def test_a_search_with_patience_stops_past_its_best_level():
     best = int(np.argmin(bics))
     assert len(bics) < 8
     assert len(bics) - 1 - best >= 2 or len(bics) == 8
+
+
+def test_path_weights_count_each_structure_once():
+    """A refitted structure is one candidate, at its lowest BIC."""
+    path = _path([100.0, 90.0, 88.0], ["A", "B", "B"])
+    rows = path.plausibility()
+    assert [r.structure for r in rows] == ["B", "A"]
+    assert rows[0].bic == 88.0
+    assert rows[1].weight == pytest.approx(np.exp(-6) / (1 + np.exp(-6)))
+
+
+def test_the_published_call_centre_path_has_a_close_rival():
+    """The report states the weights of the kept structure and of the next."""
+    x, y = benchmarks.load("07-call-centre")
+    path = search_path(benchmarks.published("07-call-centre"), x, y, "published")
+    rows = path.plausibility()
+    assert rows[0].weight == pytest.approx(0.713, abs=0.01)
+    assert rows[1].weight == pytest.approx(0.281, abs=0.01)
+    text = " ".join(findings(path, len(y)))
+    assert "posterior weight of 0.713" in text
+    assert "barely tell them apart" in text

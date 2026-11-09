@@ -143,3 +143,28 @@ def test_latex_escapes_what_latex_reads_as_commands():
     assert tex("50% of A&B_c #1 {x} ~ ^ $") == (
         r"50\% of A\&B\_c \#1 \{x\} \textasciitilde{} \textasciicircum{} \$"
     )
+
+
+@pytest.mark.parametrize("latex", [False, True])
+def test_the_search_path_section_weighs_the_structures(latex):
+    """The path section tabulates each structure's posterior weight.
+
+    Parameters
+    ----------
+    latex : bool
+        LaTeX rather than Markdown.
+    """
+    from types import SimpleNamespace
+
+    from autostat import benchmarks
+    from autostat.describe import Report
+    from autostat.stopping import search_path
+
+    x, y = benchmarks.load("07-call-centre")
+    path = search_path(benchmarks.published("07-call-centre"), x, y, "published")
+    report = SimpleNamespace(
+        path=path, bic_figure=None, model=SimpleNamespace(ndata=len(y))
+    )
+    text = "\n".join(Report._path_lines(report, latex))
+    assert "Posterior weight of each structure met" in text
+    assert "0.713" in text and "0.281" in text

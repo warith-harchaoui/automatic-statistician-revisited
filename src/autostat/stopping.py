@@ -36,6 +36,7 @@ import numpy as np
 
 from .formula import formula
 from .model import GPModel
+from .plausibility import Plausible, weigh
 from .search import Experiment
 
 
@@ -138,6 +139,21 @@ class SearchPath:
                 ran = self.steps[: i + 1]
                 return step.level, min(ran, key=lambda s: s.bic)
         return None, self.kept
+
+    def plausibility(self) -> list[Plausible]:
+        """Weigh the structures the path met by their posterior, under a flat prior.
+
+        Each distinct structure keeps its lowest BIC; the weights are
+        ``exp(-BIC / 2)`` normalised over those structures, as the Bayesian
+        machine scientist weighs expressions. A level that only refits a
+        structure adds no new candidate.
+
+        Returns
+        -------
+        list of Plausible
+            One per structure, most plausible first.
+        """
+        return weigh([(s.structure, s.bic, 0.0) for s in self.steps])
 
 
 def rule_of(experiment: Experiment) -> str:
@@ -275,6 +291,20 @@ def findings(path: SearchPath, ndata: int) -> list[str]:
             f"The best different structure, {rival.structure} (level {rival.level}), "
             f"is {gap:.1f} above it: {evidence(gap)} evidence for the kept one on "
             "the Kass and Raftery scale."
+        )
+    weights = path.plausibility()
+    if len(weights) > 1:
+        top, runner = weights[0], weights[1]
+        out.append(
+            f"Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine "
+            f"scientist weighs expressions, the structures met give the kept one a "
+            f"posterior weight of {top.weight:.3f} and the next, {runner.structure}, "
+            f"{runner.weight:.3f}"
+            + (
+                ": the data barely tell them apart."
+                if runner.weight > 0.05
+                else ": the kept one carries almost all the weight."
+            )
         )
     settled = path.settled
     beyond = [s for s in steps if s.level > settled.level]

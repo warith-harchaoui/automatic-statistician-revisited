@@ -252,18 +252,45 @@ def plausibility(
         key = model.kernel.simplified().structure()
         if key not in best or model.bic < best[key].bic:
             best[key] = model
-    rows = []
-    for key, model in best.items():
-        log_prior = 0.0 if prior is None else prior.log_prior(model.kernel.simplified())
-        rows.append(
-            (key, float(model.bic), log_prior, float(model.bic) / 2 - log_prior)
-        )
-    lowest = min(r[3] for r in rows)
-    weights = np.exp(-(np.array([r[3] for r in rows]) - lowest))
+    return weigh(
+        [
+            (
+                key,
+                float(model.bic),
+                0.0 if prior is None else prior.log_prior(model.kernel.simplified()),
+            )
+            for key, model in best.items()
+        ]
+    )
+
+
+def weigh(scored: list[tuple[str, float, float]]) -> list[Plausible]:
+    """Turn structures scored by BIC and log prior into posterior weights.
+
+    Parameters
+    ----------
+    scored : list of (str, float, float)
+        Structure, BIC and log prior; a structure met several times keeps
+        its lowest description length.
+
+    Returns
+    -------
+    list of Plausible
+        One per structure, most plausible first.
+    """
+    best: dict[str, tuple[float, float, float]] = {}
+    for key, bic, log_prior in scored:
+        length = bic / 2 - log_prior
+        if key not in best or length < best[key][2]:
+            best[key] = (bic, log_prior, length)
+    lowest = min(length for _, _, length in best.values())
+    weights = np.exp(-(np.array([r[2] for r in best.values()]) - lowest))
     weights /= weights.sum()
     out = [
         Plausible(key, bic, log_prior, length, float(w))
-        for (key, bic, log_prior, length), w in zip(rows, weights, strict=True)
+        for (key, (bic, log_prior, length)), w in zip(
+            best.items(), weights, strict=True
+        )
     ]
     return sorted(out, key=lambda p: p.description_length)
 
