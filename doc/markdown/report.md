@@ -403,7 +403,7 @@ stopped at a small fixed depth. Searching deeper found more:
 
 | example | depth used | BIC | deeper search | BIC |
 |---|---|---|---|---|
-| airline, 2014 | 2 | 1236.4 (3 components) | 10 levels, converged at level 9 | 1108.9 (4 components) |
+| airline, 2014 | 2 | 1236.4 (3 components) | 11 levels with patience 2, converged at level 9 | 1108.9 (4 components) |
 | airline, 2013 | 3 | 1370.4 (2 components, no cycle) | 10 levels, 13 minutes | 1112.4 (yearly cycle found from level 4) |
 | sales, 2014 | 3 | 458.4 (`WN + Lin x SE + Per x SE`) | converged at level 5 | 449.2 (`Lin + WN + Per`, the generating formula) |
 

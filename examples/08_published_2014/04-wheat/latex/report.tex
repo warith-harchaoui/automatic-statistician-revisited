@@ -110,10 +110,10 @@ The 2014 configuration searches a fixed number of levels and keeps the lowest BI
 \toprule
 level & BIC & change & structure & components & closed & params \\
 \midrule
-1 & 3534.8 &  & WN + SE & 2 & 0 & 3 \\
-2 & 3309.6 & -225.3 & WN + Lin x WN + Lin x SE + SE & 4 & 0 & 8 \\
-3 & 3127.9 & -181.6 & WN + Lin x WN + Lin x SE + SE & 4 & 0 & 8 \\
-4 & 3119.1 & -8.8 & CW(Lin x SE + Lin x WN, C) + WN + SE & 5 & 1 & 12 \\
+1 & 3534.8 &  & SE + WN & 2 & 0 & 3 \\
+2 & 3309.6 & -225.3 & Lin x SE + Lin x WN + SE + WN & 4 & 0 & 8 \\
+3 & 3127.9 & -181.6 & Lin x SE + Lin x WN + SE + WN & 4 & 0 & 8 \\
+4 & 3119.1 & -8.8 & CW(Lin x SE + Lin x WN, C) + SE + WN & 5 & 1 & 12 \\
 5 & 3114.1 & -5.0 & CW(Lin x SE + Lin x WN, C) + SE & 4 & 1 & 11 \\
 6 & 3113.4 & -0.6 & CW(Lin x SE + Lin x WN, C) + SE & 4 & 1 & 11 \\
 7 & 3113.2 & -0.2 & CW(Lin x SE + Lin x WN, C) + SE & 4 & 1 & 11 \\
@@ -138,7 +138,7 @@ Posterior weight of each structure met, exp(-BIC/2) normalised under a flat prio
 structure & lowest BIC & weight \\
 \midrule
 CW(Lin x SE + Lin x WN, C) + SE & 3113.0 & 0.953 \\
-CW(Lin x SE + Lin x WN, C) + WN + SE & 3119.1 & 0.046 \\
+CW(Lin x SE + Lin x WN, C) + SE + WN & 3119.1 & 0.046 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -146,8 +146,8 @@ CW(Lin x SE + Lin x WN, C) + WN + SE & 3119.1 & 0.046 \\
 \begin{itemize}
 \item The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 10, CW(Lin x SE + Lin x WN, C) + SE, BIC 3113.0.
 \item That structure was first reached at level 5; the levels after it only refitted its parameters, lowering BIC by 1.1 in all.
-\item The best different structure, CW(Lin x SE + Lin x WN, C) + WN + SE (level 4), is 6.0 above it: strong evidence for the kept one on the Kass and Raftery scale.
-\item Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.953 and the next, CW(Lin x SE + Lin x WN, C) + WN + SE, 0.046: the kept one takes almost all the weight.
+\item The best different structure, CW(Lin x SE + Lin x WN, C) + SE + WN (level 4), is 6.0 above it: strong evidence for the kept one on the Kass and Raftery scale.
+\item Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.953 and the next, CW(Lin x SE + Lin x WN, C) + SE + WN, 0.046: the kept one takes almost all the weight.
 \item The last level lowered BIC by 0.2 through its parameters only: the structure had settled, its fit had not quite.
 \item A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 8 and kept the same structure, less refitted.
 \item A rule stopping after 2 level(s) without a fall above 0.1 would have ended the search at level 9 and kept the same structure, less refitted.

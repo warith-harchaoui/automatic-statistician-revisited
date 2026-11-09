@@ -70,16 +70,16 @@ The 2014 configuration searches a fixed number of levels and keeps the lowest BI
 
 | level | BIC | change | structure | components | closed | params |
 |---|---|---|---|---|---|---|
-| 1 | 10266.6 |  | WN + SE | 2 | 0 | 3 |
-| 2 | 10208.0 | -58.6 | WN + Per + SE | 3 | 1 | 6 |
-| 3 | 9703.4 | -504.6 | WN + Per x Per + SE | 3 | 0 | 8 |
-| 4 | 9400.6 | -302.8 | WN + Per + SE | 3 | 0 | 6 |
-| 5 (kept) | 9398.3 | -2.3 | WN + Per + Per + SE | 4 | 2 | 9 |
-| 6 | 9398.3 | +0.0 | WN + Per + Per + SE | 4 | 2 | 9 |
-| 7 | 9398.3 | +0.0 | WN + Per + Per + SE | 4 | 2 | 9 |
-| 8 | 9398.3 | +0.0 | WN + Per + Per + SE | 4 | 2 | 9 |
-| 9 | 9398.3 | +0.0 | WN + Per + Per + SE | 4 | 2 | 9 |
-| 10 | 9398.3 | +0.0 | WN + Per + Per + SE | 4 | 2 | 9 |
+| 1 | 10266.6 |  | SE + WN | 2 | 0 | 3 |
+| 2 | 10208.0 | -58.6 | Per + SE + WN | 3 | 1 | 6 |
+| 3 | 9703.4 | -504.6 | Per x Per + SE + WN | 3 | 0 | 8 |
+| 4 | 9400.6 | -302.8 | Per + SE + WN | 3 | 0 | 6 |
+| 5 (kept) | 9398.3 | -2.3 | Per + Per + SE + WN | 4 | 2 | 9 |
+| 6 | 9398.3 | +0.0 | Per + Per + SE + WN | 4 | 2 | 9 |
+| 7 | 9398.3 | +0.0 | Per + Per + SE + WN | 4 | 2 | 9 |
+| 8 | 9398.3 | +0.0 | Per + Per + SE + WN | 4 | 2 | 9 |
+| 9 | 9398.3 | +0.0 | Per + Per + SE + WN | 4 | 2 | 9 |
+| 10 | 9398.3 | +0.0 | Per + Per + SE + WN | 4 | 2 | 9 |
 
 ![BIC per search level](bic.svg)
 
@@ -87,12 +87,12 @@ Posterior weight of each structure met, exp(-BIC/2) normalised under a flat prio
 
 | structure | lowest BIC | weight |
 |---|---|---|
-| WN + Per + Per + SE | 9398.3 | 0.763 |
-| WN + Per + SE | 9400.6 | 0.237 |
+| Per + Per + SE + WN | 9398.3 | 0.763 |
+| Per + SE + WN | 9400.6 | 0.237 |
 
-- The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 5, WN + Per + Per + SE, BIC 9398.3.
-- The best different structure, WN + Per + SE (level 4), is 2.3 above it: positive evidence for the kept one on the Kass and Raftery scale.
-- Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.763 and the next, WN + Per + SE, 0.237: the data favour the kept one without ruling the next out.
+- The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 5, Per + Per + SE + WN, BIC 9398.3.
+- The best different structure, Per + SE + WN (level 4), is 2.3 above it: positive evidence for the kept one on the Kass and Raftery scale.
+- Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.763 and the next, Per + SE + WN, 0.237: the data favour the kept one without ruling the next out.
 - BIC stopped falling at level 5. The 5 level(s) searched past it kept its structure and lowered BIC by 0.00 in all, less than the tolerance of 0.1: going on buys nothing the data pay for.
 - A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 6 and kept the same model.
 - A rule stopping after 2 level(s) without a fall above 0.1 would have ended the search at level 7 and kept the same model.

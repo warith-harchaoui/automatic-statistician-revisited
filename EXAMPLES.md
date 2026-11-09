@@ -95,18 +95,23 @@ about a minute, model checks and the two compilations included.
 ```python
 from autostat import Experiment, search
 
-result = search(x, y, Experiment.abcd_2014(max_depth=10, n_jobs=6))
+experiment = Experiment.abcd_2014(
+    max_depth=20, stopping_criteria=["no_improvement"], patience=2
+)
+result = search(x, y, experiment)
 print(result.best.kernel.structure(), round(result.best.bic, 1))
-# Lin x Lin + Lin x Lin x WN + Lin x Per x SE + SE 1108.9
+# Lin x Lin + Lin x Per x SE + Lin x Lin x WN + SE 1108.9
 ```
 
-Ten levels on 144 points took 4.1 hours with six worker processes. The
-published search had reached a BIC of 1123.7, so the port does 14.8 better.
-Stopped after two levels, the search keeps `WN + Per x SE + SE` (BIC 1236.4):
-the yearly cycle without the growth.
-`Experiment.abcd_2014(max_depth=20, stopping_criteria=["no_improvement"], patience=2)`
-searches until BIC has not fallen for two levels, as
-[03_search_airline.py](examples/03_search_airline.py) does.
+The search lowers BIC up to level 9, then spends two more levels finding
+nothing better and stops at level 11. The published search had reached a BIC
+of 1123.7, so the port does 14.8 better. Stopped after two levels, the search
+keeps `WN + Per x SE + SE` (BIC 1236.4): the yearly cycle without the growth.
+The two extra levels only refit the kept structure. The report's weights give
+it 0.516 and level 8's structure, 0.8 above in BIC, 0.338: the data barely
+tell the two apart. The run took 9.9 hours on two worker
+processes, on a machine busy with other work. Ten levels had taken 4.1 hours
+on six. [03_search_airline.py](examples/03_search_airline.py) runs it.
 
 ## 4. Your own CSV, from the command line
 

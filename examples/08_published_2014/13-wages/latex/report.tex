@@ -13,7 +13,7 @@
 
 \title{An automatic report for the dataset: 13-wages}
 \author{Some Math empowered by some AI guided by some researchers}
-\date{09 November 2026}
+\date{10 November 2026}
 
 \begin{document}
 \maketitle
@@ -122,16 +122,16 @@ The 2014 configuration searches a fixed number of levels and keeps the lowest BI
 \toprule
 level & BIC & change & structure & components & closed & params \\
 \midrule
-1 & 2231.7 &  & WN + SE & 2 & 0 & 3 \\
-2 & 1529.9 & -701.8 & WN + Lin x WN + Lin x SE + SE & 4 & 0 & 8 \\
-3 & 1447.2 & -82.6 & WN + Lin x Lin x WN + Lin x Lin x SE + Lin x SE & 4 & 0 & 11 \\
-4 & 1386.1 & -61.1 & WN + Lin x Lin x WN + Lin x Lin x SE + Lin x Lin x SE + Lin x SE & 5 & 0 & 15 \\
-5 & 1362.8 & -23.4 & WN + Lin x Lin x SE + Lin x Lin x SE + Lin x SE & 4 & 0 & 12 \\
-6 & 1361.6 & -1.1 & WN + Lin x Lin x SE + Lin x Lin x SE + Lin x SE & 4 & 0 & 12 \\
-7 & 1361.6 & +0.0 & WN + Lin x Lin x SE + Lin x Lin x SE + Lin x SE & 4 & 0 & 12 \\
-8 & 1355.7 & -5.9 & CW(WN, C) + Lin x Lin x SE + Lin x SE + Lin x Lin x SE + Lin x Lin x SE & 6 & 1 & 20 \\
-9 & 1354.1 & -1.7 & CW(WN, C) + Lin x Lin x SE + Lin x SE + Lin x Lin x SE + Lin x Lin x SE & 6 & 1 & 20 \\
-10 (kept) & 1350.2 & -3.8 & CW(WN, C) + Lin x Lin x SE + Lin x SE + Lin x Lin x SE + Lin x Lin x SE & 6 & 1 & 20 \\
+1 & 2231.7 &  & SE + WN & 2 & 0 & 3 \\
+2 & 1529.9 & -701.8 & Lin x SE + Lin x WN + SE + WN & 4 & 0 & 8 \\
+3 & 1447.2 & -82.6 & Lin x Lin x SE + Lin x Lin x WN + Lin x SE + WN & 4 & 0 & 11 \\
+4 & 1386.1 & -61.1 & Lin x Lin x SE + Lin x Lin x SE + Lin x Lin x WN + Lin x SE + WN & 5 & 0 & 15 \\
+5 & 1362.8 & -23.4 & Lin x Lin x SE + Lin x Lin x SE + Lin x SE + WN & 4 & 0 & 12 \\
+6 & 1361.6 & -1.1 & Lin x Lin x SE + Lin x Lin x SE + Lin x SE + WN & 4 & 0 & 12 \\
+7 & 1361.6 & +0.0 & Lin x Lin x SE + Lin x Lin x SE + Lin x SE + WN & 4 & 0 & 12 \\
+8 & 1355.7 & -5.9 & CW(WN, C) + Lin x Lin x SE + Lin x Lin x SE + Lin x Lin x SE + Lin x SE & 6 & 1 & 20 \\
+9 & 1354.1 & -1.7 & CW(WN, C) + Lin x Lin x SE + Lin x Lin x SE + Lin x Lin x SE + Lin x SE & 6 & 1 & 20 \\
+10 (kept) & 1350.2 & -3.8 & CW(WN, C) + Lin x Lin x SE + Lin x Lin x SE + Lin x Lin x SE + Lin x SE & 6 & 1 & 20 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -149,19 +149,19 @@ Posterior weight of each structure met, exp(-BIC/2) normalised under a flat prio
 \toprule
 structure & lowest BIC & weight \\
 \midrule
-CW(WN, C) + Lin x Lin x SE + Lin x SE + Lin x Lin x SE + Lin x Lin x SE & 1350.2 & 0.997 \\
-WN + Lin x Lin x SE + Lin x Lin x SE + Lin x SE & 1361.6 & 0.003 \\
+CW(WN, C) + Lin x Lin x SE + Lin x Lin x SE + Lin x Lin x SE + Lin x SE & 1350.2 & 0.997 \\
+Lin x Lin x SE + Lin x Lin x SE + Lin x SE + WN & 1361.6 & 0.003 \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \begin{itemize}
-\item The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 10, CW(WN, C) + Lin x Lin x SE + Lin x SE + Lin x Lin x SE + Lin x Lin x SE, BIC 1350.2.
+\item The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 10, CW(WN, C) + Lin x Lin x SE + Lin x Lin x SE + Lin x Lin x SE + Lin x SE, BIC 1350.2.
 \item That structure was first reached at level 8; the levels after it only refitted its parameters, lowering BIC by 5.5 in all.
-\item The best different structure, WN + Lin x Lin x SE + Lin x Lin x SE + Lin x SE (level 6), is 11.4 above it: very strong evidence for the kept one on the Kass and Raftery scale.
-\item Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.997 and the next, WN + Lin x Lin x SE + Lin x Lin x SE + Lin x SE, 0.003: the kept one takes almost all the weight.
+\item The best different structure, Lin x Lin x SE + Lin x Lin x SE + Lin x SE + WN (level 6), is 11.4 above it: very strong evidence for the kept one on the Kass and Raftery scale.
+\item Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.997 and the next, Lin x Lin x SE + Lin x Lin x SE + Lin x SE + WN, 0.003: the kept one takes almost all the weight.
 \item The last level lowered BIC by 3.8 through its parameters only: the structure had settled, its fit had not quite.
-\item A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 7 and kept WN + Lin x Lin x SE + Lin x Lin x SE + Lin x SE (level 6, BIC 11.4 above).
+\item A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 7 and kept Lin x Lin x SE + Lin x Lin x SE + Lin x SE + WN (level 6, BIC 11.4 above).
 \item A rule stopping after 2 level(s) without a fall above 0.1 would not have stopped within these 10 levels.
 \item The kept expression has 20 parameters for 735 points: its BIC is a fit term 2 NLL = 1218.2 plus a complexity term p ln n = 132.0, each extra parameter costing 6.60; it splits into 6 components, 1 of them with a closed form.
 \end{itemize}

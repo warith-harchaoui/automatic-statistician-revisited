@@ -13,7 +13,7 @@
 
 \title{An automatic report for the dataset: 06-internet}
 \author{Some Math empowered by some AI guided by some researchers}
-\date{09 November 2026}
+\date{10 November 2026}
 
 \begin{document}
 \maketitle
@@ -128,16 +128,16 @@ The 2014 configuration searches a fixed number of levels and keeps the lowest BI
 \toprule
 level & BIC & change & structure & components & closed & params \\
 \midrule
-1 & 22392.0 &  & WN + SE & 2 & 0 & 3 \\
-2 & 20259.3 & -2132.7 & WN + Per x SE + SE & 3 & 0 & 7 \\
-3 & 19605.9 & -653.4 & WN + Per x SE + Per x SE + SE + SE & 5 & 0 & 13 \\
-4 & 19374.7 & -231.2 & CW(Per x SE + Per x SE + SE, C) + WN + SE & 6 & 1 & 17 \\
-5 & 19373.0 & -1.7 & CW(Per x SE + Per x SE + SE, C) + WN + SE & 6 & 1 & 17 \\
-6 & 19352.3 & -20.7 & CW(Per x SE + Per x SE + SE, C) + WN + SE & 6 & 1 & 17 \\
-7 & 19352.3 & +0.0 & CW(Per x SE + Per x SE + SE, C) + WN + SE & 6 & 1 & 17 \\
-8 & 19352.3 & +0.0 & CW(Per x SE + Per x SE + SE, C) + WN + SE & 6 & 1 & 17 \\
-9 & 19349.4 & -2.9 & CW(Per x SE + Per x SE + SE, SE) + C + WN & 6 & 1 & 17 \\
-10 (kept) & 19323.2 & -26.3 & CW(WN + Per x SE + Per x SE + SE, SE) + C + WN & 7 & 1 & 18 \\
+1 & 22392.0 &  & SE + WN & 2 & 0 & 3 \\
+2 & 20259.3 & -2132.7 & Per x SE + SE + WN & 3 & 0 & 7 \\
+3 & 19605.9 & -653.4 & Per x SE + Per x SE + SE + SE + WN & 5 & 0 & 13 \\
+4 & 19374.7 & -231.2 & CW(Per x SE + Per x SE + SE, C) + SE + WN & 6 & 1 & 17 \\
+5 & 19373.0 & -1.7 & CW(Per x SE + Per x SE + SE, C) + SE + WN & 6 & 1 & 17 \\
+6 & 19352.3 & -20.7 & CW(Per x SE + Per x SE + SE, C) + SE + WN & 6 & 1 & 17 \\
+7 & 19352.3 & +0.0 & CW(Per x SE + Per x SE + SE, C) + SE + WN & 6 & 1 & 17 \\
+8 & 19352.3 & +0.0 & CW(Per x SE + Per x SE + SE, C) + SE + WN & 6 & 1 & 17 \\
+9 & 19349.4 & -2.9 & C + CW(Per x SE + Per x SE + SE, SE) + WN & 6 & 1 & 17 \\
+10 (kept) & 19323.2 & -26.3 & C + CW(Per x SE + Per x SE + SE + WN, SE) + WN & 7 & 1 & 18 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -155,18 +155,18 @@ Posterior weight of each structure met, exp(-BIC/2) normalised under a flat prio
 \toprule
 structure & lowest BIC & weight \\
 \midrule
-CW(WN + Per x SE + Per x SE + SE, SE) + C + WN & 19323.2 & 1.000 \\
+C + CW(Per x SE + Per x SE + SE + WN, SE) + WN & 19323.2 & 1.000 \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \begin{itemize}
-\item The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 10, CW(WN + Per x SE + Per x SE + SE, SE) + C + WN, BIC 19323.2.
-\item The best different structure, CW(Per x SE + Per x SE + SE, SE) + C + WN (level 9), is 26.3 above it: very strong evidence for the kept one on the Kass and Raftery scale.
-\item Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 1.000 and the next, CW(Per x SE + Per x SE + SE, SE) + C + WN, 0.000: the kept one takes almost all the weight.
+\item The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 10, C + CW(Per x SE + Per x SE + SE + WN, SE) + WN, BIC 19323.2.
+\item The best different structure, C + CW(Per x SE + Per x SE + SE, SE) + WN (level 9), is 26.3 above it: very strong evidence for the kept one on the Kass and Raftery scale.
+\item Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 1.000 and the next, C + CW(Per x SE + Per x SE + SE, SE) + WN, 0.000: the kept one takes almost all the weight.
 \item The last level still changed the structure and lowered BIC by 26.3: more levels might find a better expression.
-\item A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 7 and kept CW(Per x SE + Per x SE + SE, C) + WN + SE (level 6, BIC 29.2 above).
-\item A rule stopping after 2 level(s) without a fall above 0.1 would have ended the search at level 8 and kept CW(Per x SE + Per x SE + SE, C) + WN + SE (level 6, BIC 29.2 above).
+\item A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 7 and kept CW(Per x SE + Per x SE + SE, C) + SE + WN (level 6, BIC 29.2 above).
+\item A rule stopping after 2 level(s) without a fall above 0.1 would have ended the search at level 8 and kept CW(Per x SE + Per x SE + SE, C) + SE + WN (level 6, BIC 29.2 above).
 \item The kept expression has 18 parameters for 1000 points: its BIC is a fit term 2 NLL = 19198.8 plus a complexity term p ln n = 124.3, each extra parameter costing 6.91; it splits into 7 components, 1 of them with a closed form.
 \end{itemize}
 

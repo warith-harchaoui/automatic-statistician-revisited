@@ -97,18 +97,23 @@ vérifications et compilations comprises. `describe(..., report_format="latex")`
 ```python
 from autostat import Experiment, search
 
-result = search(x, y, Experiment.abcd_2014(max_depth=10, n_jobs=6))
+experiment = Experiment.abcd_2014(
+    max_depth=20, stopping_criteria=["no_improvement"], patience=2
+)
+result = search(x, y, experiment)
 print(result.best.kernel.structure(), round(result.best.bic, 1))
-# Lin x Lin + Lin x Lin x WN + Lin x Per x SE + SE 1108.9
+# Lin x Lin + Lin x Per x SE + Lin x Lin x WN + SE 1108.9
 ```
 
-Dix niveaux sur 144 points ont pris 4,1 heures avec six processus. La
-recherche publiée atteignait un BIC de 1123,7&nbsp;: le portage fait mieux de
-14,8. Arrêtée après deux niveaux, la recherche garde `WN + Per x SE + SE`
-(BIC 1236,4), soit le cycle annuel sans la croissance.
-`Experiment.abcd_2014(max_depth=20, stopping_criteria=["no_improvement"], patience=2)`
-cherche jusqu'à ce que le BIC n'ait pas baissé deux niveaux de suite, comme le
-fait [03_search_airline.py](examples/03_search_airline.py).
+La recherche fait baisser le BIC jusqu'au niveau 9, passe deux niveaux de plus
+sans rien trouver de mieux et s'arrête au niveau 11. La recherche publiée
+atteignait un BIC de 1123,7&nbsp;: le portage fait mieux de 14,8. Arrêtée après
+deux niveaux, la recherche garde `WN + Per x SE + SE` (BIC 1236,4), soit le
+cycle annuel sans la croissance. Les deux niveaux de plus ne font que réajuster la
+structure gardée. Les poids du rapport lui donnent 0,516 et 0,338 à celle du
+niveau 8, à 0,8 au-dessus en BIC&nbsp;: les données les distinguent à peine. Le calcul a pris 9,9 heures sur deux processus, sur une machine
+occupée à autre chose. Dix niveaux avaient pris 4,1 heures sur six.
+[03_search_airline.py](examples/03_search_airline.py) le lance.
 
 ## 4. Votre propre CSV, en ligne de commande
 

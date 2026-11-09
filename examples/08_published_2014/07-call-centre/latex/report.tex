@@ -13,7 +13,7 @@
 
 \title{An automatic report for the dataset: 07-call-centre}
 \author{Some Math empowered by some AI guided by some researchers}
-\date{09 November 2026}
+\date{10 November 2026}
 
 \begin{document}
 \maketitle
@@ -130,16 +130,16 @@ The 2014 configuration searches a fixed number of levels and keeps the lowest BI
 \toprule
 level & BIC & change & structure & components & closed & params \\
 \midrule
-1 & 1949.4 &  & WN + SE & 2 & 0 & 3 \\
+1 & 1949.4 &  & SE + WN & 2 & 0 & 3 \\
 2 & 1807.0 & -142.4 & CP(SE, SE) + WN & 3 & 0 & 7 \\
 3 & 1717.1 & -89.9 & CP(Lin x SE + SE, SE) + WN & 4 & 0 & 10 \\
 4 & 1696.7 & -20.4 & CP(Lin x SE + Per x SE + SE, SE) + WN & 5 & 0 & 14 \\
 5 & 1659.7 & -37.0 & CP(Lin x SE + Per x SE + SE, SE) + WN & 5 & 0 & 14 \\
 6 & 1648.1 & -11.6 & CP(Lin x SE + Per x SE + SE, SE) + WN & 5 & 0 & 14 \\
-7 & 1641.1 & -7.0 & CP(Per + Lin x SE + SE, SE) + WN & 5 & 1 & 13 \\
-8 & 1636.8 & -4.3 & CP(Lin + Per + Lin x SE, SE) + WN & 5 & 2 & 13 \\
-9 & 1633.4 & -3.4 & CP(Lin + Per + Lin x SE, SE) + WN & 5 & 2 & 13 \\
-10 (kept) & 1631.6 & -1.9 & CP(Lin + Per + Lin x SE, SE) + CW(WN, WN) & 6 & 2 & 17 \\
+7 & 1641.1 & -7.0 & CP(Lin x SE + Per + SE, SE) + WN & 5 & 1 & 13 \\
+8 & 1636.8 & -4.3 & CP(Lin + Lin x SE + Per, SE) + WN & 5 & 2 & 13 \\
+9 & 1633.4 & -3.4 & CP(Lin + Lin x SE + Per, SE) + WN & 5 & 2 & 13 \\
+10 (kept) & 1631.6 & -1.9 & CP(Lin + Lin x SE + Per, SE) + CW(WN, WN) & 6 & 2 & 17 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -157,17 +157,17 @@ Posterior weight of each structure met, exp(-BIC/2) normalised under a flat prio
 \toprule
 structure & lowest BIC & weight \\
 \midrule
-CP(Lin + Per + Lin x SE, SE) + CW(WN, WN) & 1631.6 & 0.713 \\
-CP(Lin + Per + Lin x SE, SE) + WN & 1633.4 & 0.281 \\
-CP(Per + Lin x SE + SE, SE) + WN & 1641.1 & 0.006 \\
+CP(Lin + Lin x SE + Per, SE) + CW(WN, WN) & 1631.6 & 0.713 \\
+CP(Lin + Lin x SE + Per, SE) + WN & 1633.4 & 0.281 \\
+CP(Lin x SE + Per + SE, SE) + WN & 1641.1 & 0.006 \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \begin{itemize}
-\item The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 10, CP(Lin + Per + Lin x SE, SE) + CW(WN, WN), BIC 1631.6.
-\item The best different structure, CP(Lin + Per + Lin x SE, SE) + WN (level 9), is 1.9 above it: barely worth mentioning evidence for the kept one on the Kass and Raftery scale.
-\item Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.713 and the next, CP(Lin + Per + Lin x SE, SE) + WN, 0.281: the data barely tell them apart.
+\item The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 10, CP(Lin + Lin x SE + Per, SE) + CW(WN, WN), BIC 1631.6.
+\item The best different structure, CP(Lin + Lin x SE + Per, SE) + WN (level 9), is 1.9 above it: barely worth mentioning evidence for the kept one on the Kass and Raftery scale.
+\item Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.713 and the next, CP(Lin + Lin x SE + Per, SE) + WN, 0.281: the data barely tell them apart.
 \item The last level still changed the structure and lowered BIC by 1.9: more levels might find a better expression.
 \item A rule stopping after 1 level(s) without a fall above 0.1 would not have stopped within these 10 levels.
 \item A rule stopping after 2 level(s) without a fall above 0.1 would not have stopped within these 10 levels.

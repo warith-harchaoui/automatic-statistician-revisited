@@ -13,7 +13,7 @@
 
 \title{An automatic report for the dataset: 11-unemployment}
 \author{Some Math empowered by some AI guided by some researchers}
-\date{09 November 2026}
+\date{10 November 2026}
 
 \begin{document}
 \maketitle
@@ -122,16 +122,16 @@ The 2014 configuration searches a fixed number of levels and keeps the lowest BI
 \toprule
 level & BIC & change & structure & components & closed & params \\
 \midrule
-1 & 5129.1 &  & WN + SE & 2 & 0 & 3 \\
-2 & 4888.3 & -240.8 & WN + Per x SE + SE & 3 & 0 & 7 \\
-3 & 4734.0 & -154.3 & WN + Per x SE + SE + SE & 4 & 0 & 9 \\
-4 & 4509.8 & -224.2 & WN + Per x SE + Per x SE + SE + SE & 5 & 0 & 13 \\
-5 & 4487.7 & -22.1 & CW(Per x SE + SE + SE, C) + WN + Per x SE & 6 & 1 & 17 \\
-6 & 4473.1 & -14.6 & CW(Per x SE + SE + SE, C) + WN + Per x SE & 6 & 1 & 17 \\
-7 & 4461.9 & -11.2 & CW(Per x SE + SE + SE, C) + WN + Per x SE & 6 & 1 & 17 \\
-8 & 4453.1 & -8.8 & CW(Per x SE + SE + SE, C) + WN + Per x SE & 6 & 1 & 17 \\
-9 (kept) & 4443.5 & -9.6 & CW(Per x SE + SE + SE, C) + WN + Per x SE & 6 & 1 & 17 \\
-10 & 4443.5 & +0.0 & CW(Per x SE + SE + SE, C) + WN + Per x SE & 6 & 1 & 17 \\
+1 & 5129.1 &  & SE + WN & 2 & 0 & 3 \\
+2 & 4888.3 & -240.8 & Per x SE + SE + WN & 3 & 0 & 7 \\
+3 & 4734.0 & -154.3 & Per x SE + SE + SE + WN & 4 & 0 & 9 \\
+4 & 4509.8 & -224.2 & Per x SE + Per x SE + SE + SE + WN & 5 & 0 & 13 \\
+5 & 4487.7 & -22.1 & CW(Per x SE + SE + SE, C) + Per x SE + WN & 6 & 1 & 17 \\
+6 & 4473.1 & -14.6 & CW(Per x SE + SE + SE, C) + Per x SE + WN & 6 & 1 & 17 \\
+7 & 4461.9 & -11.2 & CW(Per x SE + SE + SE, C) + Per x SE + WN & 6 & 1 & 17 \\
+8 & 4453.1 & -8.8 & CW(Per x SE + SE + SE, C) + Per x SE + WN & 6 & 1 & 17 \\
+9 (kept) & 4443.5 & -9.6 & CW(Per x SE + SE + SE, C) + Per x SE + WN & 6 & 1 & 17 \\
+10 & 4443.5 & +0.0 & CW(Per x SE + SE + SE, C) + Per x SE + WN & 6 & 1 & 17 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -149,16 +149,16 @@ Posterior weight of each structure met, exp(-BIC/2) normalised under a flat prio
 \toprule
 structure & lowest BIC & weight \\
 \midrule
-CW(Per x SE + SE + SE, C) + WN + Per x SE & 4443.5 & 1.000 \\
+CW(Per x SE + SE + SE, C) + Per x SE + WN & 4443.5 & 1.000 \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \begin{itemize}
-\item The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 9, CW(Per x SE + SE + SE, C) + WN + Per x SE, BIC 4443.5.
+\item The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 9, CW(Per x SE + SE + SE, C) + Per x SE + WN, BIC 4443.5.
 \item That structure was first reached at level 5; the levels after it only refitted its parameters, lowering BIC by 44.2 in all.
-\item The best different structure, WN + Per x SE + Per x SE + SE + SE (level 4), is 66.3 above it: very strong evidence for the kept one on the Kass and Raftery scale.
-\item Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 1.000 and the next, WN + Per x SE + Per x SE + SE + SE, 0.000: the kept one takes almost all the weight.
+\item The best different structure, Per x SE + Per x SE + SE + SE + WN (level 4), is 66.3 above it: very strong evidence for the kept one on the Kass and Raftery scale.
+\item Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 1.000 and the next, Per x SE + Per x SE + SE + SE + WN, 0.000: the kept one takes almost all the weight.
 \item BIC stopped falling at level 9. The 1 level(s) searched past it kept its structure and lowered BIC by 0.00 in all, less than the tolerance of 0.1: going on buys nothing the data pay for.
 \item A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 10 and kept the same model.
 \item A rule stopping after 2 level(s) without a fall above 0.1 would not have stopped within these 10 levels.

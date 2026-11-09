@@ -4,7 +4,7 @@
 <style>.ep{cursor:default;}.ep:hover,.ep:focus{outline:none;}.tip{opacity:0;pointer-events:none;transition:opacity .12s ease}#ep-0:hover~#eptip-0,#ep-0:focus~#eptip-0{opacity:1}@media (prefers-reduced-motion:reduce){.tip{transition:none}}</style>
 <rect width="900" height="420" fill="#FFFFFF"/>
 <text x="82.0" y="46" font-size="22" font-weight="700" fill="#1D1D1F" letter-spacing="-0.3">BIC per search level</text>
-<text x="82.0" y="72" font-size="14" fill="#6E6E73">Lower is better. Levels searched past the kept one are shaded.</text>
+<text x="82.0" y="72" font-size="14" fill="#6E6E73">Lower is better. Shaded: levels searched after BIC stopped falling (within 0.1 of its lowest, drawn at it).</text>
 <text x="82.0" y="142.0" font-size="12" fill="#6E6E73">BIC of the level's best structure</text>
 <line x1="82.0" y1="344.0" x2="782.0" y2="344.0" stroke="#E5E5EA" stroke-width="1"/>
 <text x="72.0" y="348.0" font-size="11" fill="#6E6E73" text-anchor="end" font-family="Roboto Mono, ui-monospace, monospace">19000</text>
@@ -40,8 +40,8 @@
 <rect id="ep-0" class="ep hit" tabindex="0" role="img" aria-label="BIC: from 22392 at epoch 1 to 19323 at epoch 10" x="82.0" y="178.6" width="700.0" height="12" fill="transparent"><title>BIC: 19323 at the last epoch</title></rect>
 <line x1="782.0" y1="156.0" x2="782.0" y2="344.0" stroke="#1D1D1F" stroke-width="1.2" stroke-dasharray="4 3"/>
 <circle cx="782.0" cy="328.8" r="4.6" fill="#007AFF" stroke="#FFFFFF" stroke-width="2"/>
-<rect x="790.0" y="162.0" width="102.4" height="19" fill="#FFFFFF" opacity="0.9" rx="3"/>
-<text x="795.0" y="176.0" font-size="11" font-weight="700" fill="#1D1D1F" font-family="Roboto Mono, ui-monospace, monospace">kept: level 10</text>
+<rect x="790.0" y="162.0" width="148.6" height="19" fill="#FFFFFF" opacity="0.9" rx="3"/>
+<text x="795.0" y="176.0" font-size="11" font-weight="700" fill="#1D1D1F" font-family="Roboto Mono, ui-monospace, monospace">BIC settles: level 10</text>
 <text x="774.0" y="200.0" font-size="11" fill="#6E6E73" text-anchor="end" font-family="Roboto Mono, ui-monospace, monospace">no level searched past it</text>
 <g id="eptip-0" class="tip"><rect x="342.5" y="328.8" width="179" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="351.5" y="350.3" font-size="12.5" font-weight="700" fill="#1D1D1F">BIC</text><text x="351.5" y="366.3" font-size="12.5" font-weight="400" fill="#6E6E73">start 22392 · end 19323</text><text x="351.5" y="382.3" font-size="12.5" font-weight="400" fill="#6E6E73">over 10 epochs</text></g>
 

@@ -74,15 +74,15 @@ The 2014 configuration searches a fixed number of levels and keeps the lowest BI
 | 1 | 1513.7 |  | RQ | 1 | 0 | 3 |
 | 2 | 1398.4 | -115.3 | Lin + RQ | 2 | 1 | 5 |
 | 3 | 1370.4 | -28.0 | Lin x RQ + RQ | 2 | 0 | 7 |
-| 4 | 1323.2 | -47.2 | RQ x (Lin + Per) + RQ | 3 | 0 | 10 |
-| 5 | 1177.0 | -146.1 | RQ x (Lin + Per x RQ) + RQ | 3 | 0 | 12 |
-| 6 | 1141.8 | -35.3 | (Lin + RQ) x (Lin + Per x RQ) + RQ | 5 | 1 | 14 |
-| 7 | 1128.3 | -13.5 | (Lin + RQ) x (Lin + Lin x Per) + RQ | 5 | 1 | 13 |
-| 8 | 1118.0 | -10.3 | C + (Lin + RQ) x (Lin + Lin x Per) | 5 | 2 | 11 |
-| 9 | 1112.7 | -5.3 | Per + (Lin + RQ) x (Lin + Lin x Per) | 5 | 2 | 13 |
-| 10 | 1112.4 | -0.2 | Lin x Per + (Lin + RQ) x (Lin + Lin x Per) | 5 | 1 | 14 |
-| 11 | 1112.4 | -0.0 | Lin x Per + (Lin + RQ) x (Lin + Lin x Per) | 5 | 1 | 14 |
-| 12 (kept) | 1112.4 | -0.0 | Lin x Per + (Lin + RQ) x (Lin + Lin x Per) | 5 | 1 | 14 |
+| 4 | 1323.2 | -47.2 | (Lin + Per) x RQ + RQ | 3 | 0 | 10 |
+| 5 | 1177.0 | -146.1 | (Lin + Per x RQ) x RQ + RQ | 3 | 0 | 12 |
+| 6 | 1141.8 | -35.3 | (Lin + Per x RQ) x (Lin + RQ) + RQ | 5 | 1 | 14 |
+| 7 | 1128.3 | -13.5 | (Lin + Lin x Per) x (Lin + RQ) + RQ | 5 | 1 | 13 |
+| 8 | 1118.0 | -10.3 | (Lin + Lin x Per) x (Lin + RQ) + C | 5 | 2 | 11 |
+| 9 | 1112.7 | -5.3 | (Lin + Lin x Per) x (Lin + RQ) + Per | 5 | 2 | 13 |
+| 10 | 1112.4 | -0.2 | (Lin + Lin x Per) x (Lin + RQ) + Lin x Per | 5 | 1 | 14 |
+| 11 | 1112.4 | -0.0 | (Lin + Lin x Per) x (Lin + RQ) + Lin x Per | 5 | 1 | 14 |
+| 12 (kept) | 1112.4 | -0.0 | (Lin + Lin x Per) x (Lin + RQ) + Lin x Per | 5 | 1 | 14 |
 
 ![BIC per search level](bic.svg)
 
@@ -90,14 +90,14 @@ Posterior weight of each structure met, exp(-BIC/2) normalised under a flat prio
 
 | structure | lowest BIC | weight |
 |---|---|---|
-| Lin x Per + (Lin + RQ) x (Lin + Lin x Per) | 1112.4 | 0.513 |
-| Per + (Lin + RQ) x (Lin + Lin x Per) | 1112.7 | 0.455 |
-| C + (Lin + RQ) x (Lin + Lin x Per) | 1118.0 | 0.032 |
+| (Lin + Lin x Per) x (Lin + RQ) + Lin x Per | 1112.4 | 0.513 |
+| (Lin + Lin x Per) x (Lin + RQ) + Per | 1112.7 | 0.455 |
+| (Lin + Lin x Per) x (Lin + RQ) + C | 1118.0 | 0.032 |
 
-- The search ran 12 levels (stopping after 2 level(s) without a BIC fall above 0.1, at most 20) and keeps the model of level 12, Lin x Per + (Lin + RQ) x (Lin + Lin x Per), BIC 1112.4.
+- The search ran 12 levels (stopping after 2 level(s) without a BIC fall above 0.1, at most 20) and keeps the model of level 12, (Lin + Lin x Per) x (Lin + RQ) + Lin x Per, BIC 1112.4.
 - That structure was first reached at level 10; the levels after it only refitted its parameters, lowering BIC by 0.0 in all.
-- The best different structure, Per + (Lin + RQ) x (Lin + Lin x Per) (level 9), is 0.2 above it: barely worth mentioning evidence for the kept one on the Kass and Raftery scale.
-- Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.513 and the next, Per + (Lin + RQ) x (Lin + Lin x Per), 0.455: the data barely tell them apart.
+- The best different structure, (Lin + Lin x Per) x (Lin + RQ) + Per (level 9), is 0.2 above it: barely worth mentioning evidence for the kept one on the Kass and Raftery scale.
+- Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.513 and the next, (Lin + Lin x Per) x (Lin + RQ) + Per, 0.455: the data barely tell them apart.
 - BIC stopped falling at level 10. The 2 level(s) searched past it kept its structure and lowered BIC by 0.00 in all, less than the tolerance of 0.1: going on buys nothing the data pay for.
 - A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 11 and kept the same structure, less refitted.
 - A rule stopping after 2 level(s) without a fall above 0.1 would have ended the search at level 12 and kept the same model.

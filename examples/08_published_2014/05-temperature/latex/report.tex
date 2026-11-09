@@ -110,16 +110,16 @@ The 2014 configuration searches a fixed number of levels and keeps the lowest BI
 \toprule
 level & BIC & change & structure & components & closed & params \\
 \midrule
-1 & 5038.5 &  & WN + SE & 2 & 0 & 3 \\
-2 & 4985.2 & -53.3 & WN + Per + SE & 3 & 1 & 6 \\
-3 & 4955.6 & -29.6 & WN + Per + Per x SE + SE + SE & 5 & 1 & 12 \\
-4 & 4845.2 & -110.4 & WN + Per + SE + SE & 4 & 1 & 8 \\
+1 & 5038.5 &  & SE + WN & 2 & 0 & 3 \\
+2 & 4985.2 & -53.3 & Per + SE + WN & 3 & 1 & 6 \\
+3 & 4955.6 & -29.6 & Per + Per x SE + SE + SE + WN & 5 & 1 & 12 \\
+4 & 4845.2 & -110.4 & Per + SE + SE + WN & 4 & 1 & 8 \\
 5 & 4833.9 & -11.3 & C + Per + SE & 3 & 2 & 6 \\
-6 & 4829.5 & -4.4 & C + WN + Per + SE & 4 & 2 & 7 \\
-7 & 4828.8 & -0.7 & C + WN + Per + SE & 4 & 2 & 7 \\
-8 & 4828.8 & +0.0 & C + WN + Per + SE & 4 & 2 & 7 \\
-9 (kept) & 4828.7 & -0.1 & C + WN + Per + SE & 4 & 2 & 7 \\
-10 & 4828.7 & +0.0 & C + WN + Per + SE & 4 & 2 & 7 \\
+6 & 4829.5 & -4.4 & C + Per + SE + WN & 4 & 2 & 7 \\
+7 & 4828.8 & -0.7 & C + Per + SE + WN & 4 & 2 & 7 \\
+8 & 4828.8 & +0.0 & C + Per + SE + WN & 4 & 2 & 7 \\
+9 (kept) & 4828.7 & -0.1 & C + Per + SE + WN & 4 & 2 & 7 \\
+10 & 4828.7 & +0.0 & C + Per + SE + WN & 4 & 2 & 7 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -137,14 +137,14 @@ Posterior weight of each structure met, exp(-BIC/2) normalised under a flat prio
 \toprule
 structure & lowest BIC & weight \\
 \midrule
-C + WN + Per + SE & 4828.7 & 0.931 \\
+C + Per + SE + WN & 4828.7 & 0.931 \\
 C + Per + SE & 4833.9 & 0.069 \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \begin{itemize}
-\item The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 9, C + WN + Per + SE, BIC 4828.7.
+\item The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 9, C + Per + SE + WN, BIC 4828.7.
 \item That structure was first reached at level 6; the levels after it only refitted its parameters, lowering BIC by 0.8 in all.
 \item The best different structure, C + Per + SE (level 5), is 5.2 above it: positive evidence for the kept one on the Kass and Raftery scale.
 \item Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.931 and the next, C + Per + SE, 0.069: the data favour the kept one without ruling the next out.
