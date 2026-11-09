@@ -302,8 +302,10 @@ def findings(path: SearchPath, ndata: int) -> list[str]:
             f"{runner.weight:.3f}"
             + (
                 ": the data barely tell them apart."
+                if runner.weight > 0.25
+                else ": the data favour the kept one without ruling the next out."
                 if runner.weight > 0.05
-                else ": the kept one carries almost all the weight."
+                else ": the kept one takes almost all the weight."
             )
         )
     settled = path.settled

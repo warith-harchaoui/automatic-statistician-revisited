@@ -136,3 +136,25 @@ def test_the_published_call_centre_path_has_a_close_rival():
     text = " ".join(findings(path, len(y)))
     assert "posterior weight of 0.713" in text
     assert "barely tell them apart" in text
+
+
+@pytest.mark.parametrize(
+    ("second_bic", "reading"),
+    [
+        (101.0, "barely tell them apart"),
+        (104.6, "favour the kept one without ruling the next out"),
+        (110.0, "takes almost all the weight"),
+    ],
+)
+def test_the_weight_sentence_reads_the_gap(second_bic, reading):
+    """Ten to one is not a tie; a hundred to one leaves almost nothing.
+
+    Parameters
+    ----------
+    second_bic : float
+        BIC of the runner-up structure, against 100 for the kept one.
+    reading : str
+        What the sentence says.
+    """
+    path = _path([second_bic, 100.0], ["B", "A"])
+    assert reading in " ".join(findings(path, 100))
