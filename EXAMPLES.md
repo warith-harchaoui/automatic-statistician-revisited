@@ -339,6 +339,7 @@ for sentence in findings(report.path, report.model.ndata):
 
 The data were drawn from a slope of 6 a year starting at 100, a sine of
 amplitude 8 and period one year, plus a noise of variance 4. The formula reads
-6.095, 7.95, one year and 3.578. The second harmonic, 5 % of the first, is
+6.095 for the slope, 7.95 for the amplitude, one year for the period and 3.578
+for the noise variance. The second harmonic, 5 % of the first, is
 what the search adds of its own: a part of it comes from months that decimal
 years do not space evenly.

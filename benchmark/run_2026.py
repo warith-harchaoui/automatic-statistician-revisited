@@ -38,7 +38,8 @@ The families
       give no interval.
 
     Three 2026 structure-search systems do not run here, for reasons recorded
-    in ``benchmark/README.md``: AutoGP.jl needs a Julia installation, GPy-ABCD
+    in ``benchmark/README.md``: AutoGP.jl needed Julia when the benchmark ran
+    (its Python port, ``autostat.smc``, is not benchmarked yet), GPy-ABCD
     needs GPy (which does not build on Python 3.13) and AutoBNN no longer
     imports with current JAX.
 

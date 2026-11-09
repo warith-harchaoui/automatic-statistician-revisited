@@ -349,6 +349,7 @@ for sentence in findings(report.path, report.model.ndata):
 
 Les données sont tirées d'une pente de 6 par an partant de 100, d'une
 sinusoïde d'amplitude 8 et de période un an, plus un bruit de variance 4. La
-formule donne 6,095, 7,95, un an et 3,578. La seconde harmonique, 5&nbsp;% de la
+formule donne 6,095 pour la pente, 7,95 pour l'amplitude, un an pour la
+période et 3,578 pour la variance du bruit. La seconde harmonique, 5&nbsp;% de la
 première, est ce que la recherche ajoute d'elle-même&nbsp;: une part vient des
 mois, que les années décimales n'espacent pas tout à fait également.

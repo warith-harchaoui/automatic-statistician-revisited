@@ -117,7 +117,7 @@ rapport le dit.
 pour les treize séries de référence, sont livrés avec ce paquet. Pour chaque
 série et chacun des dix niveaux de recherche, `tests/test_published.py` prend
 le modèle gagnant publié, calcule sa log-vraisemblance négative (NLL) aux
-hyperparamètres imprimés et la compare au nombre publié. Les 130 concordent&nbsp;:
+hyperparamètres imprimés et la compare au nombre publié. Les 130 concordent (treize séries fois dix niveaux)&nbsp;:
 douze séries à 5e-5 nat près, la série solaire à 5e-3 nat près. Ses matrices
 de covariance atteignent un conditionnement de 1e14, d'où la tolérance plus
 large.

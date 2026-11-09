@@ -111,7 +111,7 @@ published call-centre series the structure kept weighs 0.713 and the next one
 thirteen benchmark series ship with this package. For each series and each of
 the ten search levels, `tests/test_published.py` takes the published winning
 model, evaluates its negative log likelihood (NLL) at the printed
-hyperparameters and compares it with the published number. All 130 agree:
+hyperparameters and compares it with the published number. All 130 agree (thirteen series times ten levels):
 twelve series to within 5e-5 nats, the solar series to within 5e-3 nats. Its
 covariance matrices reach a condition number of 1e14, which explains the
 looser bound.
@@ -329,7 +329,7 @@ before exposing them.
   hours with six worker processes on a shared laptop. `--max-depth 3` gives a
   first look in minutes.
 - **One input dimension in the report.** Kernels and search accept several
-  input dimensions; the English description assumes one.
+  input dimensions, but the English description assumes one.
 - **Regression only.** The classification variant (autogpc) is not ported.
 - **The 2013 preset approximates.** It uses the 2013 grammar and settings with
   the parameter initialisation of 2014. Its two random starts with a spread of
