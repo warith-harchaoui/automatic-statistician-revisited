@@ -1,3 +1,7 @@
+---
+author: "Some Math empowered by some AI guided by some researchers"
+---
+
 # An automatic report for the dataset: airline passengers
 
 *Produced by `autostat.smc` (automatic-statistician-revisited), a Python port of AutoGP (Saad et al., ICML 2023), with the report writer and model checks of the Automatic Statistician (Lloyd et al., AAAI 2014; Lloyd and Ghahramani, NIPS 2015).*
@@ -20,6 +24,10 @@ Sequential Monte Carlo kept a weighted population of structures. Forecasts avera
 | 6 | 0.018 | `(((Lin * Lin) * ((Per + GE) + Lin)) * Lin)` | `WN + (C + GE + Lin + Per) x (C + Lin) x (C + Lin) x (C + Lin)` |  |
 | 7 | 0.014 | `((Lin * ((Per + Lin) + (Lin + GE))) * (Lin * Lin))` | `WN + (C + Lin) x (C + GE + Lin + Lin + Per) x (C + Lin) x (C + Lin)` |  |
 | 8 | 0.002 | `((Lin * ((Per + (((((GE + GE) * (Lin + Lin)) * Lin) * Lin) * Lin)) + Lin)) * Lin)` | `WN + (C + Lin + Per + (C + Lin) x (C + Lin + Lin) x (C + Lin) x (C + Lin) x (GE + GE)) x (C + Lin) x (C + Lin)` |  |
+
+![BIC of each structure](bic.svg)
+
+Each structure's BIC is that of its heaviest particle, whose parameters the sampler drew rather than optimised: the BIC the structure could reach is at most this one. BIC and the posterior disagree: BIC ranks structure 6 first (weight 0.018), 25.6 below the heaviest structure.
 
 ## Structure 1 (weight 0.543)
 

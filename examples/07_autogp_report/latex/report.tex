@@ -8,7 +8,7 @@
 \usepackage[hidelinks]{hyperref}
 
 \title{An automatic report for the dataset: airline passengers}
-\author{\texttt{autostat.smc} (automatic-statistician-revisited)}
+\author{Some Math empowered by some AI guided by some researchers}
 \date{}
 
 \begin{document}
@@ -41,6 +41,11 @@ Sequential Monte Carlo kept a weighted population of structures. Forecasts avera
 \bottomrule
 \end{tabular}
 \end{center}
+\begin{center}
+\includegraphics[width=\linewidth]{bic.pdf}
+\end{center}
+
+Each structure's BIC is that of its heaviest particle, whose parameters the sampler drew rather than optimised: the BIC the structure could reach is at most this one. BIC and the posterior disagree: BIC ranks structure 6 first (weight 0.018), 25.6 below the heaviest structure.
 
 \section*{Structure 1 (weight 0.543)}
 

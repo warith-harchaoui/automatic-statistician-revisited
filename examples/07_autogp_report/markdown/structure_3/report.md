@@ -1,3 +1,7 @@
+---
+author: "Some Math empowered by some AI guided by some researchers"
+---
+
 # An automatic report for the dataset: airline passengers, structure 3 of the posterior
 
 *Produced by `autostat` (automatic-statistician-revisited), a Python 3 port of the Automatic Bayesian Covariance Discovery system of Lloyd et al. (AAAI 2014).*
@@ -171,7 +175,7 @@ $$f_{36}(t) \sim \mathrm{GP}\!\left(0,\ 0.01334\,(t - 1950)(t' - 1950) \cdot (t 
 
 $$f_{37}(t) \sim \mathrm{GP}\!\left(0,\ 8469\right)$$
 
-Polynomial and periodic components have a closed form, read from their posterior mean:
+These components have a closed form, read from their posterior mean:
 
 $$f_{1}(t) = -8.199 + 6.779\,(t - 1949)$$
 
@@ -193,7 +197,7 @@ $$f_{37}(t) = -90.33$$
 
 A periodic kernel is exactly a sum of cosines, so a periodic component is a Fourier series in its period; it is written up to the harmonic after which the rest weighs less than 0.1 % of the component, hence the approximate sign.
 
-The other components are smooth, quasi-periodic or noise: a draw from such a process has no finite closed form; its covariance above is the formula.
+The other components are smooth, quasi-periodic or noise without a short formula: a draw from such a process has no finite closed form; its covariance above is the formula.
 
 Closed form of each component:
 

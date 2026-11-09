@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="440" viewBox="0 0 900 440" font-family="Roboto, system-ui, sans-serif" role="img" aria-labelledby="lp-title lp-desc">
+<title id="lp-title">BIC of each structure, above the lowest</title>
+<desc id="lp-desc">Lollipop chart of 8 categories, tallest 62. 8 (weight 0.002) leads at 62.</desc>
+<style>.pop{transition:r .12s ease;}.pop:hover,.pop:focus{r:8;outline:none;}.tip{opacity:0;pointer-events:none;transition:opacity .12s ease}#pop-0:hover~#pop-tip-0,#pop-0:focus~#pop-tip-0{opacity:1}#pop-1:hover~#pop-tip-1,#pop-1:focus~#pop-tip-1{opacity:1}#pop-2:hover~#pop-tip-2,#pop-2:focus~#pop-tip-2{opacity:1}#pop-3:hover~#pop-tip-3,#pop-3:focus~#pop-tip-3{opacity:1}#pop-4:hover~#pop-tip-4,#pop-4:focus~#pop-tip-4{opacity:1}#pop-5:hover~#pop-tip-5,#pop-5:focus~#pop-tip-5{opacity:1}#pop-6:hover~#pop-tip-6,#pop-6:focus~#pop-tip-6{opacity:1}#pop-7:hover~#pop-tip-7,#pop-7:focus~#pop-tip-7{opacity:1}@media (prefers-reduced-motion: reduce){.pop{transition:none;}.tip{transition:none}}</style>
+<rect width="900" height="440" fill="#FFFFFF"/>
+<text x="40" y="46" font-size="22" font-weight="700" fill="#1D1D1F" letter-spacing="-0.3">BIC of each structure, above the lowest</text>
+<text x="40" y="70" font-size="14" fill="#6E6E73">Structures numbered by posterior weight. Score: BIC minus the lowest, 0 for the structure BIC prefers.</text>
+<line x1="110.0" y1="118.0" x2="110.0" y2="380.0" stroke="#E5E5EA" stroke-width="1"/>
+<text x="110.0" y="400.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">0</text>
+<line x1="297.5" y1="118.0" x2="297.5" y2="380.0" stroke="#E5E5EA" stroke-width="1"/>
+<text x="297.5" y="400.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">20</text>
+<line x1="485.0" y1="118.0" x2="485.0" y2="380.0" stroke="#E5E5EA" stroke-width="1"/>
+<text x="485.0" y="400.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">40</text>
+<line x1="672.5" y1="118.0" x2="672.5" y2="380.0" stroke="#E5E5EA" stroke-width="1"/>
+<text x="672.5" y="400.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">60</text>
+<line x1="860.0" y1="118.0" x2="860.0" y2="380.0" stroke="#E5E5EA" stroke-width="1"/>
+<text x="860.0" y="400.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">80</text>
+<text x="485.0" y="422.0" font-size="13" fill="#1D1D1F" text-anchor="middle">Score</text>
+<line x1="110.0" y1="134.4" x2="687.3" y2="134.4" stroke="#C7C7CC" stroke-width="2"/>
+<circle id="pop-0" class="pop hit" tabindex="0" cx="687.3" cy="134.4" r="7" fill="#007AFF" stroke="#FFFFFF" stroke-width="1.5" role="img" aria-label="8 (weight 0.002): 62 (25.9% of total)"/>
+<text x="98.0" y="138.4" font-size="13" fill="#1D1D1F" text-anchor="end">8 (weight 0.002)</text>
+<line x1="110.0" y1="167.1" x2="655.9" y2="167.1" stroke="#C7C7CC" stroke-width="2"/>
+<circle id="pop-1" class="pop hit" tabindex="0" cx="655.9" cy="167.1" r="7" fill="#007AFF" stroke="#FFFFFF" stroke-width="1.5" role="img" aria-label="5 (weight 0.028): 58 (24.5% of total)"/>
+<text x="98.0" y="171.1" font-size="13" fill="#1D1D1F" text-anchor="end">5 (weight 0.028)</text>
+<line x1="110.0" y1="199.9" x2="440.5" y2="199.9" stroke="#C7C7CC" stroke-width="2"/>
+<circle id="pop-2" class="pop hit" tabindex="0" cx="440.5" cy="199.9" r="7" fill="#007AFF" stroke="#FFFFFF" stroke-width="1.5" role="img" aria-label="4 (weight 0.029): 35 (14.8% of total)"/>
+<text x="98.0" y="203.9" font-size="13" fill="#1D1D1F" text-anchor="end">4 (weight 0.029)</text>
+<line x1="110.0" y1="232.6" x2="350.3" y2="232.6" stroke="#C7C7CC" stroke-width="2"/>
+<circle id="pop-3" class="pop hit" tabindex="0" cx="350.3" cy="232.6" r="7" fill="#007AFF" stroke="#FFFFFF" stroke-width="1.5" role="img" aria-label="1 (weight 0.543): 26 (10.8% of total)"/>
+<text x="98.0" y="236.6" font-size="13" fill="#1D1D1F" text-anchor="end">1 (weight 0.543)</text>
+<line x1="110.0" y1="265.4" x2="342.8" y2="265.4" stroke="#C7C7CC" stroke-width="2"/>
+<circle id="pop-4" class="pop hit" tabindex="0" cx="342.8" cy="265.4" r="7" fill="#007AFF" stroke="#FFFFFF" stroke-width="1.5" role="img" aria-label="3 (weight 0.089): 25 (10.4% of total)"/>
+<text x="98.0" y="269.4" font-size="13" fill="#1D1D1F" text-anchor="end">3 (weight 0.089)</text>
+<line x1="110.0" y1="298.1" x2="269.2" y2="298.1" stroke="#C7C7CC" stroke-width="2"/>
+<circle id="pop-5" class="pop hit" tabindex="0" cx="269.2" cy="298.1" r="7" fill="#007AFF" stroke="#FFFFFF" stroke-width="1.5" role="img" aria-label="7 (weight 0.014): 17 (7.1% of total)"/>
+<text x="98.0" y="302.1" font-size="13" fill="#1D1D1F" text-anchor="end">7 (weight 0.014)</text>
+<line x1="110.0" y1="330.9" x2="253.2" y2="330.9" stroke="#C7C7CC" stroke-width="2"/>
+<circle id="pop-6" class="pop hit" tabindex="0" cx="253.2" cy="330.9" r="7" fill="#007AFF" stroke="#FFFFFF" stroke-width="1.5" role="img" aria-label="2 (weight 0.276): 15 (6.4% of total)"/>
+<text x="98.0" y="334.9" font-size="13" fill="#1D1D1F" text-anchor="end">2 (weight 0.276)</text>
+<line x1="110.0" y1="363.6" x2="110.0" y2="363.6" stroke="#C7C7CC" stroke-width="2"/>
+<circle id="pop-7" class="pop hit" tabindex="0" cx="110.0" cy="363.6" r="7" fill="#007AFF" stroke="#FFFFFF" stroke-width="1.5" role="img" aria-label="6 (weight 0.018): 0 (0.0% of total)"/>
+<text x="98.0" y="367.6" font-size="13" fill="#1D1D1F" text-anchor="end">6 (weight 0.018)</text>
+<g id="pop-tip-0" class="tip"><rect x="622.3" y="120.4" width="130" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="631.3" y="141.9" font-size="12.5" font-weight="700" fill="#1D1D1F">8 (weight 0.002)</text><text x="631.3" y="157.9" font-size="12.5" font-weight="400" fill="#6E6E73">62 pts</text><text x="631.3" y="173.9" font-size="12.5" font-weight="400" fill="#6E6E73">25.9% of total</text></g>
+<g id="pop-tip-1" class="tip"><rect x="590.9" y="153.1" width="130" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="599.9" y="174.6" font-size="12.5" font-weight="700" fill="#1D1D1F">5 (weight 0.028)</text><text x="599.9" y="190.6" font-size="12.5" font-weight="400" fill="#6E6E73">58 pts</text><text x="599.9" y="206.6" font-size="12.5" font-weight="400" fill="#6E6E73">24.5% of total</text></g>
+<g id="pop-tip-2" class="tip"><rect x="375.5" y="185.9" width="130" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="384.5" y="207.4" font-size="12.5" font-weight="700" fill="#1D1D1F">4 (weight 0.029)</text><text x="384.5" y="223.4" font-size="12.5" font-weight="400" fill="#6E6E73">35 pts</text><text x="384.5" y="239.4" font-size="12.5" font-weight="400" fill="#6E6E73">14.8% of total</text></g>
+<g id="pop-tip-3" class="tip"><rect x="285.3" y="218.6" width="130" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="294.3" y="240.1" font-size="12.5" font-weight="700" fill="#1D1D1F">1 (weight 0.543)</text><text x="294.3" y="256.1" font-size="12.5" font-weight="400" fill="#6E6E73">26 pts</text><text x="294.3" y="272.1" font-size="12.5" font-weight="400" fill="#6E6E73">10.8% of total</text></g>
+<g id="pop-tip-4" class="tip"><rect x="277.8" y="251.4" width="130" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="286.8" y="272.9" font-size="12.5" font-weight="700" fill="#1D1D1F">3 (weight 0.089)</text><text x="286.8" y="288.9" font-size="12.5" font-weight="400" fill="#6E6E73">25 pts</text><text x="286.8" y="304.9" font-size="12.5" font-weight="400" fill="#6E6E73">10.4% of total</text></g>
+<g id="pop-tip-5" class="tip"><rect x="204.2" y="284.1" width="130" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="213.2" y="305.6" font-size="12.5" font-weight="700" fill="#1D1D1F">7 (weight 0.014)</text><text x="213.2" y="321.6" font-size="12.5" font-weight="400" fill="#6E6E73">17 pts</text><text x="213.2" y="337.6" font-size="12.5" font-weight="400" fill="#6E6E73">7.1% of total</text></g>
+<g id="pop-tip-6" class="tip"><rect x="188.2" y="316.9" width="130" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="197.2" y="338.4" font-size="12.5" font-weight="700" fill="#1D1D1F">2 (weight 0.276)</text><text x="197.2" y="354.4" font-size="12.5" font-weight="400" fill="#6E6E73">15 pts</text><text x="197.2" y="370.4" font-size="12.5" font-weight="400" fill="#6E6E73">6.4% of total</text></g>
+<g id="pop-tip-7" class="tip"><rect x="45" y="349.6" width="130" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="54" y="371.1" font-size="12.5" font-weight="700" fill="#1D1D1F">6 (weight 0.018)</text><text x="54" y="387.1" font-size="12.5" font-weight="400" fill="#6E6E73">0 pts</text><text x="54" y="403.1" font-size="12.5" font-weight="400" fill="#6E6E73">0.0% of total</text></g>
+<line x1="110.0" y1="380.0" x2="860.0" y2="380.0" stroke="#1D1D1F" stroke-width="1.2"/>
+
+</svg>
