@@ -1043,6 +1043,10 @@ def translate_component(
 
 REPORT_FORMATS = ("markdown", "latex")
 
+#: Who signs a generated report. The project's author is Warith Harchaoui;
+#: a report is the work of the method, the tool and those who guide them.
+REPORT_AUTHOR = "Some Math empowered by some AI guided by some researchers"
+
 _TEX_SPECIAL = {
     "\\": r"\textbackslash{}",
     "&": r"\&",
@@ -1116,15 +1120,16 @@ def compile_markdown(source: Path) -> Path | None:
         )
         return None
     target = source.with_suffix(".pdf")
+    command = [exe, source.name, "-o", target.name]
     # md2pdf drives LibreOffice, which does not convert two documents at once
     # well: concurrent reports (parallel examples, an API serving several
     # requests) timed out. One conversion at a time across processes, plus
     # one retry for a conversion that still times out.
     with _machine_lock("md2pdf"):
         try:
-            _run([exe, source.name, "-o", target.name], source.parent)
+            _run(command, source.parent)
         except RuntimeError:
-            _run([exe, source.name, "-o", target.name], source.parent)
+            _run(command, source.parent)
     return target
 
 
@@ -1340,6 +1345,10 @@ class Report:
         n = len(self.parts)
         plural = "s" if n != 1 else ""
         lines = [
+            "---",
+            f'author: "{REPORT_AUTHOR}"',
+            "---",
+            "",
             f"# An automatic report for the dataset: {self.name}",
             "",
             "*Produced by `autostat` (automatic-statistician-revisited), a Python 3 "
@@ -1424,7 +1433,7 @@ class Report:
             r"\usepackage[hidelinks]{hyperref}",
             "",
             rf"\title{{An automatic report for the dataset: {tex(self.name)}}}",
-            r"\author{\texttt{autostat} (automatic-statistician-revisited)}",
+            rf"\author{{{REPORT_AUTHOR}}}",
             rf"\date{{{dt.date.today():%d %B %Y}}}",
             "",
             r"\begin{document}",

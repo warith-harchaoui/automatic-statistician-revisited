@@ -139,5 +139,7 @@ def test_the_summary_says_whether_bic_agrees_with_the_posterior():
     differ = PosteriorReport("toy", structures, bics=[104.0, 100.0])
     text = " ".join(differ.bic_sentences())
     assert "ranks structure 2 first (weight 0.400), 4.0 below" in text
+    assert agree.markdown().startswith('---\nauthor: "Some Math empowered')
+    assert r"\author{Some Math empowered" in agree.latex()
     single = PosteriorReport("toy", structures[:1], bics=[100.0])
     assert single.bic_sentences() == ["One structure only: there is no BIC to compare."]

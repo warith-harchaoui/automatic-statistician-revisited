@@ -191,3 +191,18 @@ def test_a_one_level_search_draws_no_bic_curve(airline, airline_final, tmp_path)
     assert report.bic_figure is None
     assert not (tmp_path / "bic.svg").exists()
     assert "no BIC curve to draw" in source
+
+
+def test_reports_are_signed_by_the_method_not_the_project_author(airline_report):
+    """A generated report names its own author, in both formats.
+
+    Parameters
+    ----------
+    airline_report : Report
+        Fixture: the published airline model, described.
+    """
+    from autostat.describe import REPORT_AUTHOR
+
+    assert REPORT_AUTHOR == "Some Math empowered by some AI guided by some researchers"
+    assert airline_report.markdown().startswith(f'---\nauthor: "{REPORT_AUTHOR}"\n---')
+    assert rf"\author{{{REPORT_AUTHOR}}}" in airline_report.latex()

@@ -50,6 +50,7 @@ from scipy import special
 
 from .. import kernels as ff
 from ..describe import (
+    REPORT_AUTHOR,
     Report,
     compile_latex,
     compile_markdown,
@@ -356,6 +357,10 @@ class PosteriorReport:
             Markdown.
         """
         lines = [
+            "---",
+            f'author: "{REPORT_AUTHOR}"',
+            "---",
+            "",
             f"# An automatic report for the dataset: {self.name}",
             "",
             "*Produced by `autostat.smc` (automatic-statistician-revisited), a "
@@ -421,7 +426,7 @@ class PosteriorReport:
             r"\usepackage[hidelinks]{hyperref}",
             "",
             rf"\title{{An automatic report for the dataset: {tex(self.name)}}}",
-            r"\author{\texttt{autostat.smc} (automatic-statistician-revisited)}",
+            rf"\author{{{REPORT_AUTHOR}}}",
             r"\date{}",
             "",
             r"\begin{document}",
