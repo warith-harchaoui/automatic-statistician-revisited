@@ -1,3 +1,7 @@
+---
+author: "Some Math empowered by some AI guided by some researchers"
+---
+
 # An automatic report for the dataset: 06-internet
 
 *Produced by `autostat` (automatic-statistician-revisited), a Python 3 port of the Automatic Bayesian Covariance Discovery system of Lloyd et al. (AAAI 2014).*
@@ -92,8 +96,15 @@ The 2014 configuration searches a fixed number of levels and keeps the lowest BI
 
 ![BIC per search level](bic.svg)
 
+Posterior weight of each structure met, exp(-BIC/2) normalised under a flat prior, after the Bayesian machine scientist (Guimerà et al., 2020): where the search keeps one structure, the weights say how much the data prefer it to the others. The 5 structure(s) under 0.001 are left out.
+
+| structure | lowest BIC | weight |
+|---|---|---|
+| CW(WN + Per x SE + Per x SE + SE, SE) + C + WN | 19323.2 | 1.000 |
+
 - The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 10, CW(WN + Per x SE + Per x SE + SE, SE) + C + WN, BIC 19323.2.
 - The best different structure, CW(Per x SE + Per x SE + SE, SE) + C + WN (level 9), is 26.3 above it: very strong evidence for the kept one on the Kass and Raftery scale.
+- Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 1.000 and the next, CW(Per x SE + Per x SE + SE, SE) + C + WN, 0.000: the kept one takes almost all the weight.
 - The last level still changed the structure and lowered BIC by 26.3: more levels might find a better expression.
 - A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 7 and kept CW(Per x SE + Per x SE + SE, C) + WN + SE (level 6, BIC 29.2 above).
 - A rule stopping after 2 level(s) without a fall above 0.1 would have ended the search at level 8 and kept CW(Per x SE + Per x SE + SE, C) + WN + SE (level 6, BIC 29.2 above).

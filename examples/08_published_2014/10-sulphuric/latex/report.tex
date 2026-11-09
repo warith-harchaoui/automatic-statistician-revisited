@@ -12,8 +12,8 @@
 \usepackage[hidelinks]{hyperref}
 
 \title{An automatic report for the dataset: 10-sulphuric}
-\author{\texttt{autostat} (automatic-statistician-revisited)}
-\date{08 November 2026}
+\author{Some Math empowered by some AI guided by some researchers}
+\date{09 November 2026}
 
 \begin{document}
 \maketitle
@@ -171,10 +171,23 @@ level & BIC & change & structure & components & closed & params \\
 \caption*{BIC per search level}
 \end{figure}
 
+Posterior weight of each structure met, exp(-BIC/2) normalised under a flat prior, after the Bayesian machine scientist (Guimerà et al., 2020): where the search keeps one structure, the weights say how much the data prefer it to the others. The 7 structure(s) under 0.001 are left out.
+
+\begin{center}\footnotesize
+\begin{tabular}{p{0.36\linewidth}ll}
+\toprule
+structure & lowest BIC & weight \\
+\midrule
+CP(WN + Per, CP(C + WN, WN) + CW(SE, SE)) + Per x SE + SE & 3816.3 & 1.000 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 \begin{itemize}
 \item The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 10, CP(WN + Per, CP(C + WN, WN) + CW(SE, SE)) + Per x SE + SE, BIC 3816.3.
 \item That structure was first reached at level 8; the levels after it only refitted its parameters, lowering BIC by 9.3 in all.
 \item The best different structure, CP(WN + Per, CP(C + WN, WN) + SE) + Per x SE + SE (level 7), is 18.7 above it: very strong evidence for the kept one on the Kass and Raftery scale.
+\item Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 1.000 and the next, CP(WN + Per, CP(C + WN, WN) + SE) + Per x SE + SE, 0.000: the kept one takes almost all the weight.
 \item The last level lowered BIC by 3.0 through its parameters only: the structure had settled, its fit had not quite.
 \item A rule stopping after 1 level(s) without a fall above 0.1 would not have stopped within these 10 levels.
 \item A rule stopping after 2 level(s) without a fall above 0.1 would not have stopped within these 10 levels.

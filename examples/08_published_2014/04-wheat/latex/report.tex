@@ -12,8 +12,8 @@
 \usepackage[hidelinks]{hyperref}
 
 \title{An automatic report for the dataset: 04-wheat}
-\author{\texttt{autostat} (automatic-statistician-revisited)}
-\date{08 November 2026}
+\author{Some Math empowered by some AI guided by some researchers}
+\date{09 November 2026}
 
 \begin{document}
 \maketitle
@@ -130,10 +130,24 @@ level & BIC & change & structure & components & closed & params \\
 \caption*{BIC per search level}
 \end{figure}
 
+Posterior weight of each structure met, exp(-BIC/2) normalised under a flat prior, after the Bayesian machine scientist (Guimerà et al., 2020): where the search keeps one structure, the weights say how much the data prefer it to the others. The 2 structure(s) under 0.001 are left out.
+
+\begin{center}\footnotesize
+\begin{tabular}{p{0.36\linewidth}ll}
+\toprule
+structure & lowest BIC & weight \\
+\midrule
+CW(Lin x SE + Lin x WN, C) + SE & 3113.0 & 0.953 \\
+CW(Lin x SE + Lin x WN, C) + WN + SE & 3119.1 & 0.046 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 \begin{itemize}
 \item The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 10, CW(Lin x SE + Lin x WN, C) + SE, BIC 3113.0.
 \item That structure was first reached at level 5; the levels after it only refitted its parameters, lowering BIC by 1.1 in all.
 \item The best different structure, CW(Lin x SE + Lin x WN, C) + WN + SE (level 4), is 6.0 above it: strong evidence for the kept one on the Kass and Raftery scale.
+\item Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.953 and the next, CW(Lin x SE + Lin x WN, C) + WN + SE, 0.046: the kept one takes almost all the weight.
 \item The last level lowered BIC by 0.2 through its parameters only: the structure had settled, its fit had not quite.
 \item A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 8 and kept the same structure, less refitted.
 \item A rule stopping after 2 level(s) without a fall above 0.1 would have ended the search at level 9 and kept the same structure, less refitted.

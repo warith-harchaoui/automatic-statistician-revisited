@@ -1,3 +1,7 @@
+---
+author: "Some Math empowered by some AI guided by some researchers"
+---
+
 # An automatic report for the dataset: 05-temperature
 
 *Produced by `autostat` (automatic-statistician-revisited), a Python 3 port of the Automatic Bayesian Covariance Discovery system of Lloyd et al. (AAAI 2014).*
@@ -77,9 +81,17 @@ The 2014 configuration searches a fixed number of levels and keeps the lowest BI
 
 ![BIC per search level](bic.svg)
 
+Posterior weight of each structure met, exp(-BIC/2) normalised under a flat prior, after the Bayesian machine scientist (Guimerà et al., 2020): where the search keeps one structure, the weights say how much the data prefer it to the others. The 4 structure(s) under 0.001 are left out.
+
+| structure | lowest BIC | weight |
+|---|---|---|
+| C + WN + Per + SE | 4828.7 | 0.931 |
+| C + Per + SE | 4833.9 | 0.069 |
+
 - The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 9, C + WN + Per + SE, BIC 4828.7.
 - That structure was first reached at level 6; the levels after it only refitted its parameters, lowering BIC by 0.8 in all.
 - The best different structure, C + Per + SE (level 5), is 5.2 above it: positive evidence for the kept one on the Kass and Raftery scale.
+- Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.931 and the next, C + Per + SE, 0.069: the data favour the kept one without ruling the next out.
 - BIC stopped falling at level 7. The 3 level(s) searched past it kept its structure and lowered BIC by 0.09 in all, less than the tolerance of 0.1: going on buys nothing the data pay for.
 - A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 8 and kept the same structure, less refitted.
 - A rule stopping after 2 level(s) without a fall above 0.1 would have ended the search at level 9 and kept the same model.
@@ -135,7 +147,7 @@ Each statistic compares draws of a component's posterior with draws of its prior
 
 | # | QQ max | QQ min | ACF min | ACF min lag | Periodogram max | Periodogram peak | MMD |
 |---|---|---|---|---|---|---|---|
-| 1 | 0.330 | 0.330 | 0.986 | 0.952 | 0.728 | 0.966 | **0.000** |
+| 1 | 0.330 | 0.330 | 0.992 | 0.954 | 0.728 | 0.966 | **0.000** |
 | 2 | 0.508 | 0.680 | 0.876 | 0.460 | 0.646 | 0.990 | **0.000** |
 | 3 | 0.214 | 0.280 | 0.906 | 0.772 | 0.894 | 0.734 | **0.000** |
 | 4 | 0.834 | 0.896 | 0.992 | 0.990 | 0.954 | 0.998 | **0.000** |

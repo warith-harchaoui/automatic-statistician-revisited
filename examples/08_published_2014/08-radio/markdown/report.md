@@ -1,3 +1,7 @@
+---
+author: "Some Math empowered by some AI guided by some researchers"
+---
+
 # An automatic report for the dataset: 08-radio
 
 *Produced by `autostat` (automatic-statistician-revisited), a Python 3 port of the Automatic Bayesian Covariance Discovery system of Lloyd et al. (AAAI 2014).*
@@ -89,9 +93,18 @@ The 2014 configuration searches a fixed number of levels and keeps the lowest BI
 
 ![BIC per search level](bic.svg)
 
+Posterior weight of each structure met, exp(-BIC/2) normalised under a flat prior, after the Bayesian machine scientist (Guimerà et al., 2020): where the search keeps one structure, the weights say how much the data prefer it to the others. The 2 structure(s) under 0.001 are left out.
+
+| structure | lowest BIC | weight |
+|---|---|---|
+| CW(Per x SE + SE, C) + C + WN + SE | 530.7 | 0.846 |
+| CW(Per x SE + SE, C) + WN + SE | 534.2 | 0.148 |
+| WN + Per x SE + SE + SE | 540.5 | 0.006 |
+
 - The search ran 10 levels (the published 2014 search: ten levels, no stopping rule) and keeps the model of level 8, CW(Per x SE + SE, C) + C + WN + SE, BIC 530.7.
 - That structure was first reached at level 5; the levels after it only refitted its parameters, lowering BIC by 0.1 in all.
 - The best different structure, CW(Per x SE + SE, C) + WN + SE (level 4), is 3.5 above it: positive evidence for the kept one on the Kass and Raftery scale.
+- Weighed by exp(-BIC/2) under a flat prior, as the Bayesian machine scientist weighs expressions, the structures met give the kept one a posterior weight of 0.846 and the next, CW(Per x SE + SE, C) + WN + SE, 0.148: the data favour the kept one without ruling the next out.
 - BIC stopped falling at level 6. The 4 level(s) searched past it kept its structure and lowered BIC by 0.03 in all, less than the tolerance of 0.1: going on buys nothing the data pay for.
 - A rule stopping after 1 level(s) without a fall above 0.1 would have ended the search at level 7 and kept the same structure, less refitted.
 - A rule stopping after 2 level(s) without a fall above 0.1 would have ended the search at level 8 and kept the same model.
