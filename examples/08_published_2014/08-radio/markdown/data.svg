@@ -1,0 +1,275 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="380" viewBox="0 0 900 380" font-family="Roboto, system-ui, sans-serif" role="img" aria-labelledby="gp-title gp-desc">
+<title id="gp-title">The data</title>
+<desc id="gp-desc">Observed series of 240 points, from 1934 to 1954, values from 4.3 to 13.5.</desc>
+<style>.tip{opacity:0;pointer-events:none;transition:opacity .12s ease}@media (prefers-reduced-motion:reduce){.tip{transition:none}}</style>
+<rect width="900" height="380" fill="#FFFFFF"/>
+<text x="40" y="46" font-size="22" font-weight="700" fill="#1D1D1F" letter-spacing="-0.3">The data</text>
+<text x="40" y="70" font-size="14" fill="#6E6E73">08-radio: 240 observations, before any model.</text>
+<line x1="60.0" y1="308.7" x2="870.0" y2="308.7" stroke="#E5E5EA" stroke-width="1"/>
+<text x="50.0" y="312.7" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="end">4</text>
+<line x1="60.0" y1="272.1" x2="870.0" y2="272.1" stroke="#E5E5EA" stroke-width="1"/>
+<text x="50.0" y="276.1" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="end">6</text>
+<line x1="60.0" y1="235.5" x2="870.0" y2="235.5" stroke="#E5E5EA" stroke-width="1"/>
+<text x="50.0" y="239.5" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="end">8</text>
+<line x1="60.0" y1="198.9" x2="870.0" y2="198.9" stroke="#E5E5EA" stroke-width="1"/>
+<text x="50.0" y="202.9" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="end">10</text>
+<line x1="60.0" y1="162.3" x2="870.0" y2="162.3" stroke="#E5E5EA" stroke-width="1"/>
+<text x="50.0" y="166.3" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="end">12</text>
+<line x1="60.0" y1="125.7" x2="870.0" y2="125.7" stroke="#E5E5EA" stroke-width="1"/>
+<text x="50.0" y="129.7" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="end">14</text>
+<text x="18" y="219.0" font-size="13" fill="#1D1D1F" text-anchor="middle" transform="rotate(-90 18 219.0)">Value</text>
+<path tabindex="0" d="M 60.0,283.0 L 63.5,283.0 L 66.8,288.5 L 70.3,294.0 L 73.7,281.2 L 77.0,270.2 L 80.5,264.7 L 83.8,257.4 L 87.3,264.7 L 90.8,272.1 L 93.9,270.2 L 97.3,270.2 L 100.7,284.9 L 104.1,281.2 L 107.5,277.6 L 110.9,290.4 L 114.4,275.7 L 117.7,217.2 L 121.2,191.6 L 124.5,200.7 L 128.0,186.1 L 131.4,204.4 L 134.6,220.8 L 138.1,233.6 L 141.4,228.1 L 144.9,264.7 L 148.2,259.3 L 151.7,246.4 L 155.1,215.3 L 158.5,164.1 L 161.9,153.1 L 165.3,165.9 L 168.6,178.7 L 172.1,142.2 L 175.2,156.8 L 178.7,204.4 L 182.0,241.0 L 185.5,242.8 L 188.8,233.6 L 192.3,219.0 L 195.7,191.6 L 199.0,144.0 L 202.5,140.3 L 205.8,156.8 L 209.3,171.4 L 212.8,147.6 L 215.9,158.6 L 219.3,198.9 L 222.7,233.6 L 226.1,248.3 L 229.5,246.4 L 232.9,237.3 L 236.4,206.2 L 239.7,160.4 L 243.2,142.2 L 246.5,155.0 L 250.0,178.7 L 253.4,167.8 L 256.5,193.4 L 260.0,211.7 L 263.3,235.5 L 266.8,246.4 L 270.1,255.6 L 273.6,242.8 L 277.0,219.0 L 280.4,158.6 L 283.8,173.3 L 287.2,193.4 L 290.6,208.0 L 294.1,206.2 L 297.3,202.5 L 300.8,228.1 L 304.1,246.4 L 307.6,259.3 L 310.9,264.7 L 314.4,251.9 L 317.8,213.5 L 321.2,186.1 L 324.6,187.9 L 328.0,211.7 L 331.3,217.2 L 334.8,219.0 L 337.9,233.6 L 341.3,250.1 L 344.7,277.6 L 348.1,275.7 L 351.5,275.7 L 354.9,268.4 L 358.4,255.6 L 361.7,215.3 L 365.2,217.2 L 368.5,222.7 L 372.0,235.5 L 375.4,239.1 L 378.5,222.7 L 382.0,246.4 L 385.3,270.2 L 388.8,284.9 L 392.1,292.2 L 395.6,288.5 L 399.0,272.1 L 402.4,246.4 L 405.8,244.6 L 409.2,253.8 L 412.6,264.7 L 416.1,261.1 L 419.2,268.4 L 422.7,279.4 L 426.0,288.5 L 429.5,286.7 L 432.8,286.7 L 436.3,294.0 L 439.7,286.7 L 443.1,272.1 L 446.5,261.1 L 449.8,251.9 L 453.3,264.7 L 456.8,272.1 L 460.0,273.9 L 463.4,286.7 L 466.8,292.2 L 470.2,295.8 L 473.6,295.8 L 477.0,290.4 L 480.5,279.4 L 483.8,253.8 L 487.3,261.1 L 490.6,251.9 L 494.0,262.9 L 497.4,261.1 L 500.5,268.4 L 504.0,266.6 L 507.3,277.6 L 510.8,275.7 L 514.1,281.2 L 517.6,277.6 L 521.0,264.7 L 524.4,211.7 L 527.8,211.7 L 531.2,224.5 L 534.6,241.0 L 538.1,209.9 L 541.2,204.4 L 544.7,213.5 L 548.0,268.4 L 551.5,266.6 L 554.8,270.2 L 558.3,250.1 L 561.7,224.5 L 565.1,171.4 L 568.5,158.6 L 571.8,162.3 L 575.3,162.3 L 578.8,144.0 L 581.9,153.1 L 585.3,176.9 L 588.7,198.9 L 592.1,255.6 L 595.5,251.9 L 598.9,241.0 L 602.4,187.9 L 605.7,144.0 L 609.2,134.8 L 612.5,151.3 L 616.0,156.8 L 619.4,175.1 L 622.7,176.9 L 626.1,184.2 L 629.5,231.8 L 632.9,242.8 L 636.2,251.9 L 639.7,257.4 L 643.2,213.5 L 646.5,171.4 L 650.0,155.0 L 653.3,167.8 L 656.6,160.4 L 660.1,153.1 L 663.2,153.1 L 666.7,187.9 L 670.0,230.0 L 673.5,253.8 L 676.8,251.9 L 680.3,239.1 L 683.7,197.0 L 687.1,151.3 L 690.5,142.2 L 693.9,162.3 L 697.3,175.1 L 700.8,180.6 L 703.9,189.7 L 707.3,220.8 L 710.7,250.1 L 714.1,257.4 L 717.5,272.1 L 720.9,270.2 L 724.4,253.8 L 727.7,213.5 L 731.2,217.2 L 734.5,224.5 L 738.0,228.1 L 741.4,222.7 L 744.5,239.1 L 748.0,266.6 L 751.3,270.2 L 754.8,272.1 L 758.1,279.4 L 761.6,275.7 L 765.0,253.8 L 768.4,224.5 L 771.8,213.5 L 775.2,220.8 L 778.6,235.5 L 782.1,244.6 L 785.3,262.9 L 788.8,281.2 L 792.1,294.0 L 795.6,286.7 L 798.9,290.4 L 802.4,284.9 L 805.8,272.1 L 809.2,250.1 L 812.6,242.8 L 816.0,248.3 L 819.3,264.7 L 822.8,268.4 L 825.9,286.7 L 829.3,286.7 L 832.7,294.0 L 836.1,294.0 L 839.5,303.2 L 842.9,295.8 L 846.4,272.1 L 849.7,268.4 L 853.2,262.9 L 856.5,266.6 L 860.0,273.9 L 863.4,277.6 L 866.5,281.2 L 870.0,290.4" fill="none" stroke="#007AFF" stroke-width="1.2"><title>Observed series, 240 points</title></path>
+<circle cx="60.0" cy="283.0" r="2" fill="#1D1D1F"><title>Observed: x=1934.33, y=5.40</title></circle>
+<circle cx="63.5" cy="283.0" r="2" fill="#1D1D1F"><title>Observed: x=1934.42, y=5.40</title></circle>
+<circle cx="66.8" cy="288.5" r="2" fill="#1D1D1F"><title>Observed: x=1934.50, y=5.10</title></circle>
+<circle cx="70.3" cy="294.0" r="2" fill="#1D1D1F"><title>Observed: x=1934.58, y=4.80</title></circle>
+<circle cx="73.7" cy="281.2" r="2" fill="#1D1D1F"><title>Observed: x=1934.67, y=5.50</title></circle>
+<circle cx="77.0" cy="270.2" r="2" fill="#1D1D1F"><title>Observed: x=1934.75, y=6.10</title></circle>
+<circle cx="80.5" cy="264.7" r="2" fill="#1D1D1F"><title>Observed: x=1934.84, y=6.40</title></circle>
+<circle cx="83.8" cy="257.4" r="2" fill="#1D1D1F"><title>Observed: x=1934.92, y=6.80</title></circle>
+<circle cx="87.3" cy="264.7" r="2" fill="#1D1D1F"><title>Observed: x=1935.00, y=6.40</title></circle>
+<circle cx="90.8" cy="272.1" r="2" fill="#1D1D1F"><title>Observed: x=1935.09, y=6.00</title></circle>
+<circle cx="93.9" cy="270.2" r="2" fill="#1D1D1F"><title>Observed: x=1935.16, y=6.10</title></circle>
+<circle cx="97.3" cy="270.2" r="2" fill="#1D1D1F"><title>Observed: x=1935.25, y=6.10</title></circle>
+<circle cx="100.7" cy="284.9" r="2" fill="#1D1D1F"><title>Observed: x=1935.33, y=5.30</title></circle>
+<circle cx="104.1" cy="281.2" r="2" fill="#1D1D1F"><title>Observed: x=1935.42, y=5.50</title></circle>
+<circle cx="107.5" cy="277.6" r="2" fill="#1D1D1F"><title>Observed: x=1935.50, y=5.70</title></circle>
+<circle cx="110.9" cy="290.4" r="2" fill="#1D1D1F"><title>Observed: x=1935.58, y=5.00</title></circle>
+<circle cx="114.4" cy="275.7" r="2" fill="#1D1D1F"><title>Observed: x=1935.67, y=5.80</title></circle>
+<circle cx="117.7" cy="217.2" r="2" fill="#1D1D1F"><title>Observed: x=1935.75, y=9.00</title></circle>
+<circle cx="121.2" cy="191.6" r="2" fill="#1D1D1F"><title>Observed: x=1935.84, y=10.40</title></circle>
+<circle cx="124.5" cy="200.7" r="2" fill="#1D1D1F"><title>Observed: x=1935.92, y=9.90</title></circle>
+<circle cx="128.0" cy="186.1" r="2" fill="#1D1D1F"><title>Observed: x=1936.00, y=10.70</title></circle>
+<circle cx="131.4" cy="204.4" r="2" fill="#1D1D1F"><title>Observed: x=1936.09, y=9.70</title></circle>
+<circle cx="134.6" cy="220.8" r="2" fill="#1D1D1F"><title>Observed: x=1936.17, y=8.80</title></circle>
+<circle cx="138.1" cy="233.6" r="2" fill="#1D1D1F"><title>Observed: x=1936.25, y=8.10</title></circle>
+<circle cx="141.4" cy="228.1" r="2" fill="#1D1D1F"><title>Observed: x=1936.33, y=8.40</title></circle>
+<circle cx="144.9" cy="264.7" r="2" fill="#1D1D1F"><title>Observed: x=1936.42, y=6.40</title></circle>
+<circle cx="148.2" cy="259.3" r="2" fill="#1D1D1F"><title>Observed: x=1936.50, y=6.70</title></circle>
+<circle cx="151.7" cy="246.4" r="2" fill="#1D1D1F"><title>Observed: x=1936.59, y=7.40</title></circle>
+<circle cx="155.1" cy="215.3" r="2" fill="#1D1D1F"><title>Observed: x=1936.67, y=9.10</title></circle>
+<circle cx="158.5" cy="164.1" r="2" fill="#1D1D1F"><title>Observed: x=1936.75, y=11.90</title></circle>
+<circle cx="161.9" cy="153.1" r="2" fill="#1D1D1F"><title>Observed: x=1936.84, y=12.50</title></circle>
+<circle cx="165.3" cy="165.9" r="2" fill="#1D1D1F"><title>Observed: x=1936.92, y=11.80</title></circle>
+<circle cx="168.6" cy="178.7" r="2" fill="#1D1D1F"><title>Observed: x=1937.00, y=11.10</title></circle>
+<circle cx="172.1" cy="142.2" r="2" fill="#1D1D1F"><title>Observed: x=1937.09, y=13.10</title></circle>
+<circle cx="175.2" cy="156.8" r="2" fill="#1D1D1F"><title>Observed: x=1937.16, y=12.30</title></circle>
+<circle cx="178.7" cy="204.4" r="2" fill="#1D1D1F"><title>Observed: x=1937.25, y=9.70</title></circle>
+<circle cx="182.0" cy="241.0" r="2" fill="#1D1D1F"><title>Observed: x=1937.33, y=7.70</title></circle>
+<circle cx="185.5" cy="242.8" r="2" fill="#1D1D1F"><title>Observed: x=1937.42, y=7.60</title></circle>
+<circle cx="188.8" cy="233.6" r="2" fill="#1D1D1F"><title>Observed: x=1937.50, y=8.10</title></circle>
+<circle cx="192.3" cy="219.0" r="2" fill="#1D1D1F"><title>Observed: x=1937.58, y=8.90</title></circle>
+<circle cx="195.7" cy="191.6" r="2" fill="#1D1D1F"><title>Observed: x=1937.67, y=10.40</title></circle>
+<circle cx="199.0" cy="144.0" r="2" fill="#1D1D1F"><title>Observed: x=1937.75, y=13.00</title></circle>
+<circle cx="202.5" cy="140.3" r="2" fill="#1D1D1F"><title>Observed: x=1937.84, y=13.20</title></circle>
+<circle cx="205.8" cy="156.8" r="2" fill="#1D1D1F"><title>Observed: x=1937.92, y=12.30</title></circle>
+<circle cx="209.3" cy="171.4" r="2" fill="#1D1D1F"><title>Observed: x=1938.00, y=11.50</title></circle>
+<circle cx="212.8" cy="147.6" r="2" fill="#1D1D1F"><title>Observed: x=1938.09, y=12.80</title></circle>
+<circle cx="215.9" cy="158.6" r="2" fill="#1D1D1F"><title>Observed: x=1938.16, y=12.20</title></circle>
+<circle cx="219.3" cy="198.9" r="2" fill="#1D1D1F"><title>Observed: x=1938.25, y=10.00</title></circle>
+<circle cx="222.7" cy="233.6" r="2" fill="#1D1D1F"><title>Observed: x=1938.33, y=8.10</title></circle>
+<circle cx="226.1" cy="248.3" r="2" fill="#1D1D1F"><title>Observed: x=1938.42, y=7.30</title></circle>
+<circle cx="229.5" cy="246.4" r="2" fill="#1D1D1F"><title>Observed: x=1938.50, y=7.40</title></circle>
+<circle cx="232.9" cy="237.3" r="2" fill="#1D1D1F"><title>Observed: x=1938.58, y=7.90</title></circle>
+<circle cx="236.4" cy="206.2" r="2" fill="#1D1D1F"><title>Observed: x=1938.67, y=9.60</title></circle>
+<circle cx="239.7" cy="160.4" r="2" fill="#1D1D1F"><title>Observed: x=1938.75, y=12.10</title></circle>
+<circle cx="243.2" cy="142.2" r="2" fill="#1D1D1F"><title>Observed: x=1938.84, y=13.10</title></circle>
+<circle cx="246.5" cy="155.0" r="2" fill="#1D1D1F"><title>Observed: x=1938.92, y=12.40</title></circle>
+<circle cx="250.0" cy="178.7" r="2" fill="#1D1D1F"><title>Observed: x=1939.00, y=11.10</title></circle>
+<circle cx="253.4" cy="167.8" r="2" fill="#1D1D1F"><title>Observed: x=1939.09, y=11.70</title></circle>
+<circle cx="256.5" cy="193.4" r="2" fill="#1D1D1F"><title>Observed: x=1939.16, y=10.30</title></circle>
+<circle cx="260.0" cy="211.7" r="2" fill="#1D1D1F"><title>Observed: x=1939.25, y=9.30</title></circle>
+<circle cx="263.3" cy="235.5" r="2" fill="#1D1D1F"><title>Observed: x=1939.33, y=8.00</title></circle>
+<circle cx="266.8" cy="246.4" r="2" fill="#1D1D1F"><title>Observed: x=1939.42, y=7.40</title></circle>
+<circle cx="270.1" cy="255.6" r="2" fill="#1D1D1F"><title>Observed: x=1939.50, y=6.90</title></circle>
+<circle cx="273.6" cy="242.8" r="2" fill="#1D1D1F"><title>Observed: x=1939.58, y=7.60</title></circle>
+<circle cx="277.0" cy="219.0" r="2" fill="#1D1D1F"><title>Observed: x=1939.67, y=8.90</title></circle>
+<circle cx="280.4" cy="158.6" r="2" fill="#1D1D1F"><title>Observed: x=1939.75, y=12.20</title></circle>
+<circle cx="283.8" cy="173.3" r="2" fill="#1D1D1F"><title>Observed: x=1939.84, y=11.40</title></circle>
+<circle cx="287.2" cy="193.4" r="2" fill="#1D1D1F"><title>Observed: x=1939.92, y=10.30</title></circle>
+<circle cx="290.6" cy="208.0" r="2" fill="#1D1D1F"><title>Observed: x=1940.00, y=9.50</title></circle>
+<circle cx="294.1" cy="206.2" r="2" fill="#1D1D1F"><title>Observed: x=1940.09, y=9.60</title></circle>
+<circle cx="297.3" cy="202.5" r="2" fill="#1D1D1F"><title>Observed: x=1940.17, y=9.80</title></circle>
+<circle cx="300.8" cy="228.1" r="2" fill="#1D1D1F"><title>Observed: x=1940.25, y=8.40</title></circle>
+<circle cx="304.1" cy="246.4" r="2" fill="#1D1D1F"><title>Observed: x=1940.33, y=7.40</title></circle>
+<circle cx="307.6" cy="259.3" r="2" fill="#1D1D1F"><title>Observed: x=1940.42, y=6.70</title></circle>
+<circle cx="310.9" cy="264.7" r="2" fill="#1D1D1F"><title>Observed: x=1940.50, y=6.40</title></circle>
+<circle cx="314.4" cy="251.9" r="2" fill="#1D1D1F"><title>Observed: x=1940.59, y=7.10</title></circle>
+<circle cx="317.8" cy="213.5" r="2" fill="#1D1D1F"><title>Observed: x=1940.67, y=9.20</title></circle>
+<circle cx="321.2" cy="186.1" r="2" fill="#1D1D1F"><title>Observed: x=1940.75, y=10.70</title></circle>
+<circle cx="324.6" cy="187.9" r="2" fill="#1D1D1F"><title>Observed: x=1940.84, y=10.60</title></circle>
+<circle cx="328.0" cy="211.7" r="2" fill="#1D1D1F"><title>Observed: x=1940.92, y=9.30</title></circle>
+<circle cx="331.3" cy="217.2" r="2" fill="#1D1D1F"><title>Observed: x=1941.00, y=9.00</title></circle>
+<circle cx="334.8" cy="219.0" r="2" fill="#1D1D1F"><title>Observed: x=1941.09, y=8.90</title></circle>
+<circle cx="337.9" cy="233.6" r="2" fill="#1D1D1F"><title>Observed: x=1941.16, y=8.10</title></circle>
+<circle cx="341.3" cy="250.1" r="2" fill="#1D1D1F"><title>Observed: x=1941.25, y=7.20</title></circle>
+<circle cx="344.7" cy="277.6" r="2" fill="#1D1D1F"><title>Observed: x=1941.33, y=5.70</title></circle>
+<circle cx="348.1" cy="275.7" r="2" fill="#1D1D1F"><title>Observed: x=1941.42, y=5.80</title></circle>
+<circle cx="351.5" cy="275.7" r="2" fill="#1D1D1F"><title>Observed: x=1941.50, y=5.80</title></circle>
+<circle cx="354.9" cy="268.4" r="2" fill="#1D1D1F"><title>Observed: x=1941.58, y=6.20</title></circle>
+<circle cx="358.4" cy="255.6" r="2" fill="#1D1D1F"><title>Observed: x=1941.67, y=6.90</title></circle>
+<circle cx="361.7" cy="215.3" r="2" fill="#1D1D1F"><title>Observed: x=1941.75, y=9.10</title></circle>
+<circle cx="365.2" cy="217.2" r="2" fill="#1D1D1F"><title>Observed: x=1941.84, y=9.00</title></circle>
+<circle cx="368.5" cy="222.7" r="2" fill="#1D1D1F"><title>Observed: x=1941.92, y=8.70</title></circle>
+<circle cx="372.0" cy="235.5" r="2" fill="#1D1D1F"><title>Observed: x=1942.00, y=8.00</title></circle>
+<circle cx="375.4" cy="239.1" r="2" fill="#1D1D1F"><title>Observed: x=1942.09, y=7.80</title></circle>
+<circle cx="378.5" cy="222.7" r="2" fill="#1D1D1F"><title>Observed: x=1942.16, y=8.70</title></circle>
+<circle cx="382.0" cy="246.4" r="2" fill="#1D1D1F"><title>Observed: x=1942.25, y=7.40</title></circle>
+<circle cx="385.3" cy="270.2" r="2" fill="#1D1D1F"><title>Observed: x=1942.33, y=6.10</title></circle>
+<circle cx="388.8" cy="284.9" r="2" fill="#1D1D1F"><title>Observed: x=1942.42, y=5.30</title></circle>
+<circle cx="392.1" cy="292.2" r="2" fill="#1D1D1F"><title>Observed: x=1942.50, y=4.90</title></circle>
+<circle cx="395.6" cy="288.5" r="2" fill="#1D1D1F"><title>Observed: x=1942.58, y=5.10</title></circle>
+<circle cx="399.0" cy="272.1" r="2" fill="#1D1D1F"><title>Observed: x=1942.67, y=6.00</title></circle>
+<circle cx="402.4" cy="246.4" r="2" fill="#1D1D1F"><title>Observed: x=1942.75, y=7.40</title></circle>
+<circle cx="405.8" cy="244.6" r="2" fill="#1D1D1F"><title>Observed: x=1942.84, y=7.50</title></circle>
+<circle cx="409.2" cy="253.8" r="2" fill="#1D1D1F"><title>Observed: x=1942.92, y=7.00</title></circle>
+<circle cx="412.6" cy="264.7" r="2" fill="#1D1D1F"><title>Observed: x=1943.00, y=6.40</title></circle>
+<circle cx="416.1" cy="261.1" r="2" fill="#1D1D1F"><title>Observed: x=1943.09, y=6.60</title></circle>
+<circle cx="419.2" cy="268.4" r="2" fill="#1D1D1F"><title>Observed: x=1943.16, y=6.20</title></circle>
+<circle cx="422.7" cy="279.4" r="2" fill="#1D1D1F"><title>Observed: x=1943.25, y=5.60</title></circle>
+<circle cx="426.0" cy="288.5" r="2" fill="#1D1D1F"><title>Observed: x=1943.33, y=5.10</title></circle>
+<circle cx="429.5" cy="286.7" r="2" fill="#1D1D1F"><title>Observed: x=1943.42, y=5.20</title></circle>
+<circle cx="432.8" cy="286.7" r="2" fill="#1D1D1F"><title>Observed: x=1943.50, y=5.20</title></circle>
+<circle cx="436.3" cy="294.0" r="2" fill="#1D1D1F"><title>Observed: x=1943.58, y=4.80</title></circle>
+<circle cx="439.7" cy="286.7" r="2" fill="#1D1D1F"><title>Observed: x=1943.67, y=5.20</title></circle>
+<circle cx="443.1" cy="272.1" r="2" fill="#1D1D1F"><title>Observed: x=1943.75, y=6.00</title></circle>
+<circle cx="446.5" cy="261.1" r="2" fill="#1D1D1F"><title>Observed: x=1943.84, y=6.60</title></circle>
+<circle cx="449.8" cy="251.9" r="2" fill="#1D1D1F"><title>Observed: x=1943.92, y=7.10</title></circle>
+<circle cx="453.3" cy="264.7" r="2" fill="#1D1D1F"><title>Observed: x=1944.00, y=6.40</title></circle>
+<circle cx="456.8" cy="272.1" r="2" fill="#1D1D1F"><title>Observed: x=1944.09, y=6.00</title></circle>
+<circle cx="460.0" cy="273.9" r="2" fill="#1D1D1F"><title>Observed: x=1944.17, y=5.90</title></circle>
+<circle cx="463.4" cy="286.7" r="2" fill="#1D1D1F"><title>Observed: x=1944.25, y=5.20</title></circle>
+<circle cx="466.8" cy="292.2" r="2" fill="#1D1D1F"><title>Observed: x=1944.33, y=4.90</title></circle>
+<circle cx="470.2" cy="295.8" r="2" fill="#1D1D1F"><title>Observed: x=1944.42, y=4.70</title></circle>
+<circle cx="473.6" cy="295.8" r="2" fill="#1D1D1F"><title>Observed: x=1944.50, y=4.70</title></circle>
+<circle cx="477.0" cy="290.4" r="2" fill="#1D1D1F"><title>Observed: x=1944.59, y=5.00</title></circle>
+<circle cx="480.5" cy="279.4" r="2" fill="#1D1D1F"><title>Observed: x=1944.67, y=5.60</title></circle>
+<circle cx="483.8" cy="253.8" r="2" fill="#1D1D1F"><title>Observed: x=1944.75, y=7.00</title></circle>
+<circle cx="487.3" cy="261.1" r="2" fill="#1D1D1F"><title>Observed: x=1944.84, y=6.60</title></circle>
+<circle cx="490.6" cy="251.9" r="2" fill="#1D1D1F"><title>Observed: x=1944.92, y=7.10</title></circle>
+<circle cx="494.0" cy="262.9" r="2" fill="#1D1D1F"><title>Observed: x=1945.00, y=6.50</title></circle>
+<circle cx="497.4" cy="261.1" r="2" fill="#1D1D1F"><title>Observed: x=1945.09, y=6.60</title></circle>
+<circle cx="500.5" cy="268.4" r="2" fill="#1D1D1F"><title>Observed: x=1945.16, y=6.20</title></circle>
+<circle cx="504.0" cy="266.6" r="2" fill="#1D1D1F"><title>Observed: x=1945.25, y=6.30</title></circle>
+<circle cx="507.3" cy="277.6" r="2" fill="#1D1D1F"><title>Observed: x=1945.33, y=5.70</title></circle>
+<circle cx="510.8" cy="275.7" r="2" fill="#1D1D1F"><title>Observed: x=1945.42, y=5.80</title></circle>
+<circle cx="514.1" cy="281.2" r="2" fill="#1D1D1F"><title>Observed: x=1945.50, y=5.50</title></circle>
+<circle cx="517.6" cy="277.6" r="2" fill="#1D1D1F"><title>Observed: x=1945.58, y=5.70</title></circle>
+<circle cx="521.0" cy="264.7" r="2" fill="#1D1D1F"><title>Observed: x=1945.67, y=6.40</title></circle>
+<circle cx="524.4" cy="211.7" r="2" fill="#1D1D1F"><title>Observed: x=1945.75, y=9.30</title></circle>
+<circle cx="527.8" cy="211.7" r="2" fill="#1D1D1F"><title>Observed: x=1945.84, y=9.30</title></circle>
+<circle cx="531.2" cy="224.5" r="2" fill="#1D1D1F"><title>Observed: x=1945.92, y=8.60</title></circle>
+<circle cx="534.6" cy="241.0" r="2" fill="#1D1D1F"><title>Observed: x=1946.00, y=7.70</title></circle>
+<circle cx="538.1" cy="209.9" r="2" fill="#1D1D1F"><title>Observed: x=1946.09, y=9.40</title></circle>
+<circle cx="541.2" cy="204.4" r="2" fill="#1D1D1F"><title>Observed: x=1946.16, y=9.70</title></circle>
+<circle cx="544.7" cy="213.5" r="2" fill="#1D1D1F"><title>Observed: x=1946.25, y=9.20</title></circle>
+<circle cx="548.0" cy="268.4" r="2" fill="#1D1D1F"><title>Observed: x=1946.33, y=6.20</title></circle>
+<circle cx="551.5" cy="266.6" r="2" fill="#1D1D1F"><title>Observed: x=1946.42, y=6.30</title></circle>
+<circle cx="554.8" cy="270.2" r="2" fill="#1D1D1F"><title>Observed: x=1946.50, y=6.10</title></circle>
+<circle cx="558.3" cy="250.1" r="2" fill="#1D1D1F"><title>Observed: x=1946.58, y=7.20</title></circle>
+<circle cx="561.7" cy="224.5" r="2" fill="#1D1D1F"><title>Observed: x=1946.67, y=8.60</title></circle>
+<circle cx="565.1" cy="171.4" r="2" fill="#1D1D1F"><title>Observed: x=1946.75, y=11.50</title></circle>
+<circle cx="568.5" cy="158.6" r="2" fill="#1D1D1F"><title>Observed: x=1946.84, y=12.20</title></circle>
+<circle cx="571.8" cy="162.3" r="2" fill="#1D1D1F"><title>Observed: x=1946.92, y=12.00</title></circle>
+<circle cx="575.3" cy="162.3" r="2" fill="#1D1D1F"><title>Observed: x=1947.00, y=12.00</title></circle>
+<circle cx="578.8" cy="144.0" r="2" fill="#1D1D1F"><title>Observed: x=1947.09, y=13.00</title></circle>
+<circle cx="581.9" cy="153.1" r="2" fill="#1D1D1F"><title>Observed: x=1947.16, y=12.50</title></circle>
+<circle cx="585.3" cy="176.9" r="2" fill="#1D1D1F"><title>Observed: x=1947.25, y=11.20</title></circle>
+<circle cx="588.7" cy="198.9" r="2" fill="#1D1D1F"><title>Observed: x=1947.33, y=10.00</title></circle>
+<circle cx="592.1" cy="255.6" r="2" fill="#1D1D1F"><title>Observed: x=1947.42, y=6.90</title></circle>
+<circle cx="595.5" cy="251.9" r="2" fill="#1D1D1F"><title>Observed: x=1947.50, y=7.10</title></circle>
+<circle cx="598.9" cy="241.0" r="2" fill="#1D1D1F"><title>Observed: x=1947.58, y=7.70</title></circle>
+<circle cx="602.4" cy="187.9" r="2" fill="#1D1D1F"><title>Observed: x=1947.67, y=10.60</title></circle>
+<circle cx="605.7" cy="144.0" r="2" fill="#1D1D1F"><title>Observed: x=1947.75, y=13.00</title></circle>
+<circle cx="609.2" cy="134.8" r="2" fill="#1D1D1F"><title>Observed: x=1947.84, y=13.50</title></circle>
+<circle cx="612.5" cy="151.3" r="2" fill="#1D1D1F"><title>Observed: x=1947.92, y=12.60</title></circle>
+<circle cx="616.0" cy="156.8" r="2" fill="#1D1D1F"><title>Observed: x=1948.00, y=12.30</title></circle>
+<circle cx="619.4" cy="175.1" r="2" fill="#1D1D1F"><title>Observed: x=1948.09, y=11.30</title></circle>
+<circle cx="622.7" cy="176.9" r="2" fill="#1D1D1F"><title>Observed: x=1948.17, y=11.20</title></circle>
+<circle cx="626.1" cy="184.2" r="2" fill="#1D1D1F"><title>Observed: x=1948.25, y=10.80</title></circle>
+<circle cx="629.5" cy="231.8" r="2" fill="#1D1D1F"><title>Observed: x=1948.33, y=8.20</title></circle>
+<circle cx="632.9" cy="242.8" r="2" fill="#1D1D1F"><title>Observed: x=1948.42, y=7.60</title></circle>
+<circle cx="636.2" cy="251.9" r="2" fill="#1D1D1F"><title>Observed: x=1948.50, y=7.10</title></circle>
+<circle cx="639.7" cy="257.4" r="2" fill="#1D1D1F"><title>Observed: x=1948.59, y=6.80</title></circle>
+<circle cx="643.2" cy="213.5" r="2" fill="#1D1D1F"><title>Observed: x=1948.67, y=9.20</title></circle>
+<circle cx="646.5" cy="171.4" r="2" fill="#1D1D1F"><title>Observed: x=1948.75, y=11.50</title></circle>
+<circle cx="650.0" cy="155.0" r="2" fill="#1D1D1F"><title>Observed: x=1948.84, y=12.40</title></circle>
+<circle cx="653.3" cy="167.8" r="2" fill="#1D1D1F"><title>Observed: x=1948.92, y=11.70</title></circle>
+<circle cx="656.6" cy="160.4" r="2" fill="#1D1D1F"><title>Observed: x=1949.00, y=12.10</title></circle>
+<circle cx="660.1" cy="153.1" r="2" fill="#1D1D1F"><title>Observed: x=1949.09, y=12.50</title></circle>
+<circle cx="663.2" cy="153.1" r="2" fill="#1D1D1F"><title>Observed: x=1949.16, y=12.50</title></circle>
+<circle cx="666.7" cy="187.9" r="2" fill="#1D1D1F"><title>Observed: x=1949.25, y=10.60</title></circle>
+<circle cx="670.0" cy="230.0" r="2" fill="#1D1D1F"><title>Observed: x=1949.33, y=8.30</title></circle>
+<circle cx="673.5" cy="253.8" r="2" fill="#1D1D1F"><title>Observed: x=1949.42, y=7.00</title></circle>
+<circle cx="676.8" cy="251.9" r="2" fill="#1D1D1F"><title>Observed: x=1949.50, y=7.10</title></circle>
+<circle cx="680.3" cy="239.1" r="2" fill="#1D1D1F"><title>Observed: x=1949.58, y=7.80</title></circle>
+<circle cx="683.7" cy="197.0" r="2" fill="#1D1D1F"><title>Observed: x=1949.67, y=10.10</title></circle>
+<circle cx="687.1" cy="151.3" r="2" fill="#1D1D1F"><title>Observed: x=1949.75, y=12.60</title></circle>
+<circle cx="690.5" cy="142.2" r="2" fill="#1D1D1F"><title>Observed: x=1949.84, y=13.10</title></circle>
+<circle cx="693.9" cy="162.3" r="2" fill="#1D1D1F"><title>Observed: x=1949.92, y=12.00</title></circle>
+<circle cx="697.3" cy="175.1" r="2" fill="#1D1D1F"><title>Observed: x=1950.00, y=11.30</title></circle>
+<circle cx="700.8" cy="180.6" r="2" fill="#1D1D1F"><title>Observed: x=1950.09, y=11.00</title></circle>
+<circle cx="703.9" cy="189.7" r="2" fill="#1D1D1F"><title>Observed: x=1950.16, y=10.50</title></circle>
+<circle cx="707.3" cy="220.8" r="2" fill="#1D1D1F"><title>Observed: x=1950.25, y=8.80</title></circle>
+<circle cx="710.7" cy="250.1" r="2" fill="#1D1D1F"><title>Observed: x=1950.33, y=7.20</title></circle>
+<circle cx="714.1" cy="257.4" r="2" fill="#1D1D1F"><title>Observed: x=1950.42, y=6.80</title></circle>
+<circle cx="717.5" cy="272.1" r="2" fill="#1D1D1F"><title>Observed: x=1950.50, y=6.00</title></circle>
+<circle cx="720.9" cy="270.2" r="2" fill="#1D1D1F"><title>Observed: x=1950.58, y=6.10</title></circle>
+<circle cx="724.4" cy="253.8" r="2" fill="#1D1D1F"><title>Observed: x=1950.67, y=7.00</title></circle>
+<circle cx="727.7" cy="213.5" r="2" fill="#1D1D1F"><title>Observed: x=1950.75, y=9.20</title></circle>
+<circle cx="731.2" cy="217.2" r="2" fill="#1D1D1F"><title>Observed: x=1950.84, y=9.00</title></circle>
+<circle cx="734.5" cy="224.5" r="2" fill="#1D1D1F"><title>Observed: x=1950.92, y=8.60</title></circle>
+<circle cx="738.0" cy="228.1" r="2" fill="#1D1D1F"><title>Observed: x=1951.00, y=8.40</title></circle>
+<circle cx="741.4" cy="222.7" r="2" fill="#1D1D1F"><title>Observed: x=1951.09, y=8.70</title></circle>
+<circle cx="744.5" cy="239.1" r="2" fill="#1D1D1F"><title>Observed: x=1951.16, y=7.80</title></circle>
+<circle cx="748.0" cy="266.6" r="2" fill="#1D1D1F"><title>Observed: x=1951.25, y=6.30</title></circle>
+<circle cx="751.3" cy="270.2" r="2" fill="#1D1D1F"><title>Observed: x=1951.33, y=6.10</title></circle>
+<circle cx="754.8" cy="272.1" r="2" fill="#1D1D1F"><title>Observed: x=1951.42, y=6.00</title></circle>
+<circle cx="758.1" cy="279.4" r="2" fill="#1D1D1F"><title>Observed: x=1951.50, y=5.60</title></circle>
+<circle cx="761.6" cy="275.7" r="2" fill="#1D1D1F"><title>Observed: x=1951.58, y=5.80</title></circle>
+<circle cx="765.0" cy="253.8" r="2" fill="#1D1D1F"><title>Observed: x=1951.67, y=7.00</title></circle>
+<circle cx="768.4" cy="224.5" r="2" fill="#1D1D1F"><title>Observed: x=1951.75, y=8.60</title></circle>
+<circle cx="771.8" cy="213.5" r="2" fill="#1D1D1F"><title>Observed: x=1951.84, y=9.20</title></circle>
+<circle cx="775.2" cy="220.8" r="2" fill="#1D1D1F"><title>Observed: x=1951.92, y=8.80</title></circle>
+<circle cx="778.6" cy="235.5" r="2" fill="#1D1D1F"><title>Observed: x=1952.00, y=8.00</title></circle>
+<circle cx="782.1" cy="244.6" r="2" fill="#1D1D1F"><title>Observed: x=1952.09, y=7.50</title></circle>
+<circle cx="785.3" cy="262.9" r="2" fill="#1D1D1F"><title>Observed: x=1952.17, y=6.50</title></circle>
+<circle cx="788.8" cy="281.2" r="2" fill="#1D1D1F"><title>Observed: x=1952.25, y=5.50</title></circle>
+<circle cx="792.1" cy="294.0" r="2" fill="#1D1D1F"><title>Observed: x=1952.33, y=4.80</title></circle>
+<circle cx="795.6" cy="286.7" r="2" fill="#1D1D1F"><title>Observed: x=1952.42, y=5.20</title></circle>
+<circle cx="798.9" cy="290.4" r="2" fill="#1D1D1F"><title>Observed: x=1952.50, y=5.00</title></circle>
+<circle cx="802.4" cy="284.9" r="2" fill="#1D1D1F"><title>Observed: x=1952.59, y=5.30</title></circle>
+<circle cx="805.8" cy="272.1" r="2" fill="#1D1D1F"><title>Observed: x=1952.67, y=6.00</title></circle>
+<circle cx="809.2" cy="250.1" r="2" fill="#1D1D1F"><title>Observed: x=1952.75, y=7.20</title></circle>
+<circle cx="812.6" cy="242.8" r="2" fill="#1D1D1F"><title>Observed: x=1952.84, y=7.60</title></circle>
+<circle cx="816.0" cy="248.3" r="2" fill="#1D1D1F"><title>Observed: x=1952.92, y=7.30</title></circle>
+<circle cx="819.3" cy="264.7" r="2" fill="#1D1D1F"><title>Observed: x=1953.00, y=6.40</title></circle>
+<circle cx="822.8" cy="268.4" r="2" fill="#1D1D1F"><title>Observed: x=1953.09, y=6.20</title></circle>
+<circle cx="825.9" cy="286.7" r="2" fill="#1D1D1F"><title>Observed: x=1953.16, y=5.20</title></circle>
+<circle cx="829.3" cy="286.7" r="2" fill="#1D1D1F"><title>Observed: x=1953.25, y=5.20</title></circle>
+<circle cx="832.7" cy="294.0" r="2" fill="#1D1D1F"><title>Observed: x=1953.33, y=4.80</title></circle>
+<circle cx="836.1" cy="294.0" r="2" fill="#1D1D1F"><title>Observed: x=1953.42, y=4.80</title></circle>
+<circle cx="839.5" cy="303.2" r="2" fill="#1D1D1F"><title>Observed: x=1953.50, y=4.30</title></circle>
+<circle cx="842.9" cy="295.8" r="2" fill="#1D1D1F"><title>Observed: x=1953.58, y=4.70</title></circle>
+<circle cx="846.4" cy="272.1" r="2" fill="#1D1D1F"><title>Observed: x=1953.67, y=6.00</title></circle>
+<circle cx="849.7" cy="268.4" r="2" fill="#1D1D1F"><title>Observed: x=1953.75, y=6.20</title></circle>
+<circle cx="853.2" cy="262.9" r="2" fill="#1D1D1F"><title>Observed: x=1953.84, y=6.50</title></circle>
+<circle cx="856.5" cy="266.6" r="2" fill="#1D1D1F"><title>Observed: x=1953.92, y=6.30</title></circle>
+<circle cx="860.0" cy="273.9" r="2" fill="#1D1D1F"><title>Observed: x=1954.00, y=5.90</title></circle>
+<circle cx="863.4" cy="277.6" r="2" fill="#1D1D1F"><title>Observed: x=1954.09, y=5.70</title></circle>
+<circle cx="866.5" cy="281.2" r="2" fill="#1D1D1F"><title>Observed: x=1954.16, y=5.50</title></circle>
+<circle cx="870.0" cy="290.4" r="2" fill="#1D1D1F"><title>Observed: x=1954.25, y=5.00</title></circle>
+<line x1="60.0" y1="320.0" x2="870.0" y2="320.0" stroke="#1D1D1F" stroke-width="1.2"/>
+<text x="127.9" y="340.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">1936</text>
+<text x="209.2" y="340.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">1938</text>
+<text x="290.5" y="340.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">1940</text>
+<text x="371.9" y="340.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">1942</text>
+<text x="453.2" y="340.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">1944</text>
+<text x="534.5" y="340.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">1946</text>
+<text x="615.9" y="340.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">1948</text>
+<text x="697.2" y="340.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">1950</text>
+<text x="778.5" y="340.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">1952</text>
+<text x="859.9" y="340.0" font-size="11" font-family="Roboto Mono, ui-monospace, monospace" fill="#6E6E73" text-anchor="middle">1954</text>
+<text x="465.0" y="362.0" font-size="13" fill="#1D1D1F" text-anchor="middle">Year</text>
+
+</svg>

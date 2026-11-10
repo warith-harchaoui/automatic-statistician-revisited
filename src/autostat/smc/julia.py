@@ -21,7 +21,7 @@ What it needs
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -155,7 +155,13 @@ def julia() -> Any:
 
 
 def _bridge() -> Any:
-    """The helper module."""
+    """The helper module.
+
+    Returns
+    -------
+    juliacall.AnyValue
+        ``AutostatBridge``, defined in Julia on first use.
+    """
     return julia().AutostatBridge
 
 
@@ -250,12 +256,34 @@ def simulate(seed: int, t: np.ndarray, y: np.ndarray) -> Any:
 
 
 def score(trace: Any) -> float:
-    """Gen's log joint density of a trace."""
+    """Gen's log joint density of a trace.
+
+    Parameters
+    ----------
+    trace : juliacall.AnyValue
+        The trace.
+
+    Returns
+    -------
+    float
+        ``Gen.get_score(trace)``.
+    """
     return float(julia().Gen.get_score(trace))
 
 
 def covariance(trace: Any) -> np.ndarray:
-    """The kernel matrix on the trace's times, without noise."""
+    """The kernel matrix on the trace's times, without noise.
+
+    Parameters
+    ----------
+    trace : juliacall.AnyValue
+        The trace.
+
+    Returns
+    -------
+    numpy.ndarray
+        The covariance matrix.
+    """
     return np.asarray(_bridge().covariance(trace))
 
 
@@ -310,7 +338,20 @@ def propose(seed: int, trace: Any) -> dict[str, Any]:
 
 
 def predict_mvn(trace: Any, t_new: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Predictive mean and covariance of one trace, on the scaled axis."""
+    """Predictive mean and covariance of one trace, on the scaled axis.
+
+    Parameters
+    ----------
+    trace : juliacall.AnyValue
+        The trace.
+    t_new : numpy.ndarray
+        Times to predict, on the same axis as the trace's times.
+
+    Returns
+    -------
+    tuple of numpy.ndarray
+        Predictive mean and covariance.
+    """
     jl = julia()
     mean, cov = _bridge().predict_mvn(
         trace, jl.Vector[jl.Float64](np.asarray(t_new, dtype=float))

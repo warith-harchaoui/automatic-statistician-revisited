@@ -1,0 +1,4185 @@
+{
+  "best": {
+    "kernel": {
+      "type": "SumKernel",
+      "operands": [
+        {
+          "type": "ProductKernel",
+          "operands": [
+            {
+              "type": "LinearKernel",
+              "dimension": 0,
+              "sf": -0.9259631403026971,
+              "location": 1938.057423764733
+            },
+            {
+              "type": "LinearKernel",
+              "dimension": 0,
+              "sf": 0.8614256921938249,
+              "location": 1938.0574238816935
+            }
+          ]
+        },
+        {
+          "type": "ProductKernel",
+          "operands": [
+            {
+              "type": "LinearKernel",
+              "dimension": 0,
+              "sf": 1.3282343768693923,
+              "location": 1945.1333791276109
+            },
+            {
+              "type": "PeriodicKernel",
+              "dimension": 0,
+              "lengthscale": -0.415692401915784,
+              "period": 0.0027368523020519634,
+              "sf": -5.21020782285795
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": 2.8330692760868295,
+              "sf": 5.263186005437007
+            }
+          ]
+        },
+        {
+          "type": "ProductKernel",
+          "operands": [
+            {
+              "type": "LinearKernel",
+              "dimension": 0,
+              "sf": 0.4356417820458335,
+              "location": 1956.7351009148808
+            },
+            {
+              "type": "LinearKernel",
+              "dimension": 0,
+              "sf": 1.3158781569124773,
+              "location": 1949.5140489420876
+            },
+            {
+              "type": "NoiseKernel",
+              "sf": -2.3844796258607808
+            }
+          ]
+        },
+        {
+          "type": "SqExpKernel",
+          "dimension": 0,
+          "lengthscale": -0.6832105895306093,
+          "sf": 2.1538928067082646
+        }
+      ]
+    },
+    "mean_const": null,
+    "lik_sf": -Infinity,
+    "nll": 522.1605982446595,
+    "ndata": 144,
+    "bic": 1108.9287693838069,
+    "structure": "Lin x Lin + Lin x Per x SE + Lin x Lin x WN + SE"
+  },
+  "levels": [
+    [
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 3.248632623861132
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.7340328080712282,
+              "sf": 5.53194526685421
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 749.4013769986232,
+        "ndata": 144,
+        "bic": 1513.7121938959742,
+        "structure": "WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "LinearKernel",
+              "dimension": 0,
+              "sf": 3.4620928861572025,
+              "location": 1946.2094087885182
+            },
+            {
+              "type": "NoiseKernel",
+              "sf": 3.8263743093695823
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 759.6916097529803,
+        "ndata": 144,
+        "bic": 1534.2926594046885,
+        "structure": "Lin + WN"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "LinearKernel",
+              "dimension": 0,
+              "sf": 3.4620929535760334,
+              "location": 1946.2094087555492
+            },
+            {
+              "type": "NoiseKernel",
+              "sf": 3.8263743085510336
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 759.691609752982,
+        "ndata": 144,
+        "bic": 1534.292659404692,
+        "structure": "Lin + WN"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "LinearKernel",
+              "dimension": 0,
+              "sf": 3.4620936367464457,
+              "location": 1946.2094088578074
+            },
+            {
+              "type": "NoiseKernel",
+              "sf": 3.826374307437427
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 759.6916097529826,
+        "ndata": 144,
+        "bic": 1534.292659404693,
+        "structure": "Lin + WN"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 3.804426273012393
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": 2.8512986906973605,
+              "sf": 6.209909752784156
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 761.5628699331972,
+        "ndata": 144,
+        "bic": 1538.0351797651224,
+        "structure": "WN + SE"
+      }
+    ],
+    [
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 2.3960074221540366
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.2681805385955602,
+                  "period": 0.002122119379056654,
+                  "sf": 0.3506600032422049
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.4328626410065888,
+                  "sf": 3.6510569618570257
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": 3.06088750904264,
+              "sf": 6.414014675295102
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 600.8175466022373,
+        "ndata": 144,
+        "bic": 1236.4237863015064,
+        "structure": "WN + Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 1.2354985606497424
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.4111501929785197,
+                  "location": 1947.1342903931318
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": -2.416601619505086,
+                  "sf": 2.9816951011413697
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": 2.7394100018253154,
+              "sf": 6.086894031176339
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 665.8598110942046,
+        "ndata": 144,
+        "bic": 1361.5385019858652,
+        "structure": "WN + Lin x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": -9.175770093147142
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.4040079166162547,
+                  "location": 1945.7907930550214
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": 1.581071557568839
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.6344419865742452,
+                  "location": 1946.8436588644431
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": -2.101387397744032,
+                  "sf": 3.1842935964981853
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": 2.7445183080945665,
+              "sf": 6.06711882690741
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 663.7395162635137,
+        "ndata": 144,
+        "bic": 1367.2375389236354,
+        "structure": "WN + Lin x WN + Lin x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 1.2354988963174744
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -6.896121843876867,
+                  "location": 1970.7104328815174
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -5.259923363730114
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.02190256762765664,
+                  "location": 1947.1342903346954
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": -2.416601585664493,
+                  "sf": 1.592447490056687
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": 2.739410226668085,
+              "sf": 6.08689358859802
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 665.8598110942828,
+        "ndata": 144,
+        "bic": 1371.4781285851736,
+        "structure": "WN + Lin x WN + Lin x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": -10.06965885222296
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.43378332798356617,
+                  "location": 1947.747462563298
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": 0.9737505318734595
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.3431520111967148,
+                  "location": 1946.1011054364158
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 84.52282719446892,
+                  "sf": 2.107204599477727
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -1.9760567914037777,
+              "sf": 3.7658200999758065
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 674.8879282051396,
+        "ndata": 144,
+        "bic": 1389.5343628068872,
+        "structure": "WN + Lin x WN + Lin x SE + SE"
+      }
+    ],
+    [
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 1.8052640035259693
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.2246835565487184,
+                  "location": 1946.3965536252558
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.41815430065715514,
+                  "period": 0.0015729536751873951,
+                  "sf": -1.4837752309335315
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.000649485650696,
+                  "sf": 1.76774926391992
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.26228090333595844,
+                  "location": 1942.7211471971652
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.7751613976323632,
+                  "sf": 3.0965649149703443
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.40827662285768973,
+                  "period": 0.06845457553075124,
+                  "sf": 0.16552944842607578
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 12.388799261163587,
+                  "sf": 0.5062031528394231
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.5854737364291128,
+              "sf": 2.2380211297729398
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 538.4725742637977,
+        "ndata": 144,
+        "bic": 1151.4923480212353,
+        "structure": "WN + Lin x Per x SE + Lin x SE + Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "LinearKernel",
+              "dimension": 0,
+              "sf": 3.4508776879185437,
+              "location": 1946.046762709896
+            },
+            {
+              "type": "NoiseKernel",
+              "sf": 1.8566345566776958
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.3816648053355906,
+                  "period": 0.0017181809696902404,
+                  "sf": 0.32890982331184493
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.223099996389898,
+                  "sf": 3.537997318064303
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.37742174678953455,
+              "sf": 2.6433524085171958
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 557.8152885075351,
+        "ndata": 144,
+        "bic": 1160.3588967112541,
+        "structure": "Lin + WN + Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 1.8545302926820453
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.376925026451328,
+                  "period": 0.0017461289736467663,
+                  "sf": 0.1993411882824874
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.225287139457504,
+                  "sf": 3.6777279095763373
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.5340517473967273,
+              "sf": 2.2439941207332
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": 2.866211203320689,
+              "sf": 6.224526513490654
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 559.1947490185267,
+        "ndata": 144,
+        "bic": 1163.1178177332374,
+        "structure": "WN + Per x SE + SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 1.8545299454371433
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.3769254771256595,
+                  "period": 0.0017461286330129745,
+                  "sf": 0.22043560816577487
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.225287165432771,
+                  "sf": 3.6566337999652587
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.5340511907638548,
+              "sf": 2.24399459765683
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": 2.8662127253216743,
+              "sf": 6.224527883016982
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 559.1947490186025,
+        "ndata": 144,
+        "bic": 1163.1178177333888,
+        "structure": "WN + Per x SE + SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 1.8545302641131427
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.3769250306394311,
+                  "period": 0.0017461282449556146,
+                  "sf": 0.22330826673016704
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.2252871365089804,
+                  "sf": 3.653760852384017
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.5340516488114865,
+              "sf": 2.2439942644234447
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": 2.8662111598006415,
+              "sf": 6.224526215223184
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 559.1947490186216,
+        "ndata": 144,
+        "bic": 1163.117817733427,
+        "structure": "WN + Per x SE + SE + SE"
+      }
+    ],
+    [
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 1.4362777573389875
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.20535309534007964,
+                  "location": 1942.322030891497
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.7573746672230275,
+                  "sf": 3.164146484101359
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9462201116327874,
+                  "location": 1939.278737807526
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.986214412012557,
+                  "location": 1939.4572185544255
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.40563588983278326,
+                  "period": 0.002166457157224586,
+                  "sf": -3.6788185686340693
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.971140488114188,
+                  "sf": -0.3193703516984635
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.8705438308974376,
+                  "location": 1949.511658485637
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -2.725502509170844,
+                  "period": -0.03500989379146504,
+                  "sf": -1.7896916123362085
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 12.567596842034726,
+                  "sf": -1.4310264357450047
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6232745281543848,
+              "sf": 2.211003885668233
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 524.3131520075405,
+        "ndata": 144,
+        "bic": 1133.1131301078728,
+        "structure": "WN + Lin x SE + Lin x Lin x Per x SE + Lin x Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 1.397896076002883
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.19123514121865082,
+                  "location": 1949.0075365598354
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -2.1239135860335585,
+                  "period": -0.036707868064089884,
+                  "sf": -0.618123480680407
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.22424381043555777,
+                  "location": 1942.715464450139
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.8019646025525207,
+                  "sf": 3.175116564974053
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.2007716182065025,
+                  "location": 1946.4554203384348
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.3911974642757993,
+                  "period": 0.0019912336314953307,
+                  "sf": -1.4475425246908384
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.1452443728181843,
+                  "sf": 1.7746681100490482
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": 15.662627162895028,
+                  "period": -0.6375107966341998,
+                  "sf": 0.13879679535289058
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 12.415013309828328,
+                  "sf": 0.5719187652677052
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6882419162985156,
+              "sf": 2.207537436123582
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 519.4501502931709,
+        "ndata": 144,
+        "bic": 1133.3267532782857,
+        "structure": "WN + Lin x Per + Lin x SE + Lin x Per x SE + Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "LinearKernel",
+              "dimension": 0,
+              "sf": 3.453556977076963,
+              "location": 1946.0725725700859
+            },
+            {
+              "type": "NoiseKernel",
+              "sf": 1.853893598770868
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.263324569852044,
+                  "location": 1946.2520257586684
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4188778771142359,
+                  "period": 0.0017008060791932162,
+                  "sf": -1.5944305071836962
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.9986164860599844,
+                  "sf": 1.808120477119653
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.38900273719196077,
+              "sf": 2.6332656708318174
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 541.9195954134408,
+        "ndata": 144,
+        "bic": 1133.5373238226416,
+        "structure": "Lin + WN + Lin x Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 1.374386534186545
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.3633298528033266,
+                  "location": 1943.053933441084
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.6286353846614773,
+                  "location": 1934.4662651168653
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.40423010090878436,
+                  "period": 0.001627952187328155,
+                  "sf": -2.21500827842307
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.123308891776627,
+                  "sf": 1.035080341740604
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.369573073798504,
+                  "location": 1948.3981381793408
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -2.6974726577867654,
+                  "period": -0.8215255847016866,
+                  "sf": -0.11827779429546871
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 12.425416122933306,
+                  "sf": 0.07192125812444478
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -3.992638682013478,
+                  "location": 1942.232159323105
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 3.3169126485470097,
+                  "location": 2151.846964385608
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.681210687528734,
+                  "sf": -1.1986936044944114
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6017703879310531,
+              "sf": 2.2287731198327116
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.786350495534,
+        "ndata": 144,
+        "bic": 1135.029340383436,
+        "structure": "WN + Lin x Lin x Per x SE + Lin x Per x SE + Lin x Lin x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 1.849756747143407
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.2963835745424318,
+                  "location": 1942.6190690511205
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.7688129291098296,
+                  "sf": 3.066844040555579
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.093498829832944,
+                  "location": 1946.172062349554
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.41371933813583484,
+                  "period": 0.0017375743708786214,
+                  "sf": -1.4930556355924667
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.005612047276546,
+                  "sf": 1.8814923280289135
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.5641536418271661,
+              "sf": 2.2326761051740354
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 540.256838804277,
+        "ndata": 144,
+        "bic": 1135.1816239038899,
+        "structure": "WN + Lin x SE + Lin x Per x SE + SE"
+      }
+    ],
+    [
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": -0.17591250698143057
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9742503005628602,
+                  "location": 1939.2794631143988
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.897316181478214,
+                  "location": 1939.3377639305907
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4657933750312965,
+                  "period": 0.0023374336879916123,
+                  "sf": -3.479421626145717
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.730053573058798,
+                  "sf": -0.4461915318281602
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.004284577276798812,
+                  "location": 1942.4274718610932
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.7195095409363987,
+                  "sf": 3.3254662234914467
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.0049540514282849,
+                  "location": 1956.848917317002
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.502105002327906,
+                  "location": 1949.1021189204396
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -5.253226929459474,
+                  "period": -0.7933872167703538,
+                  "sf": -3.3109402712975204
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.5957624660984064,
+              "sf": 2.2577886922571144
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 517.277224166577,
+        "ndata": 144,
+        "bic": 1119.0412744259459,
+        "structure": "WN + Lin x Lin x Per x SE + Lin x SE + Lin x Lin x Per + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "LinearKernel",
+              "dimension": 0,
+              "sf": 3.4525891404704647,
+              "location": 1946.0757458839569
+            },
+            {
+              "type": "NoiseKernel",
+              "sf": -12.540905620666459
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.8631738255195139,
+                  "location": 1940.2607845236553
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 3.010008829301594,
+                  "location": 1940.4703347910427
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.42192815202992856,
+                  "period": 0.0010300104775431197,
+                  "sf": -3.6093176246944383
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.268909916557695,
+                  "sf": -0.2931090702338652
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.891424722952181,
+                  "location": 1944.0210777463085
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -3.5541806569454413,
+                  "period": -0.009850328525134863,
+                  "sf": -1.818698937533732
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 12.592261366817471,
+                  "sf": -1.621870003751106
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.42457284617620256,
+              "sf": 2.617364077561943
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 524.0294613773609,
+        "ndata": 144,
+        "bic": 1127.575935547938,
+        "structure": "Lin + WN + Lin x Lin x Per x SE + Lin x Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "LinearKernel",
+              "dimension": 0,
+              "sf": 3.45258981367135,
+              "location": 1946.0757476323631
+            },
+            {
+              "type": "NoiseKernel",
+              "sf": -10.374392501145667
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.8008806404163981,
+                  "location": 1940.2173438215432
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 3.1015433713795484,
+                  "location": 1940.5117694213
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.42192126149552284,
+                  "period": 0.0010300219605470073,
+                  "sf": -3.6852548201166315
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.2689200410277763,
+                  "sf": -0.3710673798725266
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.8234055614154894,
+                  "location": 1944.0210509371439
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -3.5541814887552623,
+                  "period": -0.009850328265475237,
+                  "sf": -1.8371416129203675
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 12.52922632902323,
+                  "sf": -1.5354114328738933
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.4245763247552373,
+              "sf": 2.617362761123015
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 524.0295527644525,
+        "ndata": 144,
+        "bic": 1127.5761183221211,
+        "structure": "Lin + WN + Lin x Lin x Per x SE + Lin x Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 0.5614532391015599
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0362579954419153,
+                  "location": 1940.1393051202674
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 3.0748384054464415,
+                  "location": 1940.0521102116008
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.3942326509248318,
+                  "period": 0.0017605564107404444,
+                  "sf": -3.6160970605905156
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.0029903102415116,
+                  "sf": -0.24759732522163666
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.11808103399595685,
+                  "location": 1942.522697292836
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.747330392987595,
+                  "sf": 3.225177573295734
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.6504710795986093,
+                  "location": 1949.1633898011469
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.724880996837118,
+                  "location": 1956.7551987903923
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -4.471186079884696,
+                  "period": 0.8390525895042221,
+                  "sf": -4.210876902523538
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6059899226583909,
+              "sf": 2.2531095814674313
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 521.6719052438501,
+        "ndata": 144,
+        "bic": 1127.8306365804922,
+        "structure": "WN + Lin x Lin x Per x SE + Lin x SE + Lin x Lin x Per + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 0.6192673138553663
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9817147680298582,
+                  "location": 1939.6749752554704
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 3.0180488195070616,
+                  "location": 1939.5555358660395
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.3932808164130524,
+                  "period": 0.0019978503241111795,
+                  "sf": -3.5929865128036163
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.9841017826799705,
+                  "sf": -0.3173386870402336
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.4869876521465157,
+                  "location": 1956.776149048986
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.5811141900907617,
+                  "location": 1949.2860041836561
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -5.717120114186224,
+                  "period": 0.8097697258203089,
+                  "sf": -1.9174165854972434
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.2158787657607159,
+                  "location": 1942.3621315414791
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.7371543864466172,
+                  "sf": 3.1313072446962766
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6071250420660964,
+              "sf": 2.249049905167971
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 521.8425410757852,
+        "ndata": 144,
+        "bic": 1128.1719082443624,
+        "structure": "WN + Lin x Lin x Per x SE + Lin x Lin x Per + Lin x SE + SE"
+      }
+    ],
+    [
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 0.5924209278292418
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.022272470061505744,
+                  "location": 1942.3750337511476
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.7367634157606866,
+                  "sf": 3.3228622547374083
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0781902348235848,
+                  "location": 1939.6371028469082
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 3.06021859880608,
+                  "location": 1939.6370737604532
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.393581091676106,
+                  "period": 0.0019746800068939745,
+                  "sf": -3.5356987060879828
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.9617795675332492,
+                  "sf": -0.3278892034958052
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.2855275228535552,
+                  "location": 1956.778012185092
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.847695621719531,
+                  "location": 1949.3024479508656
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.945096677332105
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6077930519786959,
+              "sf": 2.249417369702902
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 521.9924107681212,
+        "ndata": 144,
+        "bic": 1118.5320210298823,
+        "structure": "WN + Lin x SE + Lin x Lin x Per x SE + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 0.5924210070442664
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.03184222919362533,
+                  "location": 1942.3750366293505
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.736763768961543,
+                  "sf": 3.3132928195792415
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9852392491961114,
+                  "location": 1939.6370803720872
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.92141894405353,
+                  "location": 1939.6371000321237
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.39358127376934254,
+                  "period": 0.001974679332614156,
+                  "sf": -3.4426177202944848
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.961779742726821,
+                  "sf": -0.3751213255961185
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.5068538572173565,
+                  "location": 1956.778012384879
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.053205917754997,
+                  "location": 1949.3024481805794
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -2.371932956705927
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6077927967571312,
+              "sf": 2.249417250963061
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 521.9924107681757,
+        "ndata": 144,
+        "bic": 1118.5320210299913,
+        "structure": "WN + Lin x SE + Lin x Lin x Per x SE + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 0.592420659708358
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.08617926940143567,
+                  "location": 1942.3750363944503
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.736764027271892,
+                  "sf": 3.2589560843066647
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.8863858900697154,
+                  "location": 1939.63708752136
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.9466574078805006,
+                  "location": 1939.6370914357883
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.39358113256032295,
+                  "period": 0.0019746804105586963,
+                  "sf": -3.4573166229458456
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.9617797283324054,
+                  "sf": -0.48451433734686716
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.6144707484311758,
+                  "location": 1956.778012257076
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.1004266888522483,
+                  "location": 1949.3024476847468
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -4.526771024701827
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6077929588977163,
+              "sf": 2.24941752347934
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 521.9924107681758,
+        "ndata": 144,
+        "bic": 1118.5320210299915,
+        "structure": "WN + Lin x SE + Lin x Lin x Per x SE + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 0.5924208506044422
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.027554697787300096,
+                  "location": 1942.3750327747148
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.7367644298788716,
+                  "sf": 3.3726905789055763
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0385036461899921,
+                  "location": 1939.6370837321408
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.8911217495458823,
+                  "location": 1939.6370977595084
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.3935811079024425,
+                  "period": 0.0019746793444196625,
+                  "sf": -3.4965522336544983
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.9617800170708186,
+                  "sf": -0.2376249016942459
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.23595817618745488,
+                  "location": 1956.778012265396
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.22946280987315415,
+                  "location": 1949.3024474076897
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -0.8053782734759738
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6077929274339761,
+              "sf": 2.2494173789714567
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 521.9924107681761,
+        "ndata": 144,
+        "bic": 1118.5320210299922,
+        "structure": "WN + Lin x SE + Lin x Lin x Per x SE + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 0.5924203153693105
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.036355456193786405,
+                  "location": 1942.375037348675
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 3.7367618618959813,
+                  "sf": 3.3087719312977844
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.1076625787548358,
+                  "location": 1939.6371068748988
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.7959685465599717,
+                  "location": 1939.637076158209
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.3935831858371414,
+                  "period": 0.001974677895769938,
+                  "sf": -3.3139044528308617
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.9617812972836792,
+                  "sf": -0.2559608019589354
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.1769444292484388,
+                  "location": 1956.7780113466658
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.655548748769167,
+                  "location": 1949.302445155613
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": 1.0206186025272206
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6077929489525452,
+              "sf": 2.2494181831156586
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 521.9924107686059,
+        "ndata": 144,
+        "bic": 1118.5320210308516,
+        "structure": "WN + Lin x SE + Lin x Lin x Per x SE + Lin x Lin x WN + SE"
+      }
+    ],
+    [
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 0.5934503972658258
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0830685713749433,
+                  "location": 1939.6047438818578
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 3.0574162454465585,
+                  "location": 1939.604738758667
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.39357676077213866,
+                  "period": 0.001979840052605598,
+                  "sf": -3.546749469987295
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.9691830758571824,
+                  "sf": -0.31096840575260637
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0444499609918103,
+                  "location": 1938.04325416826
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.9783063873872858,
+                  "location": 1938.0432665264732
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.2382062054510679,
+                  "location": 1956.7800666270848
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.8721431752340323,
+                  "location": 1949.3035942853353
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.9235084448988222
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6520565642836036,
+              "sf": 2.1631542964896666
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 518.5075178606158,
+        "ndata": 144,
+        "bic": 1111.5622352148716,
+        "structure": "WN + Lin x Lin x Per x SE + Lin x Lin + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 0.5934496181202323
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0493927195040023,
+                  "location": 1939.6096861095364
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 3.1468689591011394,
+                  "location": 1939.5997996667359
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.39357744200476985,
+                  "period": 0.001979838228979833,
+                  "sf": -3.5544390736724503
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.9691836545018506,
+                  "sf": -0.4264068926313351
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9275991408757557,
+                  "location": 1938.0435146538327
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.8614538490979674,
+                  "location": 1938.0430036785774
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.4079412054604898,
+                  "location": 1956.7800665513814
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.832276814773635,
+                  "location": 1949.3035934092845
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -4.0533770361517645
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6520565791911361,
+              "sf": 2.1631545388205837
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 518.5075180292391,
+        "ndata": 144,
+        "bic": 1111.5622355521182,
+        "structure": "WN + Lin x Lin x Per x SE + Lin x Lin + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 0.5934504552891373
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0348210640770865,
+                  "location": 1939.598681160927
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.9244970596504194,
+                  "location": 1939.6107950853434
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.39357688201013624,
+                  "period": 0.0019798412754829906,
+                  "sf": -3.38598593844792
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.9691827854545005,
+                  "sf": -0.38706075070580137
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -3.5284552859178135,
+                  "location": 1938.0428359021153
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 3.462311665500053,
+                  "location": 1938.0436842027423
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.3521420913197657,
+                  "location": 1956.780066440525
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.7324130548501124,
+                  "location": 1949.3035945951922
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.8977140607078473
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6520565925800282,
+              "sf": 2.1631544692973135
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 518.507518114267,
+        "ndata": 144,
+        "bic": 1111.562235722174,
+        "structure": "WN + Lin x Lin x Per x SE + Lin x Lin + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 0.5934502506039006
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.00896499680500441,
+                  "location": 1938.0423576527278
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.05717864815016793,
+                  "location": 1938.0441593045525
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9590937353915047,
+                  "location": 1939.6116131704728
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 3.095906985435884,
+                  "location": 1939.5978543035767
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.39357643443115425,
+                  "period": 0.0019798391262989363,
+                  "sf": -3.660283116365347
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.969183342862193,
+                  "sf": -0.359900469387286
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.2171387063745254,
+                  "location": 1956.7800663198095
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.9714237972703512,
+                  "location": 1949.3035939406113
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -4.001721630409878
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6520560915279539,
+              "sf": 2.163155236289121
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 518.5075181909714,
+        "ndata": 144,
+        "bic": 1111.5622358755827,
+        "structure": "WN + Lin x Lin + Lin x Lin x Per x SE + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "NoiseKernel",
+              "sf": 0.5934494033178164
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.183676275864773,
+                  "location": 1939.5544809036855
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.9339045562308943,
+                  "location": 1939.654506227825
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.3935754294056726,
+                  "period": 0.0019798506528250787,
+                  "sf": -3.434844382417656
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.969184753060917,
+                  "sf": -0.19877200245031504
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.4523865110091652,
+                  "location": 1938.0434255070286
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.3862444722623346,
+                  "location": 1938.0430961429581
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.3603136900609651,
+                  "location": 1956.7800661396184
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.7540322365181626,
+                  "location": 1949.3035964977119
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.9275044956786016
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6520565310613076,
+              "sf": 2.1631545734364535
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 518.5075350798045,
+        "ndata": 144,
+        "bic": 1111.562269653249,
+        "structure": "WN + Lin x Lin x Per x SE + Lin x Lin + Lin x Lin x WN + SE"
+      }
+    ],
+    [
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0181749306909023,
+                  "location": 1938.0339666165225
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.9511733931297419,
+                  "location": 1938.0338850190356
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.1066285611689575,
+                  "location": 1939.1297065575172
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.9053118675143046,
+                  "location": 1939.1300158354488
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4786191861091412,
+                  "period": 0.002247450912805766,
+                  "sf": -3.57355468900438
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.755445536647036,
+                  "sf": -0.25806482437712036
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.334037126044566,
+                  "location": 1956.7540781761734
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.8956732717708578,
+                  "location": 1949.4590244981769
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.8847987780111066
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.647279754384846,
+              "sf": 2.1639109019781686
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 520.0990400945342,
+        "ndata": 144,
+        "bic": 1109.7754663831324,
+        "structure": "Lin x Lin + Lin x Lin x Per x SE + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0377606606874967,
+                  "location": 1938.0808411181797
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.9707583227488884,
+                  "location": 1937.9867837021982
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0427159993167154,
+                  "location": 1939.1299283275757
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 3.0709311146768328,
+                  "location": 1939.1298107209286
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4786183245357859,
+                  "period": 0.0022474541092410093,
+                  "sf": -3.655281834544554
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.7554464858430237,
+                  "sf": -0.40586720217529476
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.1651879672297862,
+                  "location": 1956.7540775942782
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.033470749231667,
+                  "location": 1949.459027527908
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.8537463249523913
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6472809644179731,
+              "sf": 2.163910236371633
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 520.0990534990179,
+        "ndata": 144,
+        "bic": 1109.7754931921,
+        "structure": "Lin x Lin + Lin x Lin x Per x SE + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0877057801632228,
+                  "location": 1938.0676338785588
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.0206984210873078,
+                  "location": 1938.0000763663213
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.1059632067507312,
+                  "location": 1939.0523662085882
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 3.036200686125067,
+                  "location": 1939.206291125688
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4786157621580159,
+                  "period": 0.002247480154927443,
+                  "sf": -3.514679093820251
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.7554524833424554,
+                  "sf": -0.4485297764519732
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.1999322102766703,
+                  "location": 1956.7540774840224
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.9131183642510028,
+                  "location": 1949.459029040667
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.76813779869092
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6472824637857729,
+              "sf": 2.163910795921785
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 520.0990823120551,
+        "ndata": 144,
+        "bic": 1109.7755508181742,
+        "structure": "Lin x Lin + Lin x Lin x Per x SE + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0270806583225534,
+                  "location": 1937.9590648338758
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.9600565395415848,
+                  "location": 1938.1080919338667
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0543660772641266,
+                  "location": 1939.0904028159327
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.9236261239072583,
+                  "location": 1939.1690515039793
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4786176984992904,
+                  "period": 0.0022474640450176565,
+                  "sf": -3.6644690380791523
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.755446576677287,
+                  "sf": -0.23773474795720953
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.3516053258657814,
+                  "location": 1956.7540781777993
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.9404507055807363,
+                  "location": 1949.4590264049973
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.9471440997428506
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6472805445811821,
+              "sf": 2.1639130934497324
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 520.0990829601551,
+        "ndata": 144,
+        "bic": 1109.7755521143742,
+        "structure": "Lin x Lin + Lin x Lin x Per x SE + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9825916745510777,
+                  "location": 1938.1238728778872
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.9155579803551318,
+                  "location": 1937.9429560990911
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0618289225063535,
+                  "location": 1939.1191495358282
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.936028544501831,
+                  "location": 1939.1405432466208
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4786183241995672,
+                  "period": 0.0022474589039188524,
+                  "sf": -3.586841597189415
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.755444466215552,
+                  "sf": -0.3202941234341366
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.2359312712353816,
+                  "location": 1956.754078365322
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.8017251283681155,
+                  "location": 1949.459025223117
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.692744884221638
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6472795338056394,
+              "sf": 2.163914432303874
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 520.0990903679314,
+        "ndata": 144,
+        "bic": 1109.7755669299268,
+        "structure": "Lin x Lin + Lin x Lin x Per x SE + Lin x Lin x WN + SE"
+      }
+    ],
+    [
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9744475281451599,
+                  "location": 1938.057423848352
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.9099100696645398,
+                  "location": 1938.0574237241817
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.3143769120132023,
+                  "location": 1956.7351009056367
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.9352427943410078,
+                  "location": 1949.5140489306434
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.8825793918346503
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.2946094505655164,
+                  "location": 1945.1333790108456
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4156923985503688,
+                  "period": 0.002736852235915158,
+                  "sf": -4.05846548012601
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.833069280738147,
+                  "sf": 3.1450685997611316
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6832106060873812,
+              "sf": 2.1538928038518286
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.1605982449066,
+        "ndata": 144,
+        "bic": 1108.9287693843012,
+        "structure": "Lin x Lin + Lin x Lin x WN + Lin x Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9960732499609671,
+                  "location": 1938.0574270800869
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.9315359050394645,
+                  "location": 1938.0574203472981
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.352260700325344,
+                  "location": 1956.7351009316812
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.9226473908487554,
+                  "location": 1949.5140489604498
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.9078677793348273
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 5.850116675677321,
+                  "location": 1945.1333789613705
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.41569241857319494,
+                  "period": 0.002736852488955624,
+                  "sf": -3.808014907797841
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.8330692251085723,
+                  "sf": -0.6608892866580521
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6832106061869179,
+              "sf": 2.153892804201637
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.1605982449342,
+        "ndata": 144,
+        "bic": 1108.9287693843564,
+        "structure": "Lin x Lin + Lin x Lin x WN + Lin x Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0141590131593012,
+                  "location": 1938.0589538481024
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.9496217113925852,
+                  "location": 1938.0558938338886
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.4181489656100863,
+                  "location": 1956.7351009255626
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.8583344542036968,
+                  "location": 1949.5140489351534
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.909443101205787
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.952620738516008,
+                  "location": 1945.1333791244788
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.41569242113410587,
+                  "period": 0.00273685231955052,
+                  "sf": -5.649186879089392
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.8330692690082615,
+                  "sf": 6.077778675760341
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6832105441714842,
+              "sf": 2.153892821094486
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.1605982572589,
+        "ndata": 144,
+        "bic": 1108.9287694090058,
+        "structure": "Lin x Lin + Lin x Lin x WN + Lin x Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0884275644558679,
+                  "location": 1938.0614682744128
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.0238901045652733,
+                  "location": 1938.053373816033
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.5775420031888263,
+                  "location": 1945.133378894857
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4156924926369461,
+                  "period": 0.0027368521506068223,
+                  "sf": -2.0794101672718535
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.8330689279460457,
+                  "sf": 2.883080328365439
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.3304664611136172,
+                  "location": 1956.7351008949815
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.8612711659664487,
+                  "location": 1949.5140490753122
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.8246972073849816
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6832104320924856,
+              "sf": 2.153892870470594
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.1605983322578,
+        "ndata": 144,
+        "bic": 1108.9287695590035,
+        "structure": "Lin x Lin + Lin x Per x SE + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9809714162403426,
+                  "location": 1938.053337277888
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.9164334783730455,
+                  "location": 1938.0615084882925
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.05551807669666092,
+                  "location": 1945.1333792217304
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.41569240644180455,
+                  "period": 0.0027368522070662475,
+                  "sf": -2.714997799002734
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.833069455284025,
+                  "sf": 4.04069234620053
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.3408613229763737,
+                  "location": 1956.7351009080514
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.8253340907604232,
+                  "location": 1949.514048992442
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.799155073598499
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6832106266083069,
+              "sf": 2.1538928465707676
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.1605983339392,
+        "ndata": 144,
+        "bic": 1108.9287695623664,
+        "structure": "Lin x Lin + Lin x Per x SE + Lin x Lin x WN + SE"
+      }
+    ],
+    [
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9282687098571979,
+                  "location": 1938.0574315593326
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.8637311194110637,
+                  "location": 1938.0574154315245
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.2000685977116317,
+                  "location": 1956.7351008397457
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.029235949300892,
+                  "location": 1949.5140488815955
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.8622642254393114
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.1754322862993432,
+                  "location": 1945.133377768714
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4156924247765752,
+                  "period": 0.002736851802182484,
+                  "sf": -5.143863768862453
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.8330693913769465,
+                  "sf": 5.349643817499533
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6832105362829884,
+              "sf": 2.1538929253100636
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.1605982446864,
+        "ndata": 144,
+        "bic": 1108.9287693838608,
+        "structure": "Lin x Lin + Lin x Lin x WN + Lin x Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0257467791807875,
+                  "location": 1938.0574266885499
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.9612093083072462,
+                  "location": 1938.057420891767
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.2804188910254948,
+                  "location": 1956.7351009413137
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.9466931826012206,
+                  "location": 1949.5140489983194
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.8600717304205183
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.3417903686775623,
+                  "location": 1945.1333794248742
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4156924099508146,
+                  "period": 0.00273685214720289,
+                  "sf": -4.148587953434009
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.833069358057774,
+                  "sf": 3.1880102129650467
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.683210613113935,
+              "sf": 2.153892779494173
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.1605982446886,
+        "ndata": 144,
+        "bic": 1108.928769383865,
+        "structure": "Lin x Lin + Lin x Lin x WN + Lin x Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.8760448061993462,
+                  "location": 1938.0574230675727
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.8115072287341362,
+                  "location": 1938.0574245545863
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.3142712582759115,
+                  "location": 1956.7351009403092
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.062355605027476,
+                  "location": 1949.5140489426449
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -4.009586557194849
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.688988297405159,
+                  "location": 1945.1333791280952
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4156924050953086,
+                  "period": 0.0027368522929533167,
+                  "sf": -3.738922683286894
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.8330692809994815,
+                  "sf": 2.431146939669893
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6832105889235067,
+              "sf": 2.153892814492508
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.1605982447087,
+        "ndata": 144,
+        "bic": 1108.9287693839053,
+        "structure": "Lin x Lin + Lin x Lin x WN + Lin x Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.061094213201627,
+                  "location": 1938.0574236451089
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.996556810519867,
+                  "location": 1938.057423937761
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.4602284129043436,
+                  "location": 1956.7351009016813
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.8913198850082953,
+                  "location": 1949.5140489419766
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.0640511576959013
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.164550949869006,
+                  "location": 1945.1333790593947
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4156923920922875,
+                  "period": 0.002736852255606289,
+                  "sf": -3.8970952241857
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.833069327641554,
+                  "sf": 3.1137568568427634
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6832105658248103,
+              "sf": 2.1538928219620486
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.1605982447129,
+        "ndata": 144,
+        "bic": 1108.9287693839137,
+        "structure": "Lin x Lin + Lin x Lin x WN + Lin x Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.0295167431175842,
+                  "location": 1938.0574144142365
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.9649800681931978,
+                  "location": 1938.057431676791
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.9739605311030042,
+                  "location": 1956.735101234788
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.578924066199945,
+                  "location": 1949.514048382797
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -5.1858442905192765
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.3462975696249977,
+                  "location": 1945.133377277267
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4156926232249587,
+                  "period": 0.002736852450120464,
+                  "sf": -4.0638406216995255
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.8330695641236883,
+                  "sf": 3.0987551884977638
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6832100715326183,
+              "sf": 2.1538928650455134
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.160598244728,
+        "ndata": 144,
+        "bic": 1108.928769383944,
+        "structure": "Lin x Lin + Lin x Lin x WN + Lin x Per x SE + SE"
+      }
+    ],
+    [
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9259631403026971,
+                  "location": 1938.057423764733
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.8614256921938249,
+                  "location": 1938.0574238816935
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.3282343768693923,
+                  "location": 1945.1333791276109
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.415692401915784,
+                  "period": 0.0027368523020519634,
+                  "sf": -5.21020782285795
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.8330692760868295,
+                  "sf": 5.263186005437007
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.4356417820458335,
+                  "location": 1956.7351009148808
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.3158781569124773,
+                  "location": 1949.5140489420876
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -2.3844796258607808
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6832105895306093,
+              "sf": 2.1538928067082646
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.1605982446595,
+        "ndata": 144,
+        "bic": 1108.9287693838069,
+        "structure": "Lin x Lin + Lin x Per x SE + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9568976295969104,
+                  "location": 1938.0574231675964
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.8923600865960385,
+                  "location": 1938.0574238326071
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.1461183796950658,
+                  "location": 1945.1333791551147
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4156922579655391,
+                  "period": 0.0027368527611123326,
+                  "sf": -5.172213772848187
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.8330693402153857,
+                  "sf": 5.407308192086968
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.0773355637657318,
+                  "location": 1956.7351009457514
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.1229053217643914,
+                  "location": 1949.5140490244403
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.8332005395550355
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6832106533627337,
+              "sf": 2.1538926907138856
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.1605982446767,
+        "ndata": 144,
+        "bic": 1108.9287693838414,
+        "structure": "Lin x Lin + Lin x Per x SE + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9282687098571979,
+                  "location": 1938.0574315593326
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.8637311194110637,
+                  "location": 1938.0574154315245
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.2000685977116317,
+                  "location": 1956.7351008397457
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 2.029235949300892,
+                  "location": 1949.5140488815955
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -3.8622642254393114
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.1754322862993432,
+                  "location": 1945.133377768714
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4156924247765752,
+                  "period": 0.002736851802182484,
+                  "sf": -5.143863768862453
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.8330693913769465,
+                  "sf": 5.349643817499533
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6832105362829884,
+              "sf": 2.1538929253100636
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.1605982446864,
+        "ndata": 144,
+        "bic": 1108.9287693838608,
+        "structure": "Lin x Lin + Lin x Lin x WN + Lin x Per x SE + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.9697585705796636,
+                  "location": 1938.0574080455524
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.9052218762223455,
+                  "location": 1938.0574398800488
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.1298492701261575,
+                  "location": 1945.1333794657976
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4156925506302824,
+                  "period": 0.002736852180759026,
+                  "sf": -5.173435466391431
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.8330691809729416,
+                  "sf": 5.424798418469093
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -1.4253826525402273,
+                  "location": 1956.73510093104
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.31627086799261583,
+                  "location": 1949.5140488802783
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": 1.1086938386561849
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6832108849253606,
+              "sf": 2.1538926807406398
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.1605982446962,
+        "ndata": 144,
+        "bic": 1108.9287693838803,
+        "structure": "Lin x Lin + Lin x Per x SE + Lin x Lin x WN + SE"
+      },
+      {
+        "kernel": {
+          "type": "SumKernel",
+          "operands": [
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": -0.8948642744785309,
+                  "location": 1938.057428984676
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.8303271783260686,
+                  "location": 1938.0574186249262
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.2784849514487693,
+                  "location": 1945.133379835524
+                },
+                {
+                  "type": "PeriodicKernel",
+                  "dimension": 0,
+                  "lengthscale": -0.4156922604397212,
+                  "period": 0.002736853248927531,
+                  "sf": -5.159019165535104
+                },
+                {
+                  "type": "SqExpKernel",
+                  "dimension": 0,
+                  "lengthscale": 2.833069166717326,
+                  "sf": 5.261746963527518
+                }
+              ]
+            },
+            {
+              "type": "ProductKernel",
+              "operands": [
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 0.7871893489125577,
+                  "location": 1956.7351008879768
+                },
+                {
+                  "type": "LinearKernel",
+                  "dimension": 0,
+                  "sf": 1.4368997169062085,
+                  "location": 1949.5140489760697
+                },
+                {
+                  "type": "NoiseKernel",
+                  "sf": -2.857048866089361
+                }
+              ]
+            },
+            {
+              "type": "SqExpKernel",
+              "dimension": 0,
+              "lengthscale": -0.6832107662809566,
+              "sf": 2.153893062985392
+            }
+          ]
+        },
+        "mean_const": null,
+        "lik_sf": -Infinity,
+        "nll": 522.1605982447097,
+        "ndata": 144,
+        "bic": 1108.9287693839074,
+        "structure": "Lin x Lin + Lin x Per x SE + Lin x Lin x WN + SE"
+      }
+    ]
+  ],
+  "experiment": {
+    "max_depth": 20,
+    "k": 1,
+    "n_rand": 9,
+    "sd": 2.0,
+    "jitter_sd": 0.1,
+    "iters": 250,
+    "base_kernels": "SE,Per,Lin,Const,Noise",
+    "additive_form": true,
+    "score": "bic",
+    "random_seed": 1,
+    "period_heuristic": 3.0,
+    "max_period_heuristic": 5.0,
+    "period_heuristic_type": "min",
+    "subset": true,
+    "subset_size": 250,
+    "full_iters": 10,
+    "stopping_criteria": [
+      "no_improvement"
+    ],
+    "improvement_tolerance": 0.1,
+    "patience": 2,
+    "n_jobs": 2,
+    "rules": null,
+    "start": "noise",
+    "likelihood_noise": false
+  },
+  "seconds": 35797.417384625005
+}

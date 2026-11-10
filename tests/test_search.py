@@ -2,7 +2,7 @@
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -31,7 +31,13 @@ def trend_plus_cycle() -> tuple[np.ndarray, np.ndarray]:
 
 
 def test_fitting_lowers_the_negative_log_likelihood(airline):
-    """The optimiser improves on its starting point."""
+    """The optimiser improves on its starting point.
+
+    Parameters
+    ----------
+    airline : tuple of numpy.ndarray
+        Fixture: the airline inputs and passenger counts.
+    """
     x, y = airline
     start = GPModel(
         ff.SumKernel(

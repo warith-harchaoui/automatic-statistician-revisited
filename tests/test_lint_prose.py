@@ -2,7 +2,7 @@
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -34,14 +34,28 @@ _spec.loader.exec_module(lint_prose)
     ],
 )
 def test_the_linter_flags_a_banned_habit(tmp_path, text):
-    """Each banned habit produces a finding."""
+    """Each banned habit produces a finding.
+
+    Parameters
+    ----------
+    tmp_path : pathlib.Path
+        Pytest's temporary directory.
+    text : str
+        A line holding one banned habit.
+    """
     path = tmp_path / "note.md"
     path.write_text(text + "\n")
     assert lint_prose.scan([path], tmp_path)
 
 
 def test_the_linter_accepts_command_line_options(tmp_path):
-    """A double hyphen starting an option is not a dash."""
+    """A double hyphen starting an option is not a dash.
+
+    Parameters
+    ----------
+    tmp_path : pathlib.Path
+        Pytest's temporary directory.
+    """
     path = tmp_path / "note.md"
     path.write_text("run with --max-depth 3 and --json\n")
     assert not lint_prose.scan([path], tmp_path)

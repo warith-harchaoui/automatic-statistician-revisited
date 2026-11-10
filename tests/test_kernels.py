@@ -2,7 +2,7 @@
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -38,7 +38,13 @@ def se(lengthscale: float = 0.0, sf: float = 0.5) -> ff.SqExpKernel:
 
 @pytest.mark.parametrize("ell", [0.3, 1.0, 4.0])
 def test_the_periodic_kernel_equals_gpml_closed_form(ell):
-    """CovPeriodicNoDC through i0e equals the textbook Bessel quotient."""
+    """CovPeriodicNoDC through i0e equals the textbook Bessel quotient.
+
+    Parameters
+    ----------
+    ell : float
+        Periodic lengthscale.
+    """
     k = ff.PeriodicKernel(
         dimension=0, lengthscale=math.log(ell), period=math.log(0.7), sf=0.2
     )
@@ -59,7 +65,15 @@ def test_a_very_long_periodic_lengthscale_gives_a_cosine():
 
 
 def test_autograd_gradients_match_finite_differences(airline, airline_final):
-    """Autograd replaces GPML's hand-written derivatives without changing them."""
+    """Autograd replaces GPML's hand-written derivatives without changing them.
+
+    Parameters
+    ----------
+    airline : tuple of numpy.ndarray
+        Fixture: the airline inputs and passenger counts.
+    airline_final : GPModel
+        Fixture: the final published airline model.
+    """
     x, y = airline
     model = airline_final
     xt, yt = torch.as_tensor(x), torch.as_tensor(y)

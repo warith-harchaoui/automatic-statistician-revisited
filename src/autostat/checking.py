@@ -43,7 +43,7 @@ Faithfulness
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>. The ported design is (c) 2013-2015
+Warith Harchaoui <warithmetics@deraison.ai>. The ported design is (c) 2013-2015
 James Robert Lloyd and David Duvenaud, MIT licence, reproduced in
 ``LICENSE-ORIGINAL``.
 """

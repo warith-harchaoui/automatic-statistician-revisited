@@ -24,7 +24,7 @@ What it exposes
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>. The ported design is (c) 2023 Google
+Warith Harchaoui <warithmetics@deraison.ai>. The ported design is (c) 2023 Google
 LLC, Apache-2.0, reproduced in ``LICENSE-AUTOGP``.
 """
 

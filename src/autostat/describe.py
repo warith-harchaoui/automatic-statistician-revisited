@@ -17,8 +17,10 @@ What it consumes
     A fitted :class:`autostat.model.GPModel` and the data it was fitted to.
 
 What it produces
-    A :class:`Report`. On request it writes ``report.md`` with PNG (Portable Network
-    Graphics) figures in place of the original's LaTeX document.
+    A :class:`Report`. On request it writes the report in the format asked:
+    ``report.md`` with SVG figures, compiled to ``report.pdf`` by md2star; or
+    ``report.tex`` with PDF figures, compiled by ``latexmk`` as the original's
+    LaTeX document was. The figures are drawn by ``sprezzature-figures``.
 
 The sentences
     They are the original's. The authors wrote them as a rule system over the
@@ -27,16 +29,22 @@ The sentences
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>. The ported design is (c) 2013-2015
+Warith Harchaoui <warithmetics@deraison.ai>. The ported design is (c) 2013-2015
 James Robert Lloyd, David Duvenaud and Roger Grosse, MIT licence, reproduced
 in ``LICENSE-ORIGINAL``.
 """
 
 from __future__ import annotations
 
+import contextlib
 import datetime as dt
+import io
 import math
-from collections.abc import Callable
+import shutil
+import subprocess
+import tempfile
+import warnings
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -46,7 +54,9 @@ from scipy import stats
 
 from . import kernels as ff
 from .checking import ComponentCheck, check_model
+from .formula import Formula, formula
 from .model import GPModel, posterior
+from .stopping import SearchPath, findings
 
 POLY_NAMES = ["linear", "quadratic", "cubic", "quartic", "quintic"]
 ORDINALS = [
@@ -658,6 +668,18 @@ def translate_product(
         return summary, desc, extrap
 
     def rough(text: str) -> str:
+        """Say "rough" where the sentence said "smooth".
+
+        Parameters
+        ----------
+        text : str
+            One sentence.
+
+        Returns
+        -------
+        str
+            The sentence for a non-differentiable component.
+        """
         return text.replace("smoothly", "roughly").replace("smooth", "rough")
 
     desc = [rough(d) for d in desc]
@@ -1019,20 +1041,176 @@ def translate_component(
 # Report
 
 
-def _p(value: float) -> str:
+REPORT_FORMATS = ("markdown", "latex")
+
+#: Who signs a generated report. The project's author is Warith Harchaoui;
+#: a report is the work of the method, the tool and those who guide them.
+REPORT_AUTHOR = "Some Math empowered by some AI guided by some researchers"
+
+_TEX_SPECIAL = {
+    "\\": r"\textbackslash{}",
+    "&": r"\&",
+    "%": r"\%",
+    "$": r"\$",
+    "#": r"\#",
+    "_": r"\_",
+    "{": r"\{",
+    "}": r"\}",
+    "~": r"\textasciitilde{}",
+    "^": r"\textasciicircum{}",
+}
+
+
+def _p(value: float, latex: bool = False) -> str:
     """Format a p-value, bold below 0.05 as the original's report did.
 
     Parameters
     ----------
     value : float
         A p-value.
+    latex : bool, optional
+        Bold in LaTeX rather than in Markdown.
 
     Returns
     -------
     str
-        Markdown.
+        Markdown, or LaTeX when ``latex``.
     """
-    return f"**{value:.3f}**" if value < 0.05 else f"{value:.3f}"
+    text = f"{value:.3f}"
+    if value >= 0.05:
+        return text
+    return rf"\textbf{{{text}}}" if latex else f"**{text}**"
+
+
+def tex(text: str) -> str:
+    """Escape the characters LaTeX reads as commands.
+
+    Parameters
+    ----------
+    text : str
+        Plain text.
+
+    Returns
+    -------
+    str
+        The same text, safe in a LaTeX paragraph.
+    """
+    return "".join(_TEX_SPECIAL.get(c, c) for c in text)
+
+
+def compile_markdown(source: Path) -> Path | None:
+    """Compile a Markdown report to PDF with md2star's ``md2pdf``.
+
+    Parameters
+    ----------
+    source : pathlib.Path
+        The ``report.md`` to compile; its figures sit beside it.
+
+    Returns
+    -------
+    pathlib.Path or None
+        The PDF, or None when md2star is not installed (a warning says so).
+    """
+    exe = shutil.which("md2pdf")
+    if exe is None:
+        warnings.warn(
+            "md2pdf not found (pip install md2star): the Markdown report is "
+            "left uncompiled",
+            stacklevel=2,
+        )
+        return None
+    target = source.with_suffix(".pdf")
+    command = [exe, source.name, "-o", target.name]
+    # md2pdf drives LibreOffice, which does not convert two documents at once
+    # well: concurrent reports (parallel examples, an API serving several
+    # requests) timed out. One conversion at a time across processes, plus
+    # one retry for a conversion that still times out.
+    with _machine_lock("md2pdf"):
+        try:
+            _run(command, source.parent)
+        except RuntimeError:
+            _run(command, source.parent)
+    return target
+
+
+@contextlib.contextmanager
+def _machine_lock(name: str) -> Iterator[None]:
+    """Hold a lock shared by every process on this machine.
+
+    Parameters
+    ----------
+    name : str
+        What is being serialised; names the lock file in the temporary
+        directory.
+
+    Yields
+    ------
+    None
+        While the lock is held. Where ``fcntl`` is missing (Windows), no lock
+        is taken.
+    """
+    try:
+        import fcntl
+    except ImportError:  # pragma: no cover - Windows
+        yield
+        return
+    path = Path(tempfile.gettempdir()) / f"autostat-{name}.lock"
+    with path.open("w") as handle:
+        fcntl.flock(handle, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(handle, fcntl.LOCK_UN)
+
+
+def compile_latex(source: Path) -> Path | None:
+    """Compile a LaTeX report to PDF with ``latexmk``, then remove its by-products.
+
+    Parameters
+    ----------
+    source : pathlib.Path
+        The ``report.tex`` to compile; its figures sit beside it.
+
+    Returns
+    -------
+    pathlib.Path or None
+        The PDF, or None when ``latexmk`` is not installed (a warning says so).
+    """
+    exe = shutil.which("latexmk")
+    if exe is None:
+        warnings.warn(
+            "latexmk not found (install a TeX distribution): the LaTeX report "
+            "is left uncompiled",
+            stacklevel=2,
+        )
+        return None
+    _run(
+        [exe, "-pdf", "-interaction=nonstopmode", "-halt-on-error", source.name],
+        source.parent,
+    )
+    _run([exe, "-c", source.name], source.parent)
+    return source.with_suffix(".pdf")
+
+
+def _run(command: list[str], cwd: Path) -> None:
+    """Run a compiler and raise with the end of its output when it fails.
+
+    Parameters
+    ----------
+    command : list of str
+        Program and arguments.
+    cwd : pathlib.Path
+        Working directory.
+
+    Raises
+    ------
+    RuntimeError
+        When the command exits with a non-zero status.
+    """
+    done = subprocess.run(command, cwd=cwd, capture_output=True, text=True)
+    if done.returncode != 0:
+        tail = "\n".join((done.stdout + done.stderr).splitlines()[-20:])
+        raise RuntimeError(f"{command[0]} failed in {cwd}:\n{tail}")
 
 
 @dataclass
@@ -1056,7 +1234,23 @@ class Report:
     checks : list of ComponentCheck, optional
         Model checks in report order, when computed.
     figures : list of str
-        Figure file names relative to the report.
+        Figure file names relative to the report, from the last
+        :meth:`write`.
+    selected_by : str
+        Opening words of the executive summary, before the structure.
+    x, y : numpy.ndarray, optional
+        The data, kept so that :meth:`write` can draw the figures.
+    unit : str
+        ``"year"`` or ``""``, as :func:`describe`.
+    path : SearchPath, optional
+        The search's winners level by level, for the stopping study.
+    data_figure, bic_figure : str, optional
+        The data alone and the BIC per level, from the last :meth:`write`.
+    symbolic : bool
+        Look for formulas for smooth components with PySR.
+    written : Formula, optional
+        The formula, kept once computed: symbolic regression is slow and
+        both formats show the same one.
     """
 
     name: str
@@ -1068,6 +1262,77 @@ class Report:
     checks: list[ComponentCheck] | None = None
     figures: list[str] = field(default_factory=list)
     selected_by: str = "The structure search selected"
+    x: np.ndarray | None = field(default=None, repr=False)
+    y: np.ndarray | None = field(default=None, repr=False)
+    unit: str = "year"
+    path: SearchPath | None = None
+    data_figure: str | None = None
+    bic_figure: str | None = None
+    symbolic: bool = False
+    written: Formula | None = field(default=None, repr=False)
+
+    def write(
+        self,
+        out_dir: str | Path,
+        report_format: str = "markdown",
+        pdf: bool = True,
+    ) -> Path:
+        """Write the report, its figures and, on request, its PDF.
+
+        Parameters
+        ----------
+        out_dir : str or pathlib.Path
+            Destination directory, created if needed.
+        report_format : {"markdown", "latex"}, optional
+            ``"markdown"`` writes ``report.md`` with SVG figures and compiles
+            it with md2star; ``"latex"`` writes ``report.tex`` with PDF
+            figures and compiles it with ``latexmk``.
+        pdf : bool, optional
+            Compile ``report.pdf``. A missing compiler is a warning, not an
+            error: the source is written either way.
+
+        Returns
+        -------
+        pathlib.Path
+            The report's source file.
+
+        Raises
+        ------
+        ValueError
+            On an unknown format, or when the data were not kept.
+        """
+        if report_format not in REPORT_FORMATS:
+            raise ValueError(
+                f"report_format must be one of {REPORT_FORMATS}, not {report_format!r}"
+            )
+        if self.x is None or self.y is None:
+            raise ValueError("the report keeps no data to draw its figures from")
+        out = Path(out_dir)
+        out.mkdir(parents=True, exist_ok=True)
+        latex = report_format == "latex"
+        self.figures = _plot(
+            self.model,
+            self.parts,
+            self.order["order"],
+            self.x,
+            self.y,
+            out,
+            self.unit,
+            ".pdf" if latex else ".svg",
+        )
+        suffix = ".pdf" if latex else ".svg"
+        self.data_figure = plot_data(self.x, self.y, self.name, out, self.unit, suffix)
+        # A curve needs two levels at least; one point says nothing.
+        self.bic_figure = (
+            plot_bic(self.path, out, suffix)
+            if self.path is not None and len(self.path.steps) > 1
+            else None
+        )
+        source = out / ("report.tex" if latex else "report.md")
+        source.write_text(self.latex() if latex else self.markdown())
+        if pdf:
+            (compile_latex if latex else compile_markdown)(source)
+        return source
 
     def markdown(self) -> str:
         """Render the report as Markdown.
@@ -1080,12 +1345,20 @@ class Report:
         n = len(self.parts)
         plural = "s" if n != 1 else ""
         lines = [
+            "---",
+            f'author: "{REPORT_AUTHOR}"',
+            "---",
+            "",
             f"# An automatic report for the dataset: {self.name}",
             "",
             "*Produced by `autostat` (automatic-statistician-revisited), a Python 3 "
             "port of the Automatic Bayesian Covariance Discovery system of Lloyd et "
             "al. (AAAI 2014).*",
             "",
+        ]
+        if self.data_figure:
+            lines += [f"![The data]({self.data_figure})", ""]
+        lines += [
             "## Executive summary",
             "",
             f"{self.selected_by} `{self.model.kernel.structure()}` "
@@ -1109,6 +1382,8 @@ class Report:
                 f"{self.order['maes'][i]:.3g} | {self.order['mae_reductions'][i]:.1f} |"
             )
         lines += ["", "MAE: mean absolute error over ten contiguous held-out blocks."]
+        lines += self._formula_lines(latex=False)
+        lines += self._path_lines(latex=False)
         if self.figures:
             lines += ["", f"![Data and full posterior]({self.figures[0]})"]
         lines += ["", "## Detailed discussion of the components", ""]
@@ -1129,6 +1404,406 @@ class Report:
                 lines += [f"![Component {i + 1}]({self.figures[i + 1]})", ""]
         lines += self._checking_lines()
         return "\n".join(lines)
+
+    def latex(self) -> str:
+        """Render the report as a LaTeX document.
+
+        The sections, sentences and tables are those of :meth:`markdown`;
+        the figures are the PDF files of the last :meth:`write`.
+
+        Returns
+        -------
+        str
+            The document.
+        """
+        n = len(self.parts)
+        plural = "s" if n != 1 else ""
+        lines = [
+            r"\documentclass[11pt,a4paper]{article}",
+            r"\usepackage[utf8]{inputenc}",
+            r"\usepackage[T1]{fontenc}",
+            r"\usepackage{lmodern}",
+            r"\usepackage[margin=2.5cm]{geometry}",
+            r"\usepackage{booktabs}",
+            r"\usepackage{graphicx}",
+            r"\usepackage{caption}",
+            r"\usepackage{float}",
+            r"\usepackage{amsmath}",
+            r"\usepackage{breqn}",
+            r"\usepackage[hidelinks]{hyperref}",
+            "",
+            rf"\title{{An automatic report for the dataset: {tex(self.name)}}}",
+            rf"\author{{{REPORT_AUTHOR}}}",
+            rf"\date{{{dt.date.today():%d %B %Y}}}",
+            "",
+            r"\begin{document}",
+            r"\maketitle",
+            "",
+            r"\noindent\emph{Produced by \texttt{autostat}, a Python 3 port of the "
+            r"Automatic Bayesian Covariance Discovery system of Lloyd et al. "
+            r"(AAAI 2014).}",
+            "",
+            *(
+                self._latex_figure(self.data_figure, "The data")
+                if self.data_figure
+                else []
+            ),
+            "",
+            r"\section*{Executive summary}",
+            "",
+            f"{tex(self.selected_by)} "
+            rf"\texttt{{{tex(self.model.kernel.structure())}}} "
+            f"(Bayesian information criterion {self.model.bic:.1f}; negative log "
+            f"likelihood {self.model.nll:.1f} on {self.model.ndata} points). It "
+            f"decomposes into {n} additive component{plural}, listed by how much "
+            "each reduces extrapolation error:",
+            r"\begin{enumerate}",
+        ]
+        lines += [rf"  \item {tex(t[0])}." for t in self.texts]
+        lines += [
+            r"\end{enumerate}",
+            "",
+            r"\begin{center}",
+            r"\begin{tabular}{lrrrr}",
+            r"\toprule",
+            r"\# & $R^2$ cumulative (\%) & Residual variance explained (\%) & "
+            r"CV MAE & MAE reduction (\%) \\",
+            r"\midrule",
+            rf"data & & & {self.order['mav_data']:.3g} & \\",
+        ]
+        for i, s in enumerate(self.stats):
+            lines.append(
+                f"{i + 1} & {s['cum_var']:.1f} & {s['cum_resid_var']:.1f} & "
+                f"{self.order['maes'][i]:.3g} & "
+                rf"{self.order['mae_reductions'][i]:.1f} \\"
+            )
+        lines += [
+            r"\bottomrule",
+            r"\end{tabular}",
+            r"\end{center}",
+            "",
+            "MAE: mean absolute error over ten contiguous held-out blocks; CV: "
+            "cross-validated.",
+        ]
+        lines += self._formula_lines(latex=True)
+        lines += self._path_lines(latex=True)
+        if self.figures:
+            lines += self._latex_figure(self.figures[0], "Data and full posterior")
+        lines += ["", r"\section*{Detailed discussion of the components}", ""]
+        for i, (summary, desc, extrap) in enumerate(self.texts):
+            s = self.stats[i]
+            lines += [
+                rf"\subsection*{{Component {i + 1}: {tex(summary)}}}",
+                "",
+                tex(". ".join(desc)) + ".",
+                "",
+                f"This component explains {s['var_explained']:.1f}\\% of the data's "
+                f"variance on its own; with the components above it, "
+                f"{s['cum_var']:.1f}\\%. Adding it changes the cross-validated MAE "
+                f"by {-self.order['mae_reductions'][i]:.1f}\\%.",
+                "",
+                r"\emph{Extrapolation.} " + tex(". ".join(extrap)) + ".",
+            ]
+            if len(self.figures) > i + 1:
+                lines += self._latex_figure(self.figures[i + 1], f"Component {i + 1}")
+        lines += self._latex_checking_lines()
+        lines += ["", r"\end{document}", ""]
+        return "\n".join(lines)
+
+    @staticmethod
+    def _latex_figure(path: str, caption: str) -> list[str]:
+        """Render one full-width figure with its caption.
+
+        Parameters
+        ----------
+        path : str
+            Figure file, relative to the report.
+        caption : str
+            Caption text.
+
+        Returns
+        -------
+        list of str
+            LaTeX lines.
+        """
+        return [
+            "",
+            r"\begin{figure}[H]",
+            r"\centering",
+            rf"\includegraphics[width=\linewidth]{{{path}}}",
+            rf"\caption*{{{tex(caption)}}}",
+            r"\end{figure}",
+        ]
+
+    def _latex_checking_lines(self) -> list[str]:
+        """Render the model-checking section in LaTeX.
+
+        Returns
+        -------
+        list of str
+            LaTeX lines.
+        """
+        lines = ["", r"\section*{Model checking}", ""]
+        if not self.checks:
+            return [
+                *lines,
+                r"Not computed for this report (\texttt{describe(..., check=False)}).",
+            ]
+        lines += [
+            "Each statistic compares draws of a component's posterior with draws "
+            "of its prior. A small p-value (bold below 0.05) points at a property "
+            "of the data that the component's prior does not reproduce.",
+            "",
+            r"\begin{center}",
+            r"\begin{tabular}{lrrrrrrr}",
+            r"\toprule",
+            r"\# & QQ max & QQ min & ACF min & ACF min lag & Pgram max & "
+            r"Pgram peak & MMD \\",
+            r"\midrule",
+        ]
+        for i, c in enumerate(self.checks):
+            values = " & ".join(
+                _p(v, latex=True)
+                for v in (
+                    c.qq_max,
+                    c.qq_min,
+                    c.acf_min,
+                    c.acf_min_loc,
+                    c.pxx_max,
+                    c.pxx_max_loc,
+                    c.mmd,
+                )
+            )
+            lines.append(rf"{i + 1} & {values} \\")
+        lines += [
+            r"\bottomrule",
+            r"\end{tabular}",
+            r"\end{center}",
+            "",
+            "QQ: quantile-quantile gaps. ACF: autocorrelation function. Pgram: "
+            "periodogram. MMD: maximum mean discrepancy two-sample test.",
+        ]
+        return lines
+
+    def formula(self) -> Formula:
+        """Write the model the search kept as a formula with its fitted values.
+
+        Returns
+        -------
+        Formula
+            See :func:`autostat.formula.formula`.
+
+        Raises
+        ------
+        ValueError
+            When the report keeps no data.
+        """
+        if self.x is None or self.y is None:
+            raise ValueError("the report keeps no data to read the formula from")
+        if self.written is None:
+            self.written = formula(
+                self.model,
+                self.parts,
+                self.order["order"],
+                self.x,
+                self.y,
+                self.unit,
+                self.symbolic,
+            )
+        return self.written
+
+    def _formula_lines(self, latex: bool) -> list[str]:
+        """Render the formula section, in Markdown or in LaTeX.
+
+        Parameters
+        ----------
+        latex : bool
+            LaTeX rather than Markdown.
+
+        Returns
+        -------
+        list of str
+            Lines.
+        """
+        if self.x is None or self.y is None:
+            return []
+        f = self.formula()
+
+        def show(equation: str) -> list[str]:
+            """Display one equation.
+
+            Parameters
+            ----------
+            equation : str
+                LaTeX math.
+
+            Returns
+            -------
+            list of str
+                Lines.
+            """
+            if latex:
+                return [r"\begin{dmath*}", equation, r"\end{dmath*}"]
+            return ["", f"$${equation}$$"]
+
+        unit = "years" if f.unit == "year" else "the input's unit"
+        heading = r"\section*{The formula found}" if latex else "## The formula found"
+        lines = [
+            "",
+            heading,
+            "",
+            "The structure search is a symbolic regression: it searches a grammar of "
+            "expressions over kernels and keeps the one with the lowest Bayesian "
+            "information criterion. This is the expression it kept, with every fitted "
+            f"parameter in place; $t$ is in {unit}.",
+        ]
+        lines += show(f.model)
+        lines += ["", "Each component is a Gaussian process with its own covariance:"]
+        for law in f.laws:
+            lines += show(law)
+        if f.noise:
+            lines += show(f.noise)
+        if f.switches:
+            lines += ["", "The changes of regime weigh the components with:"]
+            for definition in f.switches:
+                lines += show(definition)
+        explicit = [e for e in f.explicit if e]
+        if explicit:
+            lines += [
+                "",
+                "These components have a closed form, read from their posterior mean:",
+            ]
+            for equation in explicit:
+                lines += show(equation)
+            if any(r"\approx" in equation for equation in explicit):
+                lines += [
+                    "",
+                    "A periodic kernel is exactly a sum of cosines, so a periodic "
+                    "component is a Fourier series in its period; it is written up to "
+                    "the harmonic after which the rest weighs less than 0.1 % of the "
+                    "component, hence the approximate sign.",
+                ]
+        if len(explicit) < len(f.laws):
+            lines += [
+                "",
+                "The other components are smooth, quasi-periodic or noise without a "
+                "short formula: a draw from "
+                "such a process has no finite closed form; its covariance above is the "
+                "formula.",
+            ]
+        rows = [
+            (
+                str(i + 1),
+                self.texts[i][0],
+                note or "none: the covariance is the formula",
+            )
+            for i, note in enumerate(f.notes)
+        ]
+        lines += ["", "Closed form of each component:", ""]
+        lines += _table(["#", "component", "closed form"], rows, latex, wide=1)
+        return lines
+
+    def _path_lines(self, latex: bool) -> list[str]:
+        """Render the search path and the stopping study.
+
+        Parameters
+        ----------
+        latex : bool
+            LaTeX rather than Markdown.
+
+        Returns
+        -------
+        list of str
+            Lines; none when the report has no search path.
+        """
+        if self.path is None:
+            return []
+        kept = self.path.kept
+        heading = (
+            r"\section*{Search path and stopping criterion}"
+            if latex
+            else "## Search path and stopping criterion"
+        )
+        lines = [
+            "",
+            heading,
+            "",
+            "The 2014 configuration searches a fixed number of levels and keeps the "
+            "lowest BIC; it has no stopping rule. The table follows the winner of "
+            "each level. A change of structure adds or removes terms; a level that "
+            "keeps the structure only refits its parameters. BIC differences read "
+            "on the scale of Kass and Raftery (1995): under 2 barely worth "
+            "mentioning, 2 to 6 positive, 6 to 10 strong, over 10 very strong.",
+        ]
+        rows = []
+        previous = None
+        for step in self.path.steps:
+            change = "" if previous is None else f"{step.bic - previous:+.1f}"
+            mark = " (kept)" if step.level == kept.level else ""
+            rows.append(
+                (
+                    f"{step.level}{mark}",
+                    f"{step.bic:.1f}",
+                    change,
+                    step.structure,
+                    str(step.components),
+                    str(step.closed_forms),
+                    str(step.parameters),
+                )
+            )
+            previous = step.bic
+        lines += [""]
+        lines += _table(
+            [
+                "level",
+                "BIC",
+                "change",
+                "structure",
+                "components",
+                "closed",
+                "params",
+            ],
+            rows,
+            latex,
+            wide=3,
+        )
+        if self.bic_figure:
+            if latex:
+                lines += self._latex_figure(self.bic_figure, "BIC per search level")
+            else:
+                lines += ["", f"![BIC per search level]({self.bic_figure})"]
+        elif len(self.path.steps) == 1:
+            lines += ["", "One level was searched: there is no BIC curve to draw."]
+        weights = self.path.plausibility()
+        shown = [w for w in weights if w.weight >= 0.001]
+        lines += [
+            "",
+            "Posterior weight of each structure met, exp(-BIC/2) normalised under "
+            "a flat prior, after the Bayesian machine scientist (Guimerà et al., "
+            "2020): where the search keeps one structure, the weights say how "
+            "much the data prefer it to the others."
+            + (
+                f" The {len(weights) - len(shown)} structure(s) under 0.001 are "
+                "left out."
+                if len(shown) < len(weights)
+                else ""
+            ),
+            "",
+        ]
+        lines += _table(
+            ["structure", "lowest BIC", "weight"],
+            [(w.structure, f"{w.bic:.1f}", f"{w.weight:.3f}") for w in shown],
+            latex,
+            wide=0,
+        )
+        sentences = findings(self.path, self.model.ndata)
+        if latex:
+            lines += ["", r"\begin{itemize}"]
+            lines += [rf"\item {tex(sentence)}" for sentence in sentences]
+            lines += [r"\end{itemize}"]
+        else:
+            lines += [""] + [f"- {sentence}" for sentence in sentences]
+        return lines
 
     def _checking_lines(self) -> list[str]:
         """Render the model-checking section.
@@ -1187,6 +1862,10 @@ def describe(
     check: bool = True,
     seed: int = 0,
     selected_by: str = "The structure search selected",
+    report_format: str = "markdown",
+    pdf: bool = True,
+    path: SearchPath | None = None,
+    symbolic: bool = False,
 ) -> Report:
     """Decompose, describe and check a fitted model; optionally write the report.
 
@@ -1201,13 +1880,23 @@ def describe(
     unit : str, optional
         ``"year"`` (inputs in decimal years) or ``""`` (no unit).
     out_dir : str or pathlib.Path, optional
-        When given, ``report.md`` and the figures are written there.
+        When given, the report and its figures are written there.
     check : bool, optional
         Compute the model-checking p-values (slower).
     seed : int, optional
         Seeds the model-checking draws.
     selected_by : str, optional
         Opening words of the executive summary, before the structure.
+    report_format : {"markdown", "latex"}, optional
+        See :meth:`Report.write`.
+    pdf : bool, optional
+        Compile the report to ``report.pdf``; see :meth:`Report.write`.
+    path : SearchPath, optional
+        The search's winners level by level
+        (:func:`autostat.stopping.search_path`), for the stopping study.
+    symbolic : bool, optional
+        Look for a formula for each smooth component with PySR (optional
+        dependency, a few seconds to a minute per component).
 
     Returns
     -------
@@ -1227,14 +1916,165 @@ def describe(
     ordered = [parts[j] for j in order["order"]]
     checks = check_model(model, ordered, xs, ys, seed=seed) if check else None
     report = Report(
-        name, model, parts, order, measured, texts, checks, selected_by=selected_by
+        name,
+        model,
+        parts,
+        order,
+        measured,
+        texts,
+        checks,
+        selected_by=selected_by,
+        x=xs,
+        y=ys,
+        unit=unit,
+        path=path,
+        symbolic=symbolic,
     )
     if out_dir is not None:
-        out = Path(out_dir)
-        out.mkdir(parents=True, exist_ok=True)
-        report.figures = _plot(model, parts, order["order"], xs, ys, out)
-        (out / "report.md").write_text(report.markdown())
+        report.write(out_dir, report_format, pdf)
     return report
+
+
+def _table(
+    header: list[str], rows: list[tuple[str, ...]], latex: bool, wide: int
+) -> list[str]:
+    """Render a table in Markdown or LaTeX.
+
+    Parameters
+    ----------
+    header : list of str
+        Column titles.
+    rows : list of tuple of str
+        Cells, as plain text.
+    latex : bool
+        LaTeX rather than Markdown.
+    wide : int
+        Index of the column that wraps (LaTeX), the one holding long text.
+
+    Returns
+    -------
+    list of str
+        Lines.
+    """
+    if not latex:
+        lines = ["| " + " | ".join(header) + " |", "|" + "---|" * len(header)]
+        lines += ["| " + " | ".join(row) + " |" for row in rows]
+        return lines
+    spec = "".join(
+        r"p{0.36\linewidth}" if i == wide else "l" for i in range(len(header))
+    )
+    lines = [
+        r"\begin{center}\footnotesize",
+        rf"\begin{{tabular}}{{{spec}}}",
+        r"\toprule",
+        " & ".join(tex(h) for h in header) + r" \\",
+        r"\midrule",
+    ]
+    lines += [" & ".join(tex(c) for c in row) + r" \\" for row in rows]
+    lines += [r"\bottomrule", r"\end{tabular}", r"\end{center}"]
+    return lines
+
+
+def plot_data(
+    x: np.ndarray, y: np.ndarray, name: str, out: Path, unit: str, suffix: str
+) -> str:
+    """Draw the data alone, the figure a report opens with.
+
+    Parameters
+    ----------
+    x, y : numpy.ndarray
+        The data.
+    name : str
+        Dataset name, for the subtitle.
+    out : pathlib.Path
+        Destination directory.
+    unit : str
+        ``"year"`` titles the time axis "Year".
+    suffix : str
+        ``".svg"`` or ``".pdf"``.
+
+    Returns
+    -------
+    str
+        The file name.
+    """
+    from sprezzature_figures import make_figure
+
+    rows = [{"x": float(t), "y": float(v)} for t, v in zip(x[:, 0], y, strict=True)]
+    fname = f"data{suffix}"
+    with contextlib.redirect_stdout(io.StringIO()):
+        make_figure(
+            "gaussian-process",
+            rows,
+            out=str(out / fname),
+            title="The data",
+            subtitle=f"{name}: {len(rows)} observations, before any model.",
+            x_label="Year" if unit == "year" else "x",
+            y_label="Value",
+            fit=False,
+            width=900,
+            height=380,
+            mode="static",
+            embed_fonts=False,
+        )
+    return fname
+
+
+def plot_bic(path: SearchPath, out: Path, suffix: str) -> str:
+    """Draw the BIC of each level's winner, the kept level marked.
+
+    Parameters
+    ----------
+    path : SearchPath
+        The search path.
+    out : pathlib.Path
+        Destination directory.
+    suffix : str
+        ``".svg"`` or ``".pdf"``.
+
+    Returns
+    -------
+    str
+        The file name.
+    """
+    from sprezzature_figures import make_figure
+
+    settled, floor = path.settled, path.kept.bic
+    beyond = sum(1 for s in path.steps if s.level > settled.level)
+    # Levels within the tolerance of the lowest BIC are drawn at it, so the
+    # mark falls where BIC stopped falling rather than on a later refit that
+    # gained a few hundredths.
+    rows = [
+        {
+            "epoch": s.level,
+            "split": "BIC",
+            "loss": floor if s.bic <= floor + path.tolerance else s.bic,
+        }
+        for s in path.steps
+    ]
+    fname = f"bic{suffix}"
+    with contextlib.redirect_stdout(io.StringIO()):
+        make_figure(
+            "loss-curve",
+            rows,
+            out=str(out / fname),
+            title="BIC per search level",
+            subtitle=(
+                "Lower is better. Shaded: levels searched after BIC stopped falling "
+                f"(within {path.tolerance:g} of its lowest, drawn at it)."
+            ),
+            x_label="Search level",
+            y_label="BIC of the level's best structure",
+            best_label=f"BIC settles: level {settled.level}",
+            wasted_label=f"{beyond} level(s) past it"
+            if beyond
+            else "no level searched past it",
+            width=900,
+            height=420,
+            mode="static",
+            embed_fonts=False,
+        )
+    return fname
 
 
 def _plot(
@@ -1244,8 +2084,14 @@ def _plot(
     x: np.ndarray,
     y: np.ndarray,
     out: Path,
+    unit: str = "year",
+    suffix: str = ".svg",
 ) -> list[str]:
-    """Draw the full posterior and each component's posterior as PNG files.
+    """Draw the full posterior and each component's posterior.
+
+    The figures are ``sprezzature-figures``' ``gaussian-process`` kind, handed
+    the posterior computed here: mean and standard deviation on a grid, the
+    data as points. Fonts are not embedded, so a report stays small.
 
     Parameters
     ----------
@@ -1259,16 +2105,17 @@ def _plot(
         Data.
     out : pathlib.Path
         Destination directory.
+    unit : str, optional
+        ``"year"`` titles the time axis "Year".
+    suffix : str, optional
+        ``".svg"`` for a Markdown report, ``".pdf"`` for a LaTeX one.
 
     Returns
     -------
     list of str
         File names, full posterior first.
     """
-    import matplotlib
-
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
+    from sprezzature_figures import make_figure
 
     lo, hi = float(x[:, 0].min()), float(x[:, 0].max())
     grid = np.linspace(lo - 0.1 * (hi - lo), hi + 0.1 * (hi - lo), 500)[:, None]
@@ -1280,10 +2127,11 @@ def _plot(
         mean: np.ndarray,
         var: np.ndarray,
         title: str,
+        subtitle: str,
         fname: str,
-        data: np.ndarray | None = None,
+        data: np.ndarray,
     ) -> None:
-        """Draw one posterior band, optionally over data points.
+        """Draw one posterior band over data points.
 
         Parameters
         ----------
@@ -1291,26 +2139,37 @@ def _plot(
             Evaluation grid, shape ``(m, 1)``.
         mean, var : numpy.ndarray
             Posterior moments on the grid.
-        title : str
-            Figure title.
+        title, subtitle : str
+            Figure text.
         fname : str
             File name inside ``out``.
-        data : numpy.ndarray, optional
+        data : numpy.ndarray
             Values to scatter at the data inputs.
         """
-        fig, ax = plt.subplots(figsize=(7, 3))
-        sd = np.sqrt(var)
-        ax.fill_between(
-            xs[:, 0], mean - 2 * sd, mean + 2 * sd, color="#9ecae1", alpha=0.6, lw=0
-        )
-        ax.plot(xs[:, 0], mean, color="#08519c", lw=1.4)
-        if data is not None:
-            ax.plot(x[:, 0], data, ".", color="#252525", ms=2.5)
-        ax.set_title(title, fontsize=10)
-        ax.spines[["top", "right"]].set_visible(False)
-        fig.tight_layout()
-        fig.savefig(out / fname, dpi=130)
-        plt.close(fig)
+        sd = np.sqrt(np.clip(var, 0.0, None))
+        rows = [
+            {"x": float(t), "y": None, "mean": float(m), "sd": float(v)}
+            for t, m, v in zip(xs[:, 0], mean, sd, strict=True)
+        ] + [
+            {"x": float(t), "y": float(v), "mean": None, "sd": None}
+            for t, v in zip(x[:, 0], data, strict=True)
+        ]
+        # The renderer announces each file on standard output, which the
+        # command line keeps for its own results.
+        with contextlib.redirect_stdout(io.StringIO()):
+            make_figure(
+                "gaussian-process",
+                rows,
+                out=str(out / fname),
+                title=title,
+                subtitle=subtitle,
+                x_label="Year" if unit == "year" else "x",
+                y_label="Value",
+                width=900,
+                height=420,
+                mode="static",
+                embed_fonts=False,
+            )
         names.append(fname)
 
     mean, var = posterior(model, x, y, grid)
@@ -1319,7 +2178,8 @@ def _plot(
         mean,
         var,
         "Data and full model posterior with extrapolation",
-        "fit.png",
+        "Posterior mean and 95% band; dots are the data.",
+        f"fit{suffix}",
         y,
     )
     for rank, j in enumerate(order):
@@ -1328,6 +2188,14 @@ def _plot(
         # The data with every other component's posterior mean removed, as
         # the original plotted it.
         removed = y - posterior(model, x, y, component=_sum(rest))[0] if rest else y
-        title = f"Posterior of component {rank + 1}"
-        panel(inside, m, v, title, f"component_{rank + 1}.png", removed)
+        panel(
+            inside,
+            m,
+            v,
+            f"Posterior of component {rank + 1}",
+            "Posterior mean and 95% band; dots are the data minus the other "
+            "components' posterior means.",
+            f"component_{rank + 1}{suffix}",
+            removed,
+        )
     return names

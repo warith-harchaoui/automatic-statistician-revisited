@@ -23,11 +23,13 @@ Why it exists
 What it exposes
     :func:`analyse` for one series end to end. The building blocks:
     :func:`prepare`, :func:`search`, :class:`Experiment`, :func:`describe`,
-    :func:`fit`, :func:`posterior`, :class:`GPModel`.
+    :func:`fit`, :func:`posterior`, :class:`GPModel`. A report's formula is
+    :meth:`Report.formula`; :func:`search_path` and :func:`findings` study
+    where a search should stop.
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>. The ported design is (c) 2013-2015
+Warith Harchaoui <warithmetics@deraison.ai>. The ported design is (c) 2013-2015
 James Robert Lloyd, David Duvenaud and Roger Grosse, MIT licence, reproduced
 in ``LICENSE-ORIGINAL``.
 """
@@ -40,23 +42,30 @@ import numpy as np
 import pandas as pd
 
 from .describe import SECONDS_PER_YEAR, Report, describe
+from .formula import Formula
 from .model import GPModel, fit, posterior
 from .search import Experiment, SearchResult, search
+from .stopping import SearchPath, findings, rule_of, search_path
 
 __version__ = "0.1.0"
 
 __all__ = [
     "Experiment",
+    "Formula",
     "GPModel",
     "Report",
+    "SearchPath",
     "SearchResult",
     "__version__",
     "analyse",
     "describe",
+    "findings",
     "fit",
     "posterior",
     "prepare",
+    "rule_of",
     "search",
+    "search_path",
 ]
 
 
@@ -124,6 +133,9 @@ def analyse(
     experiment: Experiment | None = None,
     max_points: int = 1000,
     check: bool = True,
+    report_format: str = "markdown",
+    pdf: bool = True,
+    symbolic: bool = False,
 ) -> tuple[SearchResult, Report]:
     """Search, describe, check and optionally write a report for one series.
 
@@ -134,13 +146,20 @@ def analyse(
     name : str, optional
         Name for the report.
     out_dir : str or pathlib.Path, optional
-        Where to write ``report.md``, the figures and ``search.json``.
+        Where to write the report, its figures and ``search.json``.
     experiment : Experiment, optional
         Search settings; the 2014 preset when omitted.
     max_points : int, optional
         See :func:`prepare`.
     check : bool, optional
         Compute the model-checking section.
+    report_format : {"markdown", "latex"}, optional
+        ``report.md`` compiled by md2star, or ``report.tex`` compiled by
+        ``latexmk``; see :meth:`Report.write`.
+    pdf : bool, optional
+        Compile ``report.pdf``.
+    symbolic : bool, optional
+        Look for a formula for each smooth component with PySR.
 
     Returns
     -------
@@ -149,8 +168,26 @@ def analyse(
     """
     x, y, unit = prepare(series, max_points)
     result = search(x, y, experiment)
+    path = search_path(
+        result.best_per_level(),
+        x,
+        y,
+        rule_of(result.experiment),
+        unit,
+        result.experiment.improvement_tolerance,
+    )
     report = describe(
-        result.best, x, y, name=name, unit=unit, out_dir=out_dir, check=check
+        result.best,
+        x,
+        y,
+        name=name,
+        unit=unit,
+        out_dir=out_dir,
+        check=check,
+        report_format=report_format,
+        pdf=pdf,
+        path=path,
+        symbolic=symbolic,
     )
     if out_dir is not None:
         result.save(Path(out_dir) / "search.json")

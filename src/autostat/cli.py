@@ -6,9 +6,11 @@ What this module does
     selected structure with one line per component.
 
 Why it exists as a separate module
-    The command line is an adapter: it parses arguments, loads a file and
-    calls :func:`autostat.analyse`. Keeping the parser in its own module lets
-    tests build it and call :func:`main` without a subprocess.
+    The command line is an adapter: Click parses the arguments and
+    :func:`autostat.service.analyse_file` does the work, as it does for the
+    GUI, the HTTP API and the MCP tools. :data:`command` is importable
+    without side effects, so the GUI generator can walk it and tests can
+    call :func:`main` without a subprocess.
 
 What it consumes
     A file path and options. Diagnostics go to standard error through
@@ -18,118 +20,206 @@ What it produces
     On standard output: the structure, its BIC (Bayesian information
     criterion), one summary per component and the report path; or one JSON
     object with ``--json``. Exit status 0 on success, 2 on invalid input
-    (the ``argparse`` convention).
+    (Click's usage-error status).
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
 
-import argparse
 import json
 import logging
 import sys
 from collections.abc import Sequence
 from pathlib import Path
 
-import pandas as pd
+import click
 
-from . import Experiment, __version__, analyse
+from . import __version__
+from .describe import REPORT_FORMATS
+from .service import PRESETS, analyse_file
 
 LOGGER = logging.getLogger("autostat")
 
-#: Exit status for invalid input, as ``argparse`` uses for usage errors.
+#: Exit status for invalid input, as Click uses for usage errors.
 EXIT_INVALID = 2
 
 
-def make_parser() -> argparse.ArgumentParser:
-    """Build the argument parser without running anything.
-
-    Returns
-    -------
-    argparse.ArgumentParser
-        The parser for :func:`main`.
-    """
-    parser = argparse.ArgumentParser(
-        prog="autostat",
-        description=(
-            "Search Gaussian process kernel structures for one time series "
-            "and write a report describing the best one."
-        ),
-    )
-    parser.add_argument(
-        "--version", action="version", version=f"%(prog)s {__version__}"
-    )
-    parser.add_argument("path", type=Path, help="CSV or Parquet file")
-    parser.add_argument("--time", help="time column (default: the file's index)")
-    parser.add_argument("--value", help="value column (default: the first numeric one)")
-    parser.add_argument("--out", type=Path, help="report directory")
-    parser.add_argument("--name", help="dataset name for the report title")
-    parser.add_argument(
-        "--preset",
-        choices=("abcd-2014", "cks-2013"),
-        default="abcd-2014",
-        help="search configuration (default: abcd-2014)",
-    )
-    parser.add_argument("--max-depth", type=int, default=10, help="search levels")
-    parser.add_argument(
-        "--max-points", type=int, default=1000, help="bin longer series to this size"
-    )
-    parser.add_argument("--n-jobs", type=int, default=-1, help="worker processes")
-    parser.add_argument("--seed", type=int, default=1, help="random seed")
-    parser.add_argument(
-        "--no-check", action="store_true", help="skip the model-checking section"
-    )
-    parser.add_argument(
-        "--json", action="store_true", help="print one JSON object instead of text"
-    )
-    return parser
-
-
-def load_series(path: Path, time: str | None, value: str | None) -> pd.Series:
-    """Read one series from a CSV or Parquet file.
+@click.command(
+    name="autostat",
+    context_settings={"help_option_names": ["-h", "--help"]},
+    help=(
+        "Search Gaussian process kernel structures for one time series and "
+        "write a report describing the best one."
+    ),
+)
+@click.version_option(__version__, "--version", prog_name="autostat")
+@click.argument("path", type=click.Path(path_type=Path))
+@click.option("--time", help="Time column (default: the file's index).")
+@click.option("--value", help="Value column (default: the first numeric one).")
+@click.option("--out", type=click.Path(path_type=Path), help="Report directory.")
+@click.option("--name", help="Dataset name for the report title.")
+@click.option(
+    "--preset",
+    type=click.Choice(PRESETS),
+    default="abcd-2014",
+    show_default=True,
+    help="Search configuration.",
+)
+@click.option(
+    "--max-depth", type=int, default=10, show_default=True, help="Search levels."
+)
+@click.option(
+    "--max-points",
+    type=int,
+    default=1000,
+    show_default=True,
+    help="Bin longer series to this size.",
+)
+@click.option(
+    "--n-jobs", type=int, default=-1, show_default=True, help="Worker processes."
+)
+@click.option("--seed", type=int, default=1, show_default=True, help="Random seed.")
+@click.option(
+    "--patience",
+    type=click.IntRange(min=0),
+    default=0,
+    show_default=True,
+    help=(
+        "Stop after this many levels without a BIC fall, to study what the levels "
+        "past the best one find; 0 searches all --max-depth levels."
+    ),
+)
+@click.option(
+    "--format",
+    "report_format",
+    type=click.Choice(REPORT_FORMATS),
+    default="markdown",
+    show_default=True,
+    help="Report source: Markdown compiled by md2star, or LaTeX compiled by latexmk.",
+)
+@click.option(
+    "--pdf/--no-pdf",
+    default=True,
+    show_default=True,
+    help="Compile the report to report.pdf.",
+)
+@click.option(
+    "--symbolic",
+    is_flag=True,
+    help="Look for a formula for each smooth component with PySR (optional extra).",
+)
+@click.option("--no-check", is_flag=True, help="Skip the model-checking section.")
+@click.option(
+    "--json", "as_json", is_flag=True, help="Print one JSON object instead of text."
+)
+def command(
+    path: Path,
+    time: str | None,
+    value: str | None,
+    out: Path | None,
+    name: str | None,
+    preset: str,
+    max_depth: int,
+    max_points: int,
+    n_jobs: int,
+    seed: int,
+    patience: int,
+    report_format: str,
+    pdf: bool,
+    symbolic: bool,
+    no_check: bool,
+    as_json: bool,
+) -> int:
+    """Run one analysis and print what it found.
 
     Parameters
     ----------
     path : pathlib.Path
-        The file.
-    time : str or None
-        Time column; the file's index when ``None``.
-    value : str or None
-        Value column; the first numeric column when ``None``.
+        CSV or Parquet file.
+    time, value : str or None
+        Column names.
+    out : pathlib.Path or None
+        Report directory.
+    name : str or None
+        Dataset name.
+    preset : str
+        Search configuration.
+    max_depth : int
+        Search levels.
+    max_points : int
+        Bin longer series to this size.
+    n_jobs : int
+        Worker processes.
+    seed : int
+        Random seed.
+    patience : int
+        Levels without a BIC fall before stopping; 0 for none.
+    report_format : str
+        ``"markdown"`` or ``"latex"``.
+    pdf : bool
+        Compile ``report.pdf``.
+    symbolic : bool
+        Look for formulas for smooth components with PySR.
+    no_check : bool
+        Skip the model checks.
+    as_json : bool
+        Print one JSON object.
 
     Returns
     -------
-    pandas.Series
-        Values indexed by time, named after the value column.
-
-    Raises
-    ------
-    ValueError
-        When a named column is missing or no numeric column exists.
+    int
+        0 on success, :data:`EXIT_INVALID` on invalid input.
     """
-    frame = pd.read_parquet(path) if path.suffix == ".parquet" else pd.read_csv(path)
-    if time is not None:
-        if time not in frame.columns:
-            raise ValueError(f"no column {time!r} in {path}")
-        index = frame[time]
-        if not pd.api.types.is_numeric_dtype(index):
-            index = pd.to_datetime(index, utc=True)
-        frame = frame.drop(columns=[time]).set_index(index)
-    if value is None:
-        numeric = frame.select_dtypes("number").columns
-        if numeric.empty:
-            raise ValueError(f"no numeric column in {path}")
-        value = str(numeric[0])
-    if value not in frame.columns:
-        raise ValueError(f"no column {value!r} in {path}")
-    return frame[value].rename(value)
+    logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stderr)
+    try:
+        outcome = analyse_file(
+            path,
+            time=time,
+            value=value,
+            name=name,
+            out_dir=out,
+            preset=preset,
+            max_depth=max_depth,
+            max_points=max_points,
+            n_jobs=n_jobs,
+            seed=seed,
+            patience=patience,
+            symbolic=symbolic,
+            check=not no_check,
+            report_format=report_format,
+            pdf=pdf,
+        )
+    except (OSError, ValueError) as error:
+        LOGGER.error("autostat: %s", error)
+        return EXIT_INVALID
+    if as_json:
+        payload = {
+            "structure": outcome.structure,
+            "bic": outcome.bic,
+            "components": outcome.components,
+            "report": outcome.report,
+            "pdf": outcome.pdf,
+            "formula": outcome.formula,
+            "search_path": outcome.search_path,
+        }
+        click.echo(json.dumps(payload))
+        return 0
+    click.echo(f"{outcome.structure}  (BIC {outcome.bic:.1f})")
+    for i, summary in enumerate(outcome.components, 1):
+        click.echo(f"  {i}. {summary}")
+    click.echo(f"report: {outcome.report}")
+    if outcome.pdf:
+        click.echo(f"pdf: {outcome.pdf}")
+    return 0
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     """Run the command line and return its exit status.
+
+    ``--help`` and ``--version`` print and return 0.
 
     Parameters
     ----------
@@ -141,38 +231,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     int
         0 on success, :data:`EXIT_INVALID` on invalid input.
     """
-    args = make_parser().parse_args(argv)
-    logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stderr)
     try:
-        series = load_series(args.path, args.time, args.value)
-    except (OSError, ValueError) as error:
-        LOGGER.error("autostat: %s", error)
-        return EXIT_INVALID
-    preset = Experiment.cks_2013 if args.preset == "cks-2013" else Experiment.abcd_2014
-    experiment = preset(
-        max_depth=args.max_depth, n_jobs=args.n_jobs, random_seed=args.seed
-    )
-    name = args.name or f"{args.path.stem}: {series.name}"
-    out = args.out or Path(f"autostat_{args.path.stem}_{series.name}")
-    try:
-        result, report = analyse(
-            series, name, out, experiment, args.max_points, check=not args.no_check
+        status = command.main(
+            args=list(sys.argv[1:] if argv is None else argv),
+            prog_name="autostat",
+            standalone_mode=False,
         )
-    except ValueError as error:
-        LOGGER.error("autostat: %s", error)
+    except click.UsageError as error:
+        error.show()
         return EXIT_INVALID
-    summaries = [summary for summary, _, _ in report.texts]
-    if args.json:
-        payload = {
-            "structure": result.best.kernel.structure(),
-            "bic": result.best.bic,
-            "components": summaries,
-            "report": str(out / "report.md"),
-        }
-        sys.stdout.write(json.dumps(payload) + "\n")
-        return 0
-    sys.stdout.write(f"{result.best.kernel.structure()}  (BIC {result.best.bic:.1f})\n")
-    for i, summary in enumerate(summaries, 1):
-        sys.stdout.write(f"  {i}. {summary}\n")
-    sys.stdout.write(f"report: {out / 'report.md'}\n")
-    return 0
+    return 0 if status is None else int(status)

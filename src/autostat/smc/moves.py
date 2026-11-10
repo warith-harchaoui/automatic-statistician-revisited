@@ -36,7 +36,7 @@ Faithfulness
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -96,12 +96,34 @@ class Move:
 
 
 def _log_p_detach(tree: Tree) -> float:
-    """Log probability of choosing detach rather than attach."""
+    """Log probability of choosing detach rather than attach.
+
+    Parameters
+    ----------
+    tree : Tree
+        Current structure.
+
+    Returns
+    -------
+    float
+        ``-inf`` for a single leaf, which cannot be detached, else ``log 1/2``.
+    """
     return -math.inf if len(tree) == 1 else _LOG_HALF
 
 
 def _log_p_attach(tree: Tree) -> float:
-    """Log probability of choosing attach rather than detach."""
+    """Log probability of choosing attach rather than detach.
+
+    Parameters
+    ----------
+    tree : Tree
+        Current structure.
+
+    Returns
+    -------
+    float
+        ``0`` for a single leaf, where attach is certain, else ``log 1/2``.
+    """
     return 0.0 if len(tree) == 1 else _LOG_HALF
 
 
@@ -125,7 +147,20 @@ def _path(a: int, b: int) -> list[int]:
 
 
 def _aux_max_depth(config: Config, height: int) -> int:
-    """Depth limit of the attach path, ``max_depth - (height - 1)``."""
+    """Depth limit of the attach path, ``max_depth - (height - 1)``.
+
+    Parameters
+    ----------
+    config : Config
+        The prior, which holds ``max_depth``.
+    height : int
+        Height of the subtree being attached.
+
+    Returns
+    -------
+    int
+        The limit, or -1 (no limit) when ``max_depth`` is -1.
+    """
     return -1 if config.max_depth == -1 else config.max_depth - (height - 1)
 
 
@@ -292,7 +327,25 @@ def _sample_aux(
 
 
 def _changepoint_allowed(tree: Tree, idx: int, config: Config) -> bool:
-    """Whether subtree replace may put a changepoint at ``idx``."""
+    """Whether subtree replace may put a changepoint at ``idx``.
+
+    Changepoints must be enabled; ``idx`` must be the root or the child
+    of a changepoint.
+
+    Parameters
+    ----------
+    tree : Tree
+        Current structure.
+    idx : int
+        Node index where the new subtree goes.
+    config : Config
+        The prior.
+
+    Returns
+    -------
+    bool
+        Whether a changepoint is allowed there.
+    """
     if not config.changepoints:
         return False
     return idx == 1 or tree[idx // 2].kind == CHANGEPOINT
@@ -419,6 +472,12 @@ def detach_attach_move(rng: np.random.Generator, tree: Tree, config: Config) -> 
     -------
     Move
         The proposal and its densities.
+
+    Raises
+    ------
+    ValueError
+        When the tree is a single node already at ``config.max_depth``:
+        there is nothing to detach and nowhere deeper to attach.
     """
     if len(tree) == 1 and tree.height() == config.max_depth:
         raise ValueError("detach-attach needs max_depth above 1")

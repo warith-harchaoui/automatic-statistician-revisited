@@ -20,3 +20,7 @@ autostat_*/
 results/
 .venv-bench/
 benchmark/logs/
+# Local notes and scratch work, never versioned.
+.private/
+# Working files PySR writes beside the script that calls it.
+outputs/

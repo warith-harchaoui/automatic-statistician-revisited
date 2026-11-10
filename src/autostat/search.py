@@ -34,7 +34,7 @@ The loop, step for step as the original
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>. The ported design is (c) 2013-2015
+Warith Harchaoui <warithmetics@deraison.ai>. The ported design is (c) 2013-2015
 David Duvenaud, James Robert Lloyd and Roger Grosse, MIT licence, reproduced
 in ``LICENSE-ORIGINAL``.
 """
@@ -45,7 +45,7 @@ import json
 import logging
 import math
 import time
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
 from typing import Any
 
@@ -97,9 +97,16 @@ class Experiment:
     full_iters : int
         Iterations on all the data after the subset stage.
     stopping_criteria : list of str
-        ``["no_improvement"]`` stops when the best score stops falling.
+        ``["no_improvement"]`` stops once the best score has not fallen for
+        ``patience`` levels in a row. Empty (the published configurations)
+        searches all ``max_depth`` levels.
     improvement_tolerance : float
-        The fall required to continue.
+        The fall that counts as an improvement.
+    patience : int
+        Levels searched past the last improvement before stopping, for the
+        report to show what the search would have found by going on. The
+        model kept is the best of all levels either way. ``1`` stops at the
+        first level that does not improve.
     n_jobs : int
         Worker processes; ``1`` runs in the calling process.
     rules : list, optional
@@ -130,6 +137,7 @@ class Experiment:
     full_iters: int = 10
     stopping_criteria: list[str] = field(default_factory=list)
     improvement_tolerance: float = 0.1
+    patience: int = 1
     n_jobs: int = -1
     rules: list[grammar.Rule] | None = None
     start: str = "noise"
@@ -243,6 +251,35 @@ class SearchResult:
             "experiment": asdict(self.experiment),
             "seconds": self.seconds,
         }
+
+    @classmethod
+    def load(cls, path: str | Path) -> SearchResult:
+        """Read back what :meth:`save` wrote, to re-describe a search without rerunning it.
+
+        Only the top five models of each level were saved, which is all a
+        report reads.
+
+        Parameters
+        ----------
+        path : str or pathlib.Path
+            A file :meth:`save` wrote.
+
+        Returns
+        -------
+        SearchResult
+            The search.
+        """
+        data = json.loads(Path(path).read_text())
+        known = {f.name for f in fields(Experiment)}
+        settings = {k: v for k, v in data["experiment"].items() if k in known}
+        if settings.get("rules") is not None:
+            settings["rules"] = [_as_tuples(rule) for rule in settings["rules"]]
+        return cls(
+            best=GPModel.from_dict(data["best"]),
+            levels=[[GPModel.from_dict(m) for m in level] for level in data["levels"]],
+            experiment=Experiment(**settings),
+            seconds=float(data["seconds"]),
+        )
 
     def save(self, path: str | Path) -> None:
         """Write :meth:`to_dict` as indented JSON.
@@ -538,6 +575,7 @@ def search(
     best_models: list[GPModel] | None = None
     levels: list[list[GPModel]] = []
     best_score = math.inf
+    stalled_levels = 0
 
     for depth in range(exp.max_depth):
         current = _restarts(current, exp, shape, rng)
@@ -574,9 +612,13 @@ def search(
 
         best_models = valid[: exp.k]
         new_best = valid[0].score(exp.score)
-        stalled = new_best >= best_score - exp.improvement_tolerance
-        if "no_improvement" in exp.stopping_criteria and stalled:
-            LOGGER.info("insufficient improvement; stopping")
+        stalled_levels = (
+            stalled_levels + 1
+            if new_best >= best_score - exp.improvement_tolerance
+            else 0
+        )
+        if "no_improvement" in exp.stopping_criteria and stalled_levels >= exp.patience:
+            LOGGER.info("no improvement for %d level(s); stopping", stalled_levels)
             break
         best_score = min(best_score, new_best)
         current = _expand(best_models, ndim, exp)
@@ -586,3 +628,21 @@ def search(
     winners = (level[0] for level in levels)
     overall = min(winners, key=lambda m: m.score(exp.score))
     return SearchResult(overall, levels, exp, time.perf_counter() - started)
+
+
+def _as_tuples(value: Any) -> Any:
+    """Turn JSON lists back into the tuples grammar rules are made of.
+
+    Parameters
+    ----------
+    value : Any
+        A rule, or part of one, as JSON read it.
+
+    Returns
+    -------
+    Any
+        The same with every list a tuple; dictionaries are kept.
+    """
+    if isinstance(value, list):
+        return tuple(_as_tuples(v) for v in value)
+    return value

@@ -25,7 +25,7 @@ What it produces
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -62,7 +62,7 @@ FAMILIES_2014 = {
     "SP": "2014 baselines",
     "TCI": "2014 baselines",
     "MKL": "2014 baselines",
-    "Eureqa": "2014 baselines",
+    "Eureqa": "symbolic regression (2014 published)",
     "CP": "2014 baselines",
     "SE": "2014 baselines",
     "LN": "2014 baselines",
@@ -105,6 +105,70 @@ def rmse_table(predictions: pd.DataFrame) -> pd.DataFrame:
     return np.sqrt(grouped).unstack("method")
 
 
+def mase_tables(predictions: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Mean and median absolute scaled error per dataset and method.
+
+    Each error is divided by the mean absolute one-step change of the
+    series' training part, so the error reads in units of a naive one-step
+    forecast's error (Hyndman and Koehler 2006).
+
+    Parameters
+    ----------
+    predictions : pandas.DataFrame
+        Columns ``dataset, method, step, actual, prediction``.
+
+    Returns
+    -------
+    mase : pandas.DataFrame
+        Mean absolute scaled error, datasets in rows and methods in columns.
+    mdase : pandas.DataFrame
+        Median absolute scaled error, same layout.
+    """
+    table = pd.read_parquet(HERE / "data" / "series.parquet")
+    train = table[table["split"] == "train"].sort_values(["dataset", "step"])
+    scale = train.groupby("dataset")["y"].apply(lambda y: y.diff().abs().mean())
+    scaled = (predictions["actual"] - predictions["prediction"]).abs() / predictions[
+        "dataset"
+    ].map(scale)
+    grouped = scaled.groupby([predictions["dataset"], predictions["method"]])
+    return grouped.mean().unstack("method"), grouped.median().unstack("method")
+
+
+def ape_tables(
+    predictions: pd.DataFrame,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Mean and median absolute percentage error per dataset and method.
+
+    ``100 * |actual - prediction| / |actual|``. A zero actual value has no
+    percentage error: it is left out of both statistics and counted.
+
+    Parameters
+    ----------
+    predictions : pandas.DataFrame
+        Columns ``dataset, method, step, actual, prediction``.
+
+    Returns
+    -------
+    mape : pandas.DataFrame
+        Mean APE in per cent, datasets in rows and methods in columns.
+    mdape : pandas.DataFrame
+        Median APE in per cent, same layout.
+    undefined : pandas.DataFrame
+        Number of points whose actual value is zero, same layout.
+    """
+    actual = predictions["actual"]
+    with np.errstate(divide="ignore", invalid="ignore"):
+        ape = 100.0 * (actual - predictions["prediction"]).abs() / actual.abs()
+    ape = ape.where(actual != 0)
+    keys = [predictions["dataset"], predictions["method"]]
+    grouped = ape.groupby(keys)
+    return (
+        grouped.mean().unstack("method"),
+        grouped.median().unstack("method"),
+        ape.isna().groupby(keys).sum().unstack("method"),
+    )
+
+
 def published() -> pd.DataFrame:
     """Read the 2014 predictions, as published.
 
@@ -141,6 +205,11 @@ def convert_legacy_csv() -> list[str]:
     -------
     list of str
         Methods converted.
+
+    Raises
+    ------
+    RuntimeError
+        When a Parquet copy does not reproduce its CSV exactly.
     """
     converted = []
     for csv in sorted(RESULTS.glob("*.csv")):
@@ -242,13 +311,25 @@ def main(argv: Sequence[str] | None = None) -> int:
         if not interval.empty
         else pd.Series(dtype=float)
     )
+    mape, mdape, undefined = ape_tables(combined)
+    mase, mdase = mase_tables(combined)
+    columns = standardised.columns
     summary = pd.DataFrame(
         {
-            "family": [families.get(m, "") for m in standardised.columns],
+            "family": [families.get(m, "") for m in columns],
             "median_standardised_rmse": standardised.median().to_numpy(),
             "mean_standardised_rmse": standardised.mean().to_numpy(),
             "series_won": (standardised == 1.0).sum().to_numpy(),
-            "coverage90": [coverage.get(m, np.nan) for m in standardised.columns],
+            "coverage90": [coverage.get(m, np.nan) for m in columns],
+            # Percentage errors: per-series MAPE and MdAPE, then the median
+            # and the mean of those across series.
+            "median_mase": mase[columns].median().to_numpy(),
+            "mean_mase": mase[columns].mean().to_numpy(),
+            "median_mdase": mdase[columns].median().to_numpy(),
+            "median_mape": mape[columns].median().to_numpy(),
+            "mean_mape": mape[columns].mean().to_numpy(),
+            "median_mdape": mdape[columns].median().to_numpy(),
+            "ape_undefined": undefined[columns].sum().astype(int).to_numpy(),
         },
         index=standardised.columns,
     ).sort_values("median_standardised_rmse")
@@ -265,14 +346,28 @@ def main(argv: Sequence[str] | None = None) -> int:
         "series among every method listed, so 1.00 is the best. Median over the",
         f"{len(standardised)} series; lower is better.",
         "",
-        "| method | family | median | mean | series won | 90 % coverage |",
-        "|---|---|---|---|---|---|",
+        "MASE and MdASE: mean and median absolute error of each series scaled",
+        "by the mean absolute one-step change of its training part; MASE is",
+        "their median (and mean MASE their mean) across series; lower is better.",
+        "",
+        "MAPE and MdAPE: mean and median absolute percentage error of each",
+        "series, in per cent, then their median (MAPE, MdAPE) and mean (mean",
+        "MAPE) across series; lower is better. A zero actual value has no",
+        "percentage error and is left out.",
+        "",
+        "| method | family | median | mean | series won | 90 % coverage "
+        "| MASE | mean MASE | MdASE | MAPE | mean MAPE | MdAPE |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for name, row in summary.iterrows():
         cov = "" if np.isnan(row["coverage90"]) else f"{row['coverage90']:.2f}"
         lines.append(
             f"| {name} | {row['family']} | {row['median_standardised_rmse']:.2f} | "
-            f"{row['mean_standardised_rmse']:.2f} | {int(row['series_won'])} | {cov} |"
+            f"{row['mean_standardised_rmse']:.2f} | {int(row['series_won'])} | {cov} "
+            f"| {row['median_mase']:.2f} | {row['mean_mase']:.2f} "
+            f"| {row['median_mdase']:.2f} "
+            f"| {row['median_mape']:.1f} | {row['mean_mape']:.1f} "
+            f"| {row['median_mdape']:.1f} |"
         )
     if incomplete:
         lines += [

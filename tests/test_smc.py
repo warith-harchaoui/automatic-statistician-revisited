@@ -2,7 +2,7 @@
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 import math
@@ -32,7 +32,18 @@ from autostat.smc.tree import (
 
 
 def _tree(*pairs: tuple[int, Node]) -> Tree:
-    """A tree from ``(index, node)`` pairs."""
+    """A tree from ``(index, node)`` pairs.
+
+    Parameters
+    ----------
+    *pairs : tuple of (int, Node)
+        Heap index and node of each entry.
+
+    Returns
+    -------
+    Tree
+        The tree holding those nodes.
+    """
     return Tree(dict(pairs))
 
 
@@ -80,7 +91,13 @@ def test_detach_then_attach_is_the_identity():
 
 
 def test_the_acceptance_ratio_is_antisymmetric():
-    """Detach and attach have opposite log acceptance ratios."""
+    """Detach and attach have opposite log acceptance ratios.
+
+    Returns
+    -------
+    None
+        The test only asserts.
+    """
     config = Config()
     t = torch.linspace(0, 1, 20, dtype=torch.float64)
     y = torch.sin(6 * t)
@@ -88,6 +105,18 @@ def test_the_acceptance_ratio_is_antisymmetric():
     new = old.replaced(1, old.moved(3, 1))
 
     def score(tree: Tree) -> float:
+        """Log prior plus log likelihood of a tree at noise ``z = 0``.
+
+        Parameters
+        ----------
+        tree : Tree
+            The structure to score.
+
+        Returns
+        -------
+        float
+            The log joint density.
+        """
         return log_prior(tree, config) + float(log_likelihood(tree, config, t, y, 0.0))
 
     forward = moves.detach_densities(old, new, 1, 3, config)
@@ -116,7 +145,17 @@ def test_proposals_from_prior_trees_are_valid_trees():
     [(100, 0.1, list(range(10, 101, 10))), (129, 0.1, [*range(13, 118, 13), 129])],
 )
 def test_linear_schedule(n, percent, expected):
-    """Same checkpoints as ``Schedule.linear_schedule``."""
+    """Same checkpoints as ``Schedule.linear_schedule``.
+
+    Parameters
+    ----------
+    n : int
+        Number of observations.
+    percent : float
+        Fraction of the data added at each step.
+    expected : list of int
+        The checkpoints AutoGP.jl gives.
+    """
     assert linear_schedule(n, percent) == expected
 
 

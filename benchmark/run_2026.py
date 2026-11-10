@@ -25,13 +25,21 @@ The families
     them chooses: ``tuning.py`` picks them per series by rolling-origin
     cross-validation on the training part (skrub grid search, skore report).
     The statistical models choose their own form by AIC and are left so.
-    * ``foundation``: Chronos-2, Chronos-Bolt (base), TimesFM 2.5 and
-      TabPFN-TS used zero-shot; NVIDIA's KumoTabular in context on lags.
+    * ``foundation``: Chronos-2, Chronos-Bolt (base), TimesFM 2.5, Mistral's
+      Timestral (209M) and TabPFN-TS used zero-shot; NVIDIA's KumoTabular in
+      context on lags.
     * ``structure search``: this repository's ports of the 2014 and 2013
       Automatic Statistician.
+    * ``symbolic regression``: a formula ``y = f(t)`` fitted to the training
+      part and continued over the tail, as Eureqa did in 2014: PySR
+      (multi-population evolution, Julia backend), gplearn (genetic
+      programming) and Operon (genetic programming with local constant
+      fitting). Time is centred and scaled on the training part first. They
+      give no interval.
 
     Three 2026 structure-search systems do not run here, for reasons recorded
-    in ``benchmark/README.md``: AutoGP.jl needs a Julia installation, GPy-ABCD
+    in ``benchmark/README.md``: AutoGP.jl needed Julia when the benchmark ran
+    (its Python port, ``autostat.smc``, is not benchmarked yet), GPy-ABCD
     needs GPy (which does not build on Python 3.13) and AutoBNN no longer
     imports with current JAX.
 
@@ -43,7 +51,7 @@ What it produces
 
 Author
 ------
-Warith Harchaoui <warith@deraison.ai>
+Warith Harchaoui <warithmetics@deraison.ai>
 """
 
 from __future__ import annotations
@@ -52,6 +60,7 @@ import argparse
 import json
 import logging
 import sys
+import tempfile
 import time
 import warnings
 from collections.abc import Callable, Sequence
@@ -312,6 +321,128 @@ def lightgbm_lags(s: Series, n_jobs: int = 1) -> Forecast:
     return mean, None, None, info
 
 
+# Symbolic regression
+
+
+#: Seed of every symbolic-regression method, so a rerun finds the same formulas.
+#: The three share the operators Eureqa's 2014 setting allowed: arithmetic,
+#: sine and cosine for cycles (and the exponential where offered).
+SR_SEED = 0
+
+
+def _scaled_time(s: Series) -> tuple[np.ndarray, np.ndarray]:
+    """Centre and scale time on the training part, for the formula search.
+
+    Parameters
+    ----------
+    s : Series
+        One benchmark series.
+
+    Returns
+    -------
+    numpy.ndarray, numpy.ndarray
+        Training and test inputs, shape ``(n, 1)``.
+    """
+    mean, sd = float(np.mean(s.x_train)), float(np.std(s.x_train)) or 1.0
+    return (s.x_train - mean)[:, None] / sd, (s.x_test - mean)[:, None] / sd
+
+
+def pysr(s: Series) -> Forecast:
+    """PySR: multi-population evolution over expression trees, seeded.
+
+    Parameters
+    ----------
+    s : Series
+        One benchmark series.
+
+    Returns
+    -------
+    tuple
+        The formula's values on the tail; no interval.
+    """
+    from pysr import PySRRegressor
+
+    x_train, x_test = _scaled_time(s)
+    model = PySRRegressor(
+        output_directory=tempfile.mkdtemp(prefix="pysr-"),
+        niterations=60,
+        binary_operators=["+", "-", "*", "/"],
+        unary_operators=["sin", "cos", "exp"],
+        maxsize=30,
+        random_state=SR_SEED,
+        deterministic=True,
+        parallelism="serial",
+        progress=False,
+        verbosity=0,
+    )
+    model.fit(x_train, s.y_train)
+    return (
+        np.asarray(model.predict(x_test), float),
+        None,
+        None,
+        {"formula": str(model.sympy())},
+    )
+
+
+def gplearn(s: Series) -> Forecast:
+    """gplearn: tree-based genetic programming, seeded.
+
+    Parameters
+    ----------
+    s : Series
+        One benchmark series.
+
+    Returns
+    -------
+    tuple
+        The formula's values on the tail; no interval.
+    """
+    from gplearn.genetic import SymbolicRegressor
+
+    x_train, x_test = _scaled_time(s)
+    model = SymbolicRegressor(
+        population_size=2000,
+        generations=30,
+        function_set=("add", "sub", "mul", "div", "sin", "cos"),
+        parsimony_coefficient=0.001,
+        random_state=SR_SEED,
+    )
+    model.fit(x_train, s.y_train)
+    return (
+        np.asarray(model.predict(x_test), float),
+        None,
+        None,
+        {"formula": str(model._program)},
+    )
+
+
+def operon(s: Series) -> Forecast:
+    """Operon: genetic programming with local optimisation of constants, seeded.
+
+    Parameters
+    ----------
+    s : Series
+        One benchmark series.
+
+    Returns
+    -------
+    tuple
+        The formula's values on the tail; no interval.
+    """
+    from pyoperon.sklearn import SymbolicRegressor
+
+    x_train, x_test = _scaled_time(s)
+    model = SymbolicRegressor(
+        allowed_symbols="add,sub,mul,div,sin,cos,exp,constant,variable",
+        max_length=30,
+        generations=200,
+        random_state=SR_SEED,
+    )
+    model.fit(x_train, s.y_train)
+    formula = model.get_model_string(model.model_, 4)
+    return np.asarray(model.predict(x_test), float), None, None, {"formula": formula}
+
+
 # Deep learning
 
 
@@ -405,6 +536,43 @@ def _chronos(checkpoint: str) -> Callable[[Series], Forecast]:
         return q[:, 1], q[:, 0], q[:, 2]
 
     return method
+
+
+def timestral_209m(s: Series) -> Forecast:
+    """Mistral's Timestral (209 million parameters), zero-shot.
+
+    The checkpoint is pinned to the Hugging Face revision read on 2026-11-07.
+    The package's ``clip_nonnegative`` default is turned off: it clamps the
+    forecast at zero whenever the context holds no negative value. A benchmark
+    series is not non-negative by construction.
+
+    Parameters
+    ----------
+    s : Series
+        One benchmark series.
+
+    Returns
+    -------
+    tuple
+        Median, 5 % and 95 % quantiles (all three among the model's 21).
+    """
+    from timestral import TimestralForecaster
+
+    if "timestral" not in _CACHE:
+        _CACHE["timestral"] = TimestralForecaster.from_pretrained(
+            "mistralai/Timestral-209M",
+            device="cpu",
+            revision="9874d252ab0aae16f7f7c999f98f98d6ad7d8365",
+        )
+    model = _CACHE["timestral"]
+    forecast = model.forecast(
+        np.asarray(s.y_train, float),
+        prediction_length=s.horizon,
+        clip_nonnegative=False,
+    )
+    q = forecast.quantiles[0, 0].cpu().numpy()
+    levels = list(model.quantile_levels)
+    return q[:, levels.index(0.5)], q[:, levels.index(0.05)], q[:, levels.index(0.95)]
 
 
 def timesfm_2p5(s: Series) -> Forecast:
@@ -633,6 +801,7 @@ def registry(n_jobs: int, max_depth: int) -> dict[str, Method]:
         "foundation", _chronos("amazon/chronos-bolt-base")
     )
     methods["timesfm_2p5"] = Method("foundation", timesfm_2p5)
+    methods["timestral_209m"] = Method("foundation", timestral_209m)
     methods["tabpfn_ts"] = Method("foundation", tabpfn_ts)
     methods["kumo_lags"] = Method("foundation", kumo_lags)
     methods["abcd_2014_port"] = Method(
@@ -641,6 +810,9 @@ def registry(n_jobs: int, max_depth: int) -> dict[str, Method]:
     methods["cks_2013_port"] = Method(
         "structure search", _autostat("cks_2013", n_jobs, max_depth)
     )
+    methods["pysr"] = Method("symbolic regression", pysr)
+    methods["gplearn"] = Method("symbolic regression", gplearn)
+    methods["operon"] = Method("symbolic regression", operon)
     return methods
 
 
@@ -699,7 +871,10 @@ def run_method(name: str, method: Method, series: list[Series]) -> None:
         "failures": failures,
     }
     if tuned:
-        meta["tuning"] = tuned
+        # A tuned method records its cross-validation; a formula search, the
+        # formula it found on each series.
+        key = "formulas" if method.family == "symbolic regression" else "tuning"
+        meta[key] = tuned
     (RESULTS / f"{name}.json").write_text(json.dumps(meta, indent=2))
 
 
