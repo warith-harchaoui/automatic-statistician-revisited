@@ -400,8 +400,8 @@ Citez les travaux d'origine, puis ce portage si vous l'employez&nbsp;:
 
 ## Licence et crédits
 
-Le logiciel est de Warith Harchaoui, sous licence MIT ([LICENSE](LICENSE)).
-La conception portée ici, les données de référence et les résultats publiés
+Le logiciel est de Warith Harchaoui, sous licence BSD à trois clauses
+([LICENSE](LICENSE)). La conception portée ici, les données de référence et les résultats publiés
 sont de James Robert Lloyd, David Duvenaud et Roger Grosse, sous la licence
 MIT reproduite dans [LICENSE-ORIGINAL](LICENSE-ORIGINAL). `autostat.smc` porte
 AutoGP.jl, (c) 2023 Google LLC, sous la licence Apache 2.0 reproduite dans

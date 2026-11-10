@@ -378,7 +378,7 @@ Cite the original work, then this port if you use it:
 
 ## Licence and credit
 
-The software is by Warith Harchaoui, under the MIT licence
+The software is by Warith Harchaoui, under the BSD 3-Clause licence
 ([LICENSE](LICENSE)). The design ported here, the benchmark data and the
 published results are by James Robert Lloyd, David Duvenaud and Roger Grosse,
 under the MIT licence reproduced in [LICENSE-ORIGINAL](LICENSE-ORIGINAL).

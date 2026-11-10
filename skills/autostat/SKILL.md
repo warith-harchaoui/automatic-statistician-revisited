@@ -12,7 +12,7 @@ description: >-
   série », « quelle formule pour cette courbe ». Not for scoring forecasts
   across many series, tabular regression on several inputs or a plain chart
   of the raw data.
-license: MIT
+license: BSD-3-Clause
 compatibility: >-
   Python 3.11+ with the autostat package. PDF output needs Pandoc and
   LibreOffice (Markdown) or latexmk (LaTeX). Formulas for smooth components
