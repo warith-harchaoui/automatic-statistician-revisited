@@ -8,7 +8,7 @@ authors:
     email: warithmetics@deraison.ai
 version: 0.1.0
 date-released: "2026-11-07"
-license: MIT
+license: BSD-3-Clause
 repository-code: "https://github.com/warith-harchaoui/automatic-statistician-revisited"
 keywords:
   - gaussian processes
