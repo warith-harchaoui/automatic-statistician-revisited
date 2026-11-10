@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- The project is now under the BSD 3-Clause licence.
+- The skill's triggering is measured: 14 of 14 queries that should load it
+  do, none of the 7 that should not
+  ([skills/autostat/evals/RESULTS.md](skills/autostat/evals/RESULTS.md),
+  `measure_triggers.py` beside it).
 - `autostat.smc`: AutoGP.jl (ICML 2023) ported to Python. Sequential Monte
   Carlo over kernel structures, subtree-replace and detach-attach moves,
   HMC, online `add_data`, mixture forecasts. Checked against AutoGP.jl
