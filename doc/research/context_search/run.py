@@ -2,13 +2,16 @@
 
 What this script does
     It draws two synthetic families (a quarterly cycle, a level jump at a
-    known date), three seeds each. It runs the same light structure search
-    twice per series: blind, then with ``Context.search_hints()``. For each
-    run it records the BIC, the structure kept and the features read against
-    the context, one JSON line per run, then the whole list.
+    known date) and runs the same structure search three times per series:
+    blind, with the true context's hints (``Context.search_hints()``) and
+    with a misleading context (a wrong period, a wrong date). Features are
+    always read against the true context, so each arm is judged on what it
+    recovers. One JSON line per run, then the whole list.
 
 Usage
-    ``python doc/research/context_search/run.py results.json``
+    ``python doc/research/context_search/run.py results.json [seeds] [full]``
+    ``seeds`` defaults to 3; ``full`` uses the published search settings
+    (nine random starts, 250 iterations) instead of the light ones.
     Two worker processes; set ``LOKY_MAX_CPU_COUNT=2`` and the BLAS thread
     variables to 1 to keep the machine usable.
 
@@ -60,6 +63,16 @@ def quarterly(seed: int) -> Series:
     return t, y, context
 
 
+#: The misleading context of each family: a wrong period, a wrong date.
+WRONG = {
+    "quarterly": {"cycles": [{"name": "quarterly", "period": "5mo"}]},
+    "jump": {
+        "cycles": [{"name": "yearly", "period": "1y"}],
+        "events": [{"name": "reform", "at": 2012.0}],
+    },
+}
+
+
 def jump(seed: int) -> Series:
     """Draw ten years of monthly data with a yearly cycle and a jump in mid-2014.
 
@@ -103,20 +116,21 @@ def main() -> int:
         ("quarterly", quarterly),
         ("jump", jump),
     ]
+    seeds = int(sys.argv[2]) if len(sys.argv) > 2 else 3
+    settings = {} if "full" in sys.argv[3:] else {"n_rand": 4, "iters": 100}
     rows = []
     for name, make in families:
-        for seed in range(3):
+        for seed in range(seeds):
             t, y, mapping = make(seed)
             context = Context.from_dict(mapping)
-            for guided in (False, True):
-                hints = context.search_hints() if guided else {}
+            arms = {
+                "blind": {},
+                "true": context.search_hints(),
+                "wrong": Context.from_dict(WRONG[name]).search_hints(),
+            }
+            for arm, hints in arms.items():
                 experiment = Experiment.abcd_2014(
-                    max_depth=3,
-                    n_jobs=2,
-                    n_rand=4,
-                    iters=100,
-                    random_seed=seed,
-                    **hints,
+                    max_depth=3, n_jobs=2, random_seed=seed, **settings, **hints
                 )
                 tic = time.perf_counter()
                 result = search(t, y, experiment)
@@ -125,7 +139,7 @@ def main() -> int:
                 record = {
                     "family": name,
                     "seed": seed,
-                    "guided": guided,
+                    "arm": arm,
                     "bic": result.best.bic,
                     "structure": result.best.kernel.structure_key(),
                     "seconds": time.perf_counter() - tic,
