@@ -2,7 +2,7 @@
 
 What this script does
     It draws two synthetic families (a quarterly cycle, a level jump at a
-    known date), three seeds each, and runs the same light structure search
+    known date), three seeds each. It runs the same light structure search
     twice per series: blind, then with ``Context.search_hints()``. For each
     run it records the BIC, the structure kept and the features read against
     the context, one JSON line per run, then the whole list.
