@@ -1274,6 +1274,10 @@ class PeriodicKernel(_BaseKernel):
         """
         if self.lengthscale is None:
             self.lengthscale = rng.normal(0.0, sd)
+        hints = shape.get("period_hints") or []
+        if self.period is None and hints and rng.random() < 0.5:
+            # A period the business expects, a few per cent either way.
+            self.period = rng.normal(hints[rng.integers(len(hints))], 0.05)
         if self.period is None:
             if rng.random() < 0.33:
                 loc = 0.0
@@ -1817,6 +1821,25 @@ class ProductKernel(_Operator):
         return " x ".join(sorted(parts))
 
 
+def _inside(shape: dict[str, Any], d: int) -> list[float]:
+    """Keep the known event dates that fall inside the data.
+
+    Parameters
+    ----------
+    shape : dict
+        Data summary, with the optional ``location_hints``.
+    d : int
+        Input dimension.
+
+    Returns
+    -------
+    list of float
+        The dates strictly between the first and last input.
+    """
+    low, high = shape["x_min"][d], shape["x_max"][d]
+    return [t for t in shape.get("location_hints") or [] if low < t < high]
+
+
 class _Switch(_Operator):
     """Shared code for the two operators that switch between two kernels."""
 
@@ -2027,6 +2050,10 @@ class ChangePointKernel(_Switch):
         """
         d = self.dimension or 0
         span = shape["x_max"][d] - shape["x_min"][d]
+        hints = _inside(shape, d)
+        if self.location is None and hints and rng.random() < 0.5:
+            # A known event's date, give or take one per cent of the span.
+            self.location = rng.normal(hints[rng.integers(len(hints))], 0.01 * span)
         if self.location is None:
             self.location = rng.uniform(shape["x_min"][d], shape["x_max"][d])
         if self.steepness is None:
@@ -2167,6 +2194,13 @@ class ChangeWindowKernel(_Switch):
         """
         d = self.dimension or 0
         span = shape["x_max"][d] - shape["x_min"][d]
+        hints = sorted(_inside(shape, d))
+        if self.location is None and len(hints) >= 2 and rng.random() < 0.5:
+            # A window opened and closed by two known events.
+            i, j = sorted(rng.choice(len(hints), size=2, replace=False))
+            if hints[j] > hints[i]:
+                self.location = (hints[i] + hints[j]) / 2
+                self.width = math.log(hints[j] - hints[i])
         if self.location is None:
             self.location = rng.uniform(shape["x_min"][d], shape["x_max"][d])
         if self.steepness is None:

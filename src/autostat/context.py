@@ -61,6 +61,11 @@ def years(value: float | str) -> float:
     -------
     float
         The duration in years.
+
+    Raises
+    ------
+    ValueError
+        When the text is neither a number nor a number with a known suffix.
     """
     if isinstance(value, int | float):
         return float(value)
@@ -186,6 +191,23 @@ class Context:
             cycles=cycles,
             events=events,
         )
+
+    def search_hints(self) -> dict[str, list[float]]:
+        """Say where the structure search should start looking.
+
+        Returns
+        -------
+        dict
+            ``period_hints`` (the expected cycles, in years) and
+            ``location_hints`` (the event dates), the two
+            :class:`~autostat.search.Experiment` fields of the same names, so
+            that ``Experiment.abcd_2014(**context.search_hints())`` searches
+            with the context. The search starts near them; BIC still decides.
+        """
+        return {
+            "period_hints": [c.period for c in self.cycles],
+            "location_hints": [e.at for e in self.events],
+        }
 
     @classmethod
     def from_yaml(cls, path: str | Path) -> Context:

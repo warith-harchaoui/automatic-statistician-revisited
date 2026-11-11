@@ -7,6 +7,8 @@ Warith Harchaoui <warithmetics@deraison.ai>
 
 from __future__ import annotations
 
+import math
+
 import pytest
 
 from autostat import benchmarks, describe
@@ -20,7 +22,15 @@ from autostat.features import kind, switches
     [("1y", 1.0), ("12mo", 1.0), ("7d", 7 / 365.25), ("24h", 24 / 8766), (0.5, 0.5)],
 )
 def test_durations_read_in_years(text, expected):
-    """A period with a suffix becomes years, the time axis of the reports."""
+    """A period with a suffix becomes years, the time axis of the reports.
+
+    Parameters
+    ----------
+    text : str or float
+        The duration as written.
+    expected : float
+        Its length in years.
+    """
     assert years(text) == pytest.approx(expected)
 
 
@@ -76,7 +86,13 @@ def test_a_change_window_switches_at_its_two_edges():
 
 @pytest.fixture(scope="module")
 def airline_report():
-    """The published 2014 airline model, described without its checks."""
+    """The published 2014 airline model, described without its checks.
+
+    Returns
+    -------
+    Report
+        Its description, data included.
+    """
     x, y = benchmarks.load("01-airline")
     return describe(
         benchmarks.published("01-airline")[-1], x, y, name="airline", check=False
@@ -84,7 +100,13 @@ def airline_report():
 
 
 def test_the_airline_features_find_the_yearly_cycle(airline_report):
-    """The expected yearly cycle is present, a quarter of the level in size."""
+    """The expected yearly cycle is present, a quarter of the level in size.
+
+    Parameters
+    ----------
+    airline_report : Report
+        The fixture.
+    """
     from autostat.features import features
 
     context = Context.from_dict(
@@ -109,10 +131,45 @@ def test_the_airline_features_find_the_yearly_cycle(airline_report):
 
 
 def test_without_context_only_the_generic_columns(airline_report):
-    """No context, no per-cent sizes and no business columns."""
+    """No context, no per-cent sizes and no business columns.
+
+    Parameters
+    ----------
+    airline_report : Report
+        The fixture.
+    """
     from autostat.features import features
 
     row = features(airline_report)
     assert row["main_cycle_period"] == pytest.approx(1.0, abs=0.01)
     assert row["trend_slope_pct_per_unit"] is None
     assert not any(k.startswith(("cycle_", "event_")) for k in row)
+
+
+def test_two_equally_good_structures_split_the_vote():
+    """A periodic and a smooth model with the same BIC give a coin flip.
+
+    Two models of three parameters each, fitted equally well: the data do
+    not choose, so the probability of a cycle is one half.
+    """
+    from autostat.features import structure_probabilities
+    from autostat.model import GPModel
+
+    cycle = ff.PeriodicKernel(0, lengthscale=0.0, period=0.0, sf=0.0)
+    smooth = ff.RQKernel(0, lengthscale=0.0, sf=0.0, alpha=0.0)
+    models = [GPModel(cycle, nll=10.0, ndata=100), GPModel(smooth, nll=10.0, ndata=100)]
+    context = Context.from_dict({"cycles": [{"name": "yearly", "period": "1y"}]})
+    row = structure_probabilities(models, context)
+    assert row["p_periodic"] == pytest.approx(0.5)
+    assert row["p_cycle_yearly"] == pytest.approx(0.5)
+    assert row["p_entropy"] == pytest.approx(math.log(2))
+
+
+def test_the_published_airline_search_is_sure_of_its_yearly_cycle():
+    """Every structure that counts in the 2014 airline search has the cycle."""
+    from autostat.features import structure_probabilities
+
+    context = Context.from_dict({"cycles": [{"name": "yearly", "period": "1y"}]})
+    row = structure_probabilities(benchmarks.published("01-airline"), context)
+    assert row["p_cycle_yearly"] == pytest.approx(1.0, abs=1e-6)
+    assert row["p_changepoint"] < 1e-6

@@ -117,6 +117,15 @@ class Experiment:
     likelihood_noise : bool
         Model observation noise in the likelihood (2013) instead of leaving
         the search to discover a white-noise kernel (2014).
+    period_hints : list of float
+        Periods the business expects, in the time unit of the inputs (see
+        :meth:`autostat.context.Context.search_hints`). Half the random
+        starts of a periodic kernel then begin near one of them. They only
+        say where to start: BIC still decides what is kept. Empty (the
+        published configurations) changes nothing.
+    location_hints : list of float
+        Dates of known events; half the random starts of a changepoint or a
+        change window then switch near them. Empty changes nothing.
     """
 
     max_depth: int = 10
@@ -142,6 +151,8 @@ class Experiment:
     rules: list[grammar.Rule] | None = None
     start: str = "noise"
     likelihood_noise: bool = False
+    period_hints: list[float] = field(default_factory=list)
+    location_hints: list[float] = field(default_factory=list)
 
     @classmethod
     def abcd_2014(cls, **overrides: Any) -> Experiment:
@@ -365,6 +376,9 @@ def data_shape(x: np.ndarray, y: np.ndarray, exp: Experiment) -> dict[str, Any]:
         math.log((shape["x_max"][d] - shape["x_min"][d]) / exp.max_period_heuristic)
         for d in dims
     ]
+    # What the business expects: read by the kernels' random starts only.
+    shape["period_hints"] = [math.log(p) for p in exp.period_hints if p > 0]
+    shape["location_hints"] = [float(t) for t in exp.location_hints]
     return shape
 
 

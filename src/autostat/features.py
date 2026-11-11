@@ -49,6 +49,7 @@ from .plausibility import features as kernel_counts
 
 if TYPE_CHECKING:
     from .describe import Report
+    from .model import GPModel
 
 #: The four kinds of component the shares are summed over.
 KINDS = ("trend", "cycle", "smooth", "noise")
@@ -306,3 +307,96 @@ def _slug(name: str) -> str:
         E.g. ``"covid_lockdown"``.
     """
     return "_".join("".join(ch if ch.isalnum() else " " for ch in name.lower()).split())
+
+
+def structure_probabilities(
+    models: list[GPModel], context: Context | None = None, prefix: str = "p_"
+) -> dict[str, float]:
+    """Weigh what the scored models agree on, rather than trusting one of them.
+
+    Every model the search fitted votes, weighted by ``exp(-BIC / 2)`` under
+    a flat prior, as :mod:`autostat.plausibility` weighs structures: each
+    distinct structure keeps its best fit. A feature is then the posterior
+    probability of a property, for instance "the series has a cycle near
+    the expected quarter". Where the kept model says yes or no, this says
+    how sure the data are, after Saad et al. (POPL 2019, ICML 2023).
+
+    Parameters
+    ----------
+    models : list of GPModel
+        Fitted models with their BIC, e.g. every level of a
+        :class:`~autostat.search.SearchResult`.
+    context : Context, optional
+        Adds one probability per expected cycle and per dated event.
+    prefix : str, optional
+        Prepended to every column name.
+
+    Returns
+    -------
+    dict
+        ``periodic``, ``changepoint``, ``linear``, ``smooth`` (probability
+        that the model holds such a kernel), ``structures`` (how many voted),
+        ``entropy`` (in nats, 0 when one structure takes all the weight) and,
+        with a context, ``cycle_<name>`` and ``event_<name>``.
+    """
+    best: dict[str, GPModel] = {}
+    for model in models:
+        if not math.isfinite(model.bic):
+            continue
+        key = model.kernel.simplified().structure_key()
+        if key not in best or model.bic < best[key].bic:
+            best[key] = model
+    if not best:
+        return {}
+    chosen = list(best.values())
+    bics = np.array([m.bic for m in chosen])
+    weights = np.exp(-(bics - bics.min()) / 2)
+    weights /= weights.sum()
+    found = [
+        (
+            {type(k) for k in leaves(m.kernel)},
+            periods(m.kernel),
+            switches(m.kernel),
+        )
+        for m in chosen
+    ]
+
+    def chance(test: Any) -> float:
+        """Sum the weights of the models a property holds for.
+
+        Parameters
+        ----------
+        test : callable
+            Takes one model's kernel types, periods and switch dates.
+
+        Returns
+        -------
+        float
+            The posterior probability of the property.
+        """
+        return float(sum(w for w, f in zip(weights, found, strict=True) if test(f)))
+
+    row: dict[str, float] = {
+        "periodic": chance(lambda f: ff.PeriodicKernel in f[0]),
+        "changepoint": chance(
+            lambda f: bool(f[0] & {ff.ChangePointKernel, ff.ChangeWindowKernel})
+        ),
+        "linear": chance(lambda f: ff.LinearKernel in f[0]),
+        "smooth": chance(
+            lambda f: bool(f[0] & {ff.SqExpKernel, ff.RQKernel, ff.GammaExpKernel})
+        ),
+        "structures": float(len(chosen)),
+        "entropy": float(-np.sum(weights * np.log(np.clip(weights, 1e-300, None)))),
+    }
+    if context is not None:
+        for cycle in context.cycles:
+            row[f"cycle_{_slug(cycle.name)}"] = chance(
+                lambda f, c=cycle: any(
+                    abs(p - c.period) <= c.tolerance * c.period for p in f[1]
+                )
+            )
+        for event in context.events:
+            row[f"event_{_slug(event.name)}"] = chance(
+                lambda f, e=event: any(abs(s - e.at) <= e.tolerance for s in f[2])
+            )
+    return {f"{prefix}{k}": v for k, v in row.items()}
