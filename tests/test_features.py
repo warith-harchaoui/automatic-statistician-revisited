@@ -173,3 +173,16 @@ def test_the_published_airline_search_is_sure_of_its_yearly_cycle():
     row = structure_probabilities(benchmarks.published("01-airline"), context)
     assert row["p_cycle_yearly"] == pytest.approx(1.0, abs=1e-6)
     assert row["p_changepoint"] < 1e-6
+
+
+def test_the_call_centre_drop_is_measured_and_a_placebo_is_not():
+    """The 1973 drop is negative with an interval clear of 0; 1968 is not."""
+    from autostat.features import event_effect
+
+    x, y = benchmarks.load("07-call-centre")
+    model = benchmarks.published("07-call-centre")[-1]
+    drop = event_effect(model, x, y, 1973.36, 1.0)
+    placebo = event_effect(model, x, y, 1968.0, 1.0)
+    assert drop["high"] < 0
+    assert placebo["low"] < 0 < placebo["high"]
+    assert event_effect(model, x, y, x.min() + 0.1, 1.0) is None

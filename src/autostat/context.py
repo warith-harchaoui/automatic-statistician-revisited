@@ -26,7 +26,7 @@ What it consumes
           - {name: yearly, period: 1y}
           - {name: weekly, period: 7d, tolerance: 0.03}
         events:
-          - {name: covid lockdown, at: 2020-03-17}
+          - {name: covid lockdown, at: 2020-03-17, horizon: 6mo}
 
     Periods take a suffix (``h``, ``d``, ``w``, ``mo``, ``y``) or a bare
     number in the series' time unit; dates are ISO dates or bare numbers.
@@ -127,11 +127,15 @@ class Event:
         Its date, as a decimal year.
     tolerance : float
         Gap in years within which a fitted changepoint counts as this event.
+    horizon : float
+        Length in years of the window after the event over which its effect
+        is measured.
     """
 
     name: str
     at: float
     tolerance: float = 0.25
+    horizon: float = 1.0
 
 
 @dataclass
@@ -180,7 +184,12 @@ class Context:
             for c in data.get("cycles", [])
         ]
         events = [
-            Event(e["name"], decimal_year(e["at"]), years(e.get("tolerance", 0.25)))
+            Event(
+                e["name"],
+                decimal_year(e["at"]),
+                years(e.get("tolerance", 0.25)),
+                years(e.get("horizon", 1.0)),
+            )
             for e in data.get("events", [])
         ]
         return cls(

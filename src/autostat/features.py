@@ -286,6 +286,9 @@ def features(
             hit = nearest is not None and nearest[1] <= event.tolerance
             row[f"{key}_changepoint"] = hit
             row[f"{key}_gap"] = nearest[1] if nearest else None
+            effect = event_effect(report.model, x, y, event.at, event.horizon)
+            for name in ("effect", "low", "high", "effect_pct"):
+                row[f"{key}_{name}"] = effect[name] if effect else None
             if hit:
                 explained.add(nearest[0])
         row["unexpected_changepoints"] = len(dates) - len(explained)
@@ -400,3 +403,98 @@ def structure_probabilities(
                 lambda f, e=event: any(abs(s - e.at) <= e.tolerance for s in f[2])
             )
     return {f"{prefix}{k}": v for k, v in row.items()}
+
+
+def without_switches(kernel: ff.Kernel) -> ff.Kernel:
+    """Keep the regime before every changepoint and outside every window.
+
+    Parameters
+    ----------
+    kernel : Kernel
+        A fitted expression.
+
+    Returns
+    -------
+    Kernel
+        A copy where each changepoint or change window is replaced by its
+        first operand, with its fitted parameters: the series as it would
+        have gone on had nothing switched.
+    """
+    if isinstance(kernel, ff.ChangePointKernel | ff.ChangeWindowKernel):
+        return without_switches(kernel.operands[0])
+    if not kernel.is_operator:
+        return kernel.copy()
+    out = kernel.copy()
+    out.operands = [without_switches(o) for o in kernel.operands]
+    return out
+
+
+def event_effect(
+    model: GPModel,
+    x: np.ndarray,
+    y: np.ndarray,
+    at: float,
+    horizon: float,
+) -> dict[str, float] | None:
+    """Measure what a dated event changed, with its uncertainty.
+
+    The fitted model, stripped of its switches (:func:`without_switches`),
+    is conditioned on the data before the event and predicts the window
+    after it: what the series would have done without the event. The effect
+    is the mean gap between what happened and that prediction, as
+    CausalImpact (Brodersen et al., 2015) reads an intervention, here with
+    the Gaussian process the search found instead of a structural model.
+
+    Parameters
+    ----------
+    model : GPModel
+        The fitted model.
+    x, y : numpy.ndarray
+        The data.
+    at : float
+        The event's date, on the time axis of ``x``.
+    horizon : float
+        Length of the window after the event, in the same unit.
+
+    Returns
+    -------
+    dict or None
+        ``effect`` (mean gap, units of the data), ``low`` and ``high`` (its
+        95 % interval), ``effect_pct`` (in per cent of the predicted level)
+        and ``points`` (how many observations the window holds); ``None``
+        when fewer than three observations fall on either side.
+    """
+    from .model import GPModel, posterior
+
+    t = np.asarray(x, float).reshape(len(y), -1)
+    before = t[:, 0] < at
+    after = (t[:, 0] >= at) & (t[:, 0] < at + horizon)
+    if before.sum() < 3 or after.sum() < 3:
+        return None
+    blind = GPModel(
+        without_switches(model.kernel),
+        model.mean_const,
+        model.lik_sf,
+        model.nll,
+        model.ndata,
+    )
+    mean, cov = posterior(
+        blind,
+        t[before],
+        np.asarray(y)[before],
+        x_star=t[after],
+        noise=True,
+        full_cov=True,
+    )
+    gaps = np.asarray(y)[after] - mean
+    effect = float(np.mean(gaps))
+    # The prediction's error on the mean gap: the average of its covariance.
+    sd = float(np.sqrt(max(np.mean(cov), 0.0)))
+    level = float(np.mean(np.abs(mean))) or 1.0
+    return {
+        "effect": effect,
+        "low": effect - 1.96 * sd,
+        "high": effect + 1.96 * sd,
+        "effect_pct": 100 * effect / level,
+        "points": int(after.sum()),
+    }
