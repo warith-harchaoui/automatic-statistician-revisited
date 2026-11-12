@@ -27,6 +27,7 @@ import sys
 import time
 import warnings
 from collections.abc import Callable
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -118,7 +119,15 @@ def main() -> int:
     ]
     seeds = int(sys.argv[2]) if len(sys.argv) > 2 else 3
     settings = {} if "full" in sys.argv[3:] else {"n_rand": 4, "iters": 100}
-    rows = []
+    # Each run is appended to a JSON Lines file beside the output, so an
+    # interrupted measurement starts again where it stopped.
+    lines = Path(sys.argv[1]).with_suffix(".jsonl")
+    rows = (
+        [json.loads(line) for line in lines.read_text(encoding="utf-8").splitlines()]
+        if lines.exists()
+        else []
+    )
+    done = {(r["family"], r["seed"], r["arm"]) for r in rows}
     for name, make in families:
         for seed in range(seeds):
             t, y, mapping = make(seed)
@@ -129,6 +138,8 @@ def main() -> int:
                 "wrong": Context.from_dict(WRONG[name]).search_hints(),
             }
             for arm, hints in arms.items():
+                if (name, seed, arm) in done:
+                    continue
                 experiment = Experiment.abcd_2014(
                     max_depth=3, n_jobs=2, random_seed=seed, **settings, **hints
                 )
@@ -151,6 +162,8 @@ def main() -> int:
                 }
                 rows.append(record)
                 print(json.dumps(record), flush=True)
+                with lines.open("a", encoding="utf-8") as out:
+                    out.write(json.dumps(record) + "\n")
     with open(sys.argv[1], "w", encoding="utf-8") as out:
         json.dump(rows, out, indent=1)
     return 0

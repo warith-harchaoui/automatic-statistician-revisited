@@ -267,7 +267,13 @@ def component_stats(
         cum_mean, _ = posterior(model, x, y, component=cumulative)
         out.append(
             {
-                "snr": 10 * math.log10(np.sum(mean**2) / max(np.sum(var), 1e-300)),
+                # A component whose posterior mean vanishes has no signal:
+                # its ratio is -inf decibels, not a math domain error.
+                "snr": 10
+                * math.log10(
+                    max(float(np.sum(mean**2)), 1e-300)
+                    / max(float(np.sum(var)), 1e-300)
+                ),
                 "var_explained": (1 - np.var(y - mean) / np.var(y)) * 100,
                 "cum_var": (1 - np.var(y - cum_mean) / np.var(y)) * 100,
                 "cum_resid_var": (1 - np.var(y - cum_mean) / np.var(resid)) * 100,

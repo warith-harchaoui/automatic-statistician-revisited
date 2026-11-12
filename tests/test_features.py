@@ -186,3 +186,28 @@ def test_the_call_centre_drop_is_measured_and_a_placebo_is_not():
     assert drop["high"] < 0
     assert placebo["low"] < 0 < placebo["high"]
     assert event_effect(model, x, y, x.min() + 0.1, 1.0) is None
+
+
+def test_a_component_with_no_signal_is_described():
+    """A component whose posterior mean vanishes no longer crashes describe."""
+    import numpy as np
+
+    from autostat.model import GPModel
+
+    t = np.linspace(2000, 2010, 60)
+    y = np.sin(2 * np.pi * t) + 0.1 * np.cos(7 * t)
+    kernel = ff.SumKernel(
+        [
+            ff.PeriodicKernel(0, lengthscale=0.0, period=0.0, sf=0.0),
+            ff.ChangePointKernel(
+                0,
+                location=2050.0,
+                steepness=3.0,
+                operands=[ff.ZeroKernel(), ff.NoiseKernel(sf=-2.0)],
+            ),
+        ]
+    )
+    report = describe(
+        GPModel(kernel, nll=0.0, ndata=60), t, y, name="flat", check=False
+    )
+    assert len(report.stats) == len(report.parts)
