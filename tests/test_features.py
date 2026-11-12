@@ -235,3 +235,22 @@ def test_a_known_event_adds_a_level_shift_to_each_kept_model():
     assert shifted.kernel.structure_key() == "CP(Zero, C) + Lin + WN"
     assert shifted.kernel.operands[0].location == 2010.0
     assert _level_shifts([shifted], Experiment(location_hints=[2014.5])) == []
+
+
+@pytest.mark.slow
+def test_a_short_search_finds_the_jump_on_the_date_it_is_told():
+    """One level is too few for the grammar; the last stage adds the shift."""
+    import numpy as np
+
+    from autostat import Experiment, search
+
+    rng = np.random.default_rng(0)
+    t = 2010 + np.arange(60) / 12
+    y = 1.0 * (t - 2010) + 6 * (t > 2012.5) + rng.normal(0, 0.5, t.size)
+    exp = Experiment.abcd_2014(
+        max_depth=1, n_rand=3, iters=100, n_jobs=1, location_hints=[2012.5]
+    )
+    best = search(t, y, exp).best
+    (shift,) = [k for k in best.kernel.operands if isinstance(k, ff.ChangePointKernel)]
+    assert isinstance(shift.operands[0], ff.ZeroKernel)
+    assert abs(shift.location - 2012.5) < 0.15

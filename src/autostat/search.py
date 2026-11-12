@@ -26,7 +26,9 @@ The loop, step for step as the original
        more optimisation;
     5. optimise and score everything, discarding out-of-bounds and failed
        fits;
-    6. keep the best ``k`` and repeat, up to ``max_depth`` levels.
+    6. keep the best ``k`` and repeat, up to ``max_depth`` levels;
+    7. with known event dates only, one last stage fits the final models
+       plus a level shift (:func:`_level_shifts`), kept if BIC prefers it.
 
     The original shipped each batch to a Sun Grid Engine cluster or to a local
     MATLAB through ``cblparallel``, polling for ``.mat`` files. A ``joblib``
@@ -125,8 +127,9 @@ class Experiment:
         published configurations) changes nothing.
     location_hints : list of float
         Dates of known events; half the random starts of a changepoint or a
-        change window then switch near them. Every level also proposes
-        each kept model plus a level shift (see :func:`_level_shifts`).
+        change window then switch near them. Every level, and one last
+        stage after them, also proposes each kept model plus a level shift
+        (see :func:`_level_shifts`).
         Empty changes nothing.
     """
 
@@ -708,6 +711,26 @@ def search(
             break
         best_score = min(best_score, new_best)
         current = _expand(best_models, ndim, exp)
+
+    if levels and best_models and exp.location_hints:
+        # The greedy levels add a cycle before a shift, so the shift of the
+        # final model would only come at a level that never runs.
+        last = _restarts(_level_shifts(best_models, exp), exp, shape, rng)
+        scored = _evaluate(last, x, y, exp, seed=exp.random_seed + len(levels))
+        valid = [
+            m
+            for m in scored
+            if not m.out_of_bounds(shape) and math.isfinite(m.score(exp.score))
+        ]
+        if valid:
+            valid.sort(key=lambda m: m.score(exp.score))
+            levels.append(valid)
+            LOGGER.info(
+                "event stage: best %s=%.1f  %s",
+                exp.score.upper(),
+                valid[0].score(exp.score),
+                valid[0].kernel.structure(),
+            )
 
     if not levels:
         raise RuntimeError("no candidate structure could be fitted")
