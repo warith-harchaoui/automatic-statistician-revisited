@@ -17,6 +17,11 @@
   against the model's own counterfactual.
 - `doc/research/context_features.md`: a literature review of
   context-conditioned time-series features.
+- With known event dates, the search also proposes each kept model plus a
+  level shift `CP(Zero, Const)`, at every level and once more after the
+  last one. On the synthetic jump family the jump is found 5 times out of
+  5 instead of once; a wrong date creates no false changepoint
+  (`doc/research/context_search/README.md`).
 - The project is now under the BSD 3-Clause licence.
 - The skill's triggering is measured: 14 of 14 queries that should load it
   do, none of the 7 that should not
