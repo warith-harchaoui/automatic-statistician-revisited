@@ -127,9 +127,9 @@ class Experiment:
         published configurations) changes nothing.
     location_hints : list of float
         Dates of known events; half the random starts of a changepoint or a
-        change window then switch near them. Every level, and one last
-        stage after them, also proposes each kept model plus a level shift
-        (see :func:`_level_shifts`).
+        change window then switch near them. Every level also proposes
+        each kept model plus a level shift (see :func:`_level_shifts`), as
+        does one last stage after the levels.
         Empty changes nothing.
     """
 
