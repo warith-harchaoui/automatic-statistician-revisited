@@ -100,3 +100,51 @@ generic starts miss and BIC rejects a wrong hint. The event hints do not,
 as they stand, help to locate a jump. The next steps are real
 series with known events and a comparison with generic feature sets
 (catch22, tsfresh).
+
+## Third measurement: a level shift for each known event
+
+Why did the event date not help? Fitted directly, the model of the right
+shape beats the search's best by about 60 BIC on several jump series: the
+search does not reach it. The grammar adds a changepoint only by turning
+one term into `CP(term, term)` while the greedy levels prefer the yearly
+cycle first. Logged level by level (seed 2), the search keeps
+`Lin + SE + WN` (500.3) over the same plus a shift (547.0), then
+`Lin + Per + SE + WN` (484.5) just ahead of `Lin + SE + WN` plus a shift
+(488.1). The shift of the final model would win, but it would come at a
+fourth level that never runs.
+
+Two changes follow, active only when the context names an event date:
+every level proposes each kept model plus a level shift
+`CP(Zero, Const)` with its fitted parameters kept; one last stage after
+the levels does the same for the final model. BIC still decides.
+The quarterly runs and the blind runs carry no date, so they do not
+change; the ten jump runs with a date were run again with the same
+settings. [event_stage.json](event_stage.json) holds all 30 rows.
+
+| seed | BIC true (before → after) | BIC wrong date (before → after) | jump found (true / wrong) | effect with the true date, 95 % interval |
+|---|---|---|---|---|
+| 0 | 485.1 → **417.6** | 485.1 → **419.9** | yes, 0.08 / yes, 0.03 | 6.6 [5.6, 7.6] |
+| 1 | 455.9 → **383.3** | 455.9 → **383.3** | yes, 0.08 / yes, 0.08 | 7.1 [6.6, 7.6] |
+| 2 | 484.5 → **416.2** | 484.5 → 484.5 | yes, 0.00 / no | 7.4 [6.8, 8.0] |
+| 3 | 450.0 → **438.9** | 450.0 → 450.0 | yes, 0.07 / yes, 0.07 | 6.6 [5.7, 7.6] |
+| 4 | 480.9 → **412.4** | 480.9 → 480.9 | yes, 0.00 / no | 7.8 [7.2, 8.4] |
+
+The gaps are in years, from the true date (mid-2014); with monthly data
+the first point after the jump lies 0.08 years after it.
+
+What the ten runs say:
+
+- **With the true date, the jump is found 5 times out of 5** instead of
+  once. BIC improves by 11 to 73. The shift lands at most one month
+  from the date.
+- **The measured effect is closer to the truth and tighter:** 6.6 to 7.8
+  for a true 8, with intervals three to eight times narrower than
+  through the smooth terms in the four seeds where no changepoint was
+  found before. It is still biased low; the interval covers 8 in two
+  seeds out of five. The bias is smaller than before but has not gone.
+- **A wrong date creates no false changepoint.** No run kept a shift in
+  2012. In two seeds out of five a shift that started at a random
+  date moved to the real jump, so a date roughly right is enough to make the
+  search look for a jump. Read against the context that named 2012, such
+  a run would say what matters: the expected event is absent and an
+  unexpected changepoint sits in mid-2014.
