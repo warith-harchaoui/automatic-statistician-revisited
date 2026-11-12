@@ -211,3 +211,27 @@ def test_a_component_with_no_signal_is_described():
         GPModel(kernel, nll=0.0, ndata=60), t, y, name="flat", check=False
     )
     assert len(report.stats) == len(report.parts)
+
+
+def test_a_known_event_adds_a_level_shift_to_each_kept_model():
+    """With an event date, each kept model is also proposed with a shift.
+
+    The fitted terms keep their parameters; a model that already has as
+    many shifts as there are events gets no more; without dates, nothing.
+    """
+    from autostat import Experiment
+    from autostat.model import GPModel
+    from autostat.search import _level_shifts
+
+    fitted = GPModel(
+        ff.SumKernel(
+            [ff.LinearKernel(0, location=2010.0, sf=0.5), ff.NoiseKernel(sf=0.1)]
+        ),
+        nll=10.0,
+        ndata=100,
+    )
+    assert _level_shifts([fitted], Experiment()) == []
+    (shifted,) = _level_shifts([fitted], Experiment(location_hints=[2014.5]))
+    assert shifted.kernel.structure_key() == "CP(Zero, C) + Lin + WN"
+    assert shifted.kernel.operands[0].location == 2010.0
+    assert _level_shifts([shifted], Experiment(location_hints=[2014.5])) == []

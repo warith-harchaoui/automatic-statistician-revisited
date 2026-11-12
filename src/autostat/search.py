@@ -125,7 +125,9 @@ class Experiment:
         published configurations) changes nothing.
     location_hints : list of float
         Dates of known events; half the random starts of a changepoint or a
-        change window then switch near them. Empty changes nothing.
+        change window then switch near them. Every level also proposes
+        each kept model plus a level shift (see :func:`_level_shifts`).
+        Empty changes nothing.
     """
 
     max_depth: int = 10
@@ -469,8 +471,78 @@ def _expand(models: list[GPModel], ndim: int, exp: Experiment) -> list[GPModel]:
             m.kernel = k
             m.nll = math.nan
             out.append(m)
+    out.extend(_level_shifts(models, exp))
     if exp.additive_form:
         out = ff.remove_duplicates([m.additive_form() for m in out])
+    return out
+
+
+def _is_shift(kernel: ff.Kernel) -> bool:
+    """Tell whether a term is a level shift, ``CP(Zero, Const)``.
+
+    Parameters
+    ----------
+    kernel : Kernel
+        One additive term.
+
+    Returns
+    -------
+    bool
+        True for a changepoint from nothing to a constant.
+    """
+    return (
+        isinstance(kernel, ff.ChangePointKernel)
+        and isinstance(kernel.operands[0], ff.ZeroKernel)
+        and isinstance(kernel.operands[1], ff.ConstKernel)
+    )
+
+
+def _level_shifts(models: list[GPModel], exp: Experiment) -> list[GPModel]:
+    """Propose each model plus a level shift when the context names events.
+
+    The grammar reaches a changepoint only by replacing one term with
+    ``CP(term, term)``, so a jump that the earlier levels absorbed into a
+    trend or a smooth term is out of reach within a few levels. Adding a
+    shift ``CP(Zero, Const)`` to a model that is already fitted keeps its
+    parameters and only draws the shift's own, near a known date half of
+    the time: on the jump family of ``doc/research/context_search`` it
+    gains 60 to 85 BIC and lands within a month of the date. BIC still
+    decides whether the shift stays.
+
+    Parameters
+    ----------
+    models : list of GPModel
+        Models kept at this level.
+    exp : Experiment
+        Supplies ``location_hints``.
+
+    Returns
+    -------
+    list of GPModel
+        One unscored candidate per model with fewer shifts than events; empty
+        without ``location_hints``.
+    """
+    if not exp.location_hints:
+        return []
+    out = []
+    for model in models:
+        terms = (
+            list(model.kernel.operands)
+            if isinstance(model.kernel, ff.SumKernel)
+            else [model.kernel]
+        )
+        terms = [k for k in terms if not isinstance(k, ff.NoneKernel)]
+        if sum(map(_is_shift, terms)) >= len(exp.location_hints):
+            continue
+        m = model.copy()
+        m.kernel = ff.SumKernel(
+            [
+                *terms,
+                ff.ChangePointKernel(0, operands=[ff.ZeroKernel(), ff.ConstKernel()]),
+            ]
+        )
+        m.nll = math.nan
+        out.append(m)
     return out
 
 
