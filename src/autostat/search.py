@@ -26,7 +26,9 @@ The loop, step for step as the original
        more optimisation;
     5. optimise and score everything, discarding out-of-bounds and failed
        fits;
-    6. keep the best ``k`` and repeat, up to ``max_depth`` levels.
+    6. keep the best ``k`` and repeat, up to ``max_depth`` levels;
+    7. with known event dates only, one last stage fits the final models
+       plus a level shift (:func:`_level_shifts`), kept if BIC prefers it.
 
     The original shipped each batch to a Sun Grid Engine cluster or to a local
     MATLAB through ``cblparallel``, polling for ``.mat`` files. A ``joblib``
@@ -117,6 +119,18 @@ class Experiment:
     likelihood_noise : bool
         Model observation noise in the likelihood (2013) instead of leaving
         the search to discover a white-noise kernel (2014).
+    period_hints : list of float
+        Periods the business expects, in the time unit of the inputs (see
+        :meth:`autostat.context.Context.search_hints`). Half the random
+        starts of a periodic kernel then begin near one of them. They only
+        say where to start: BIC still decides what is kept. Empty (the
+        published configurations) changes nothing.
+    location_hints : list of float
+        Dates of known events; half the random starts of a changepoint or a
+        change window then switch near them. Every level also proposes
+        each kept model plus a level shift (see :func:`_level_shifts`), as
+        does one last stage after the levels.
+        Empty changes nothing.
     """
 
     max_depth: int = 10
@@ -142,6 +156,8 @@ class Experiment:
     rules: list[grammar.Rule] | None = None
     start: str = "noise"
     likelihood_noise: bool = False
+    period_hints: list[float] = field(default_factory=list)
+    location_hints: list[float] = field(default_factory=list)
 
     @classmethod
     def abcd_2014(cls, **overrides: Any) -> Experiment:
@@ -365,6 +381,9 @@ def data_shape(x: np.ndarray, y: np.ndarray, exp: Experiment) -> dict[str, Any]:
         math.log((shape["x_max"][d] - shape["x_min"][d]) / exp.max_period_heuristic)
         for d in dims
     ]
+    # What the business expects: read by the kernels' random starts only.
+    shape["period_hints"] = [math.log(p) for p in exp.period_hints if p > 0]
+    shape["location_hints"] = [float(t) for t in exp.location_hints]
     return shape
 
 
@@ -455,8 +474,78 @@ def _expand(models: list[GPModel], ndim: int, exp: Experiment) -> list[GPModel]:
             m.kernel = k
             m.nll = math.nan
             out.append(m)
+    out.extend(_level_shifts(models, exp))
     if exp.additive_form:
         out = ff.remove_duplicates([m.additive_form() for m in out])
+    return out
+
+
+def _is_shift(kernel: ff.Kernel) -> bool:
+    """Tell whether a term is a level shift, ``CP(Zero, Const)``.
+
+    Parameters
+    ----------
+    kernel : Kernel
+        One additive term.
+
+    Returns
+    -------
+    bool
+        True for a changepoint from nothing to a constant.
+    """
+    return (
+        isinstance(kernel, ff.ChangePointKernel)
+        and isinstance(kernel.operands[0], ff.ZeroKernel)
+        and isinstance(kernel.operands[1], ff.ConstKernel)
+    )
+
+
+def _level_shifts(models: list[GPModel], exp: Experiment) -> list[GPModel]:
+    """Propose each model plus a level shift when the context names events.
+
+    The grammar reaches a changepoint only by replacing one term with
+    ``CP(term, term)``, so a jump that the earlier levels absorbed into a
+    trend or a smooth term is out of reach within a few levels. Adding a
+    shift ``CP(Zero, Const)`` to a model that is already fitted keeps its
+    parameters and only draws the shift's own, near a known date half of
+    the time: on the jump family of ``doc/research/context_search`` it
+    gains 60 to 85 BIC and lands within a month of the date. BIC still
+    decides whether the shift stays.
+
+    Parameters
+    ----------
+    models : list of GPModel
+        Models kept at this level.
+    exp : Experiment
+        Supplies ``location_hints``.
+
+    Returns
+    -------
+    list of GPModel
+        One unscored candidate per model with fewer shifts than events; empty
+        without ``location_hints``.
+    """
+    if not exp.location_hints:
+        return []
+    out = []
+    for model in models:
+        terms = (
+            list(model.kernel.operands)
+            if isinstance(model.kernel, ff.SumKernel)
+            else [model.kernel]
+        )
+        terms = [k for k in terms if not isinstance(k, ff.NoneKernel)]
+        if sum(map(_is_shift, terms)) >= len(exp.location_hints):
+            continue
+        m = model.copy()
+        m.kernel = ff.SumKernel(
+            [
+                *terms,
+                ff.ChangePointKernel(0, operands=[ff.ZeroKernel(), ff.ConstKernel()]),
+            ]
+        )
+        m.nll = math.nan
+        out.append(m)
     return out
 
 
@@ -622,6 +711,26 @@ def search(
             break
         best_score = min(best_score, new_best)
         current = _expand(best_models, ndim, exp)
+
+    if levels and best_models and exp.location_hints:
+        # The greedy levels add a cycle before a shift, so the shift of the
+        # final model would only come at a level that never runs.
+        last = _restarts(_level_shifts(best_models, exp), exp, shape, rng)
+        scored = _evaluate(last, x, y, exp, seed=exp.random_seed + len(levels))
+        valid = [
+            m
+            for m in scored
+            if not m.out_of_bounds(shape) and math.isfinite(m.score(exp.score))
+        ]
+        if valid:
+            valid.sort(key=lambda m: m.score(exp.score))
+            levels.append(valid)
+            LOGGER.info(
+                "event stage: best %s=%.1f  %s",
+                exp.score.upper(),
+                valid[0].score(exp.score),
+                valid[0].kernel.structure(),
+            )
 
     if not levels:
         raise RuntimeError("no candidate structure could be fitted")

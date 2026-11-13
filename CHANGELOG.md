@@ -2,6 +2,26 @@
 
 ## Unreleased
 
+- `autostat.context`: what the business knows about a family of series
+  (unit, positivity, expected cycles, dated events), read from YAML.
+  `Context.search_hints()` feeds two new `Experiment` fields,
+  `period_hints` and `location_hints`: half the random starts then begin
+  near an expected period or a known date. BIC still decides what is kept,
+  and empty hints change nothing.
+- `autostat.features`: a fixed-schema row of features per series, read from
+  a described model and measured against the context (expected cycles
+  found or not, their size and share, changepoints near each event,
+  unexpected cycles and breaks); `structure_probabilities` weighs every
+  scored model by exp(-BIC/2) to give the probability of each property;
+  `event_effect` measures what a dated event changed, with a 95 % interval,
+  against the model's own counterfactual.
+- `doc/research/context_features.md`: a literature review of
+  context-conditioned time-series features.
+- With known event dates, the search also proposes each kept model plus a
+  level shift `CP(Zero, Const)`, at every level and once more after the
+  last one. On the synthetic jump family the jump is found 5 times out of
+  5 instead of once; a wrong date creates no false changepoint
+  (`doc/research/context_search/README.md`).
 - The project is now under the BSD 3-Clause licence.
 - The skill's triggering is measured: 14 of 14 queries that should load it
   do, none of the 7 that should not
