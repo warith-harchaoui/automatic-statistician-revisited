@@ -267,3 +267,16 @@ def test_two_vanishing_constants_merge_without_a_domain_error():
         if isinstance(k, ff.ConstKernel)
     ]
     assert const.sf == pytest.approx(-400.0 + 0.5 * math.log(2))
+
+
+def test_two_very_long_lengthscales_merge_without_a_domain_error():
+    """SE x SE with lengthscales beyond exp's range combine in quadrature."""
+    product = ff.ProductKernel(
+        [
+            ff.SqExpKernel(0, lengthscale=400.0, sf=0.0),
+            ff.SqExpKernel(0, lengthscale=400.0, sf=0.0),
+        ]
+    )
+    merged = product.collapse_multiplicative_idempotency()
+    (se,) = [merged] if isinstance(merged, ff.SqExpKernel) else merged.operands
+    assert se.lengthscale == pytest.approx(400.0 - 0.5 * math.log(2))

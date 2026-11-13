@@ -59,6 +59,29 @@ Tensor = torch.Tensor
 PERIODIC_ELL_LIMIT = 1e4
 
 
+def _log_sum_exp(values: list[float]) -> float:
+    """Return ``log(sum(exp(v)))`` without underflow or overflow.
+
+    A variance or an inverse squared lengthscale far from 1 underflows to 0
+    under ``exp``, whose log is a domain error: the sum is taken
+    relative to its largest term instead.
+
+    Parameters
+    ----------
+    values : list of float
+        Logs of the terms; ``-inf`` stands for a zero term.
+
+    Returns
+    -------
+    float
+        Log of the sum; ``-inf`` when every term is zero.
+    """
+    top = max(values)
+    if not math.isfinite(top):
+        return top
+    return top + math.log(sum(math.exp(v - top) for v in values))
+
+
 def _fmt(value: float | None) -> str:
     """Format one parameter as the original pretty-printer did.
 
@@ -667,14 +690,9 @@ class Kernel:
             for cls in (NoiseKernel, ConstKernel):
                 matches = [op for op in k.operands if isinstance(op, cls)]
                 if matches:
-                    # Summed on the log scale: a tiny variance underflows
-                    # to 0 under exp, whose log is a domain error.
-                    logs = [2 * op.sf for op in matches]
-                    top = max(logs)
-                    if math.isfinite(top):
-                        top += math.log(sum(math.exp(v - top) for v in logs))
+                    variance = _log_sum_exp([2 * op.sf for op in matches])
                     others = [op for op in k.operands if not isinstance(op, cls)]
-                    k.operands = [*others, cls(sf=0.5 * top)]
+                    k.operands = [*others, cls(sf=0.5 * variance)]
             return k.canonical()
         return k
 
@@ -700,8 +718,8 @@ class Kernel:
             if isinstance(op, SqExpKernel):
                 previous = lengthscales.get(op.dimension, math.inf)
                 # exp(-r^2/2a^2) exp(-r^2/2b^2) is an SE with 1/l^2 = 1/a^2 + 1/b^2.
-                lengthscales[op.dimension] = -0.5 * math.log(
-                    math.exp(-2 * previous) + math.exp(-2 * op.lengthscale)
+                lengthscales[op.dimension] = -0.5 * _log_sum_exp(
+                    [-2 * previous, -2 * op.lengthscale]
                 )
                 scales[op.dimension] = scales.get(op.dimension, 0.0) + op.sf
             else:
@@ -1602,7 +1620,7 @@ class SumKernel(_Operator):
         """
         if not self.is_stationary:
             raise RuntimeError("non-stationary kernels have no scale factor")
-        return 0.5 * math.log(sum(math.exp(2 * o.sf) for o in self.operands))
+        return 0.5 * _log_sum_exp([2 * o.sf for o in self.operands])
 
     @property
     def effective_params(self) -> int:
