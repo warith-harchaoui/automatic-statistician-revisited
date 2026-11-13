@@ -667,9 +667,14 @@ class Kernel:
             for cls in (NoiseKernel, ConstKernel):
                 matches = [op for op in k.operands if isinstance(op, cls)]
                 if matches:
-                    variance = sum(math.exp(2 * op.sf) for op in matches)
+                    # Summed on the log scale: a tiny variance underflows
+                    # to 0 under exp, whose log is a domain error.
+                    logs = [2 * op.sf for op in matches]
+                    top = max(logs)
+                    if math.isfinite(top):
+                        top += math.log(sum(math.exp(v - top) for v in logs))
                     others = [op for op in k.operands if not isinstance(op, cls)]
-                    k.operands = [*others, cls(sf=0.5 * math.log(variance))]
+                    k.operands = [*others, cls(sf=0.5 * top)]
             return k.canonical()
         return k
 

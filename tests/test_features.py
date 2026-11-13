@@ -254,3 +254,16 @@ def test_a_short_search_finds_the_jump_on_the_date_it_is_told():
     (shift,) = [k for k in best.kernel.operands if isinstance(k, ff.ChangePointKernel)]
     assert isinstance(shift.operands[0], ff.ZeroKernel)
     assert abs(shift.location - 2012.5) < 0.15
+
+
+def test_two_vanishing_constants_merge_without_a_domain_error():
+    """Constants too small for exp still add up, on the log scale."""
+    kernel = ff.SumKernel(
+        [ff.ConstKernel(sf=-400.0), ff.ConstKernel(sf=-400.0), ff.NoiseKernel(sf=0.0)]
+    )
+    (const,) = [
+        k
+        for k in kernel.collapse_additive_idempotency().operands
+        if isinstance(k, ff.ConstKernel)
+    ]
+    assert const.sf == pytest.approx(-400.0 + 0.5 * math.log(2))
