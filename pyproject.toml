@@ -67,7 +67,7 @@ where = ["src"]
 [tool.setuptools.package-data]
 # The thirteen benchmark series and the 2014 results the port is checked
 # against travel with the package, so the regression test runs anywhere.
-autostat = ["datasets/*.mat", "reference/*.txt", "locales/*.yaml", "static/*.js"]
+autostat = ["datasets/*.mat", "reference/*.txt", "locales/*.yaml", "static/*.js", "static/*.html", "static/*.css", "static/fonts/*/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

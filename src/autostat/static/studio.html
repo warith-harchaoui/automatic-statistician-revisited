@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>autostat studio</title>
+  <meta name="description" content="Search the structure of a time series, read it in plain language, on this machine only.">
+  <link rel="preload" href="/fonts/roboto/Roboto-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/roboto/fonts.css">
+  <link rel="stylesheet" href="/fonts/roboto-serif/fonts.css">
+  <link rel="stylesheet" href="/fonts/roboto-mono/fonts.css">
+  <link rel="stylesheet" href="/static/studio.css">
+  <script>
+    // Apply the saved or system colour scheme before the first paint.
+    try {
+      const saved = localStorage.getItem("autostat.scheme");
+      const dark = saved ? saved === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.classList.toggle("dark", dark);
+    } catch (error) { /* private window: follow the system */ }
+  </script>
+</head>
+<body class="min-h-full bg-surface text-label antialiased dark:bg-surface-dark dark:text-label-dark">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-blue focus:px-4 focus:py-2 focus:text-white" data-i18n="studio.skip">Skip to the studio</a>
+
+  <header class="sticky top-0 z-30 border-b border-line bg-surface/90 backdrop-blur dark:border-line-dark dark:bg-surface-dark/90">
+    <div class="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6">
+      <svg class="h-7 w-7 shrink-0 text-brand-blue" viewBox="0 0 32 32" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" d="M3 22c4 0 5-12 9-12s5 14 9 14 4-9 8-9"/></svg>
+      <div class="min-w-0 flex-1">
+        <h1 class="text-lg font-semibold leading-tight">autostat <span class="font-normal text-label-2 dark:text-label-2-dark" data-i18n="studio.title">studio</span></h1>
+        <p class="hidden truncate text-sm text-label-2 sm:block dark:text-label-2-dark" data-i18n="studio.tagline">Find the structure of a series, read it in plain language. Everything stays on this machine.</p>
+      </div>
+      <a href="/form" class="hidden rounded-full px-3 py-2 text-sm text-brand-blue hover:bg-brand-blue/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-blue sm:inline-flex" data-i18n="studio.advanced">All options</a>
+      <label class="sr-only" for="lang" data-i18n="studio.language">Language</label>
+      <select id="lang" class="min-h-11 rounded-full border border-line bg-surface px-3 text-sm dark:border-line-dark dark:bg-surface-dark">
+        <option value="en">EN</option>
+        <option value="fr">FR</option>
+      </select>
+      <button id="scheme" type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full hover:bg-fill focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-blue dark:hover:bg-fill-dark" aria-label="Switch light or dark" data-i18n-label="studio.scheme">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main" class="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[22rem_minmax(0,1fr)]">
+    <!-- Left: the three steps -->
+    <div class="space-y-4 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:pr-1">
+
+      <section aria-labelledby="step-data" class="rounded-2xl border border-line bg-card p-4 dark:border-line-dark dark:bg-card-dark">
+        <h2 id="step-data" class="flex items-center gap-2 text-base font-semibold"><span class="step">1</span><span data-i18n="studio.data">Data</span></h2>
+        <div class="mt-3 grid grid-cols-2 rounded-full bg-fill p-1 text-sm dark:bg-fill-dark" role="tablist" aria-label="Source">
+          <button type="button" role="tab" id="tab-file" aria-selected="true" aria-controls="panel-file" class="tab" data-i18n="studio.yourFile">Your file</button>
+          <button type="button" role="tab" id="tab-example" aria-selected="false" aria-controls="panel-example" class="tab" data-i18n="studio.example">An example</button>
+        </div>
+        <div id="panel-file" role="tabpanel" aria-labelledby="tab-file" class="mt-3">
+          <label id="drop" for="file" class="flex min-h-28 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-line px-3 py-4 text-center text-sm text-label-2 hover:border-brand-blue focus-within:border-brand-blue dark:border-line-dark dark:text-label-2-dark">
+            <svg class="h-6 w-6 text-brand-blue" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 16V4m0 0L7 9m5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+            <span data-i18n="studio.drop">Drop a CSV, TSV or Parquet file, or choose one</span>
+            <span id="file-name" class="font-medium text-label dark:text-label-dark"></span>
+          </label>
+          <input id="file" type="file" accept=".csv,.tsv,.txt,.parquet" class="sr-only">
+        </div>
+        <div id="panel-example" role="tabpanel" aria-labelledby="tab-example" class="mt-3" hidden>
+          <label for="example" class="field-label" data-i18n="studio.series">Series</label>
+          <select id="example" class="field"></select>
+          <p class="hint" data-i18n="studio.exampleHint">The thirteen series of the 2014 paper.</p>
+        </div>
+        <div id="columns" class="mt-3 space-y-3" hidden>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label for="time" class="field-label" data-i18n="studio.time">Time</label>
+              <select id="time" class="field"></select>
+            </div>
+            <div>
+              <label for="value" class="field-label" data-i18n="studio.value">Value</label>
+              <select id="value" class="field"></select>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3">
+          <label for="name" class="field-label" data-i18n="studio.name">Name</label>
+          <input id="name" class="field" autocomplete="off" placeholder="monthly sales">
+        </div>
+        <p id="data-status" class="hint" role="status" aria-live="polite"></p>
+      </section>
+
+      <details id="context-box" class="group rounded-2xl border border-line bg-card p-4 dark:border-line-dark dark:bg-card-dark">
+        <summary class="flex min-h-11 cursor-pointer list-none items-center gap-2 text-base font-semibold">
+          <span class="step">2</span><span data-i18n="studio.context">What you already know</span>
+          <span class="ml-auto text-xs font-normal text-label-2 dark:text-label-2-dark" data-i18n="studio.optional">optional</span>
+        </summary>
+        <p class="hint mt-2" data-i18n="studio.contextHint">Expected cycles and dated events guide where the search starts. The data still decide: a wrong hint is rejected.</p>
+        <label class="mt-3 flex min-h-11 items-center gap-3 text-sm">
+          <input id="positive" type="checkbox" class="h-5 w-5 accent-brand-blue">
+          <span data-i18n="studio.positive">Values cannot be negative (sales, counts, prices)</span>
+        </label>
+        <fieldset class="mt-3">
+          <legend class="field-label" data-i18n="studio.cycles">Expected cycles</legend>
+          <ul id="cycles" class="space-y-2"></ul>
+          <button type="button" id="add-cycle" class="link-button" data-i18n="studio.addCycle">Add a cycle</button>
+          <p class="hint" data-i18n="studio.periodHint">Periods such as 7d, 12mo or 1y; plain numbers are in the time unit.</p>
+        </fieldset>
+        <fieldset class="mt-3">
+          <legend class="field-label" data-i18n="studio.events">Dated events</legend>
+          <ul id="events" class="space-y-2"></ul>
+          <button type="button" id="add-event" class="link-button" data-i18n="studio.addEvent">Add an event</button>
+          <p class="hint" data-i18n="studio.dateHint">Dates such as 2024-11-05, or a number on the time axis.</p>
+        </fieldset>
+      </details>
+
+      <section aria-labelledby="step-run" class="rounded-2xl border border-line bg-card p-4 dark:border-line-dark dark:bg-card-dark">
+        <h2 id="step-run" class="flex items-center gap-2 text-base font-semibold"><span class="step">3</span><span data-i18n="studio.search">Search</span></h2>
+        <div class="mt-3">
+          <label for="depth" class="field-label"><span data-i18n="studio.depth">Depth</span> <output id="depth-out" for="depth" class="font-mono text-label-2 dark:text-label-2-dark">4</output></label>
+          <input id="depth" type="range" min="1" max="10" value="4" class="w-full accent-brand-blue">
+          <p class="hint" data-i18n="studio.depthHint">Each level tries every rewrite of the best structure so far. 3 to 4 levels take minutes; 10 can take hours.</p>
+        </div>
+        <details class="mt-2 text-sm">
+          <summary class="min-h-11 cursor-pointer py-2 text-brand-blue" data-i18n="studio.more">More settings</summary>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label for="jobs" class="field-label" data-i18n="studio.jobs">Workers</label>
+              <input id="jobs" type="number" min="1" max="64" value="2" class="field">
+            </div>
+            <div>
+              <label for="points" class="field-label" data-i18n="studio.points">Max points</label>
+              <input id="points" type="number" min="20" max="2000" value="500" class="field">
+            </div>
+            <div>
+              <label for="preset" class="field-label" data-i18n="studio.preset">Grammar</label>
+              <select id="preset" class="field"><option value="abcd-2014">ABCD 2014</option><option value="cks-2013">CKS 2013</option></select>
+            </div>
+            <div>
+              <label for="seed" class="field-label" data-i18n="studio.seed">Seed</label>
+              <input id="seed" type="number" min="0" value="1" class="field">
+            </div>
+          </div>
+          <label class="mt-2 flex min-h-11 items-center gap-3">
+            <input id="check" type="checkbox" checked class="h-5 w-5 accent-brand-blue">
+            <span data-i18n="studio.check">Check each component against the data</span>
+          </label>
+        </details>
+        <button id="run" type="button" class="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-blue px-5 font-medium text-white hover:bg-brand-blue/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue disabled:cursor-not-allowed disabled:opacity-40" disabled data-i18n="studio.runButton">Find the structure</button>
+        <div id="progress" class="mt-3 space-y-2" hidden>
+          <div class="h-2 overflow-hidden rounded-full bg-fill dark:bg-fill-dark" role="progressbar" aria-labelledby="progress-text" aria-valuemin="0" id="bar">
+            <div id="bar-fill" class="h-full w-0 rounded-full bg-brand-blue transition-[width] duration-500 motion-reduce:transition-none"></div>
+          </div>
+          <p id="progress-text" class="text-sm text-label-2 dark:text-label-2-dark" role="status" aria-live="polite"></p>
+          <ol id="levels" class="space-y-1 font-mono text-xs"></ol>
+        </div>
+      </section>
+    </div>
+
+    <!-- Right: data first, then what the search found -->
+    <div class="min-w-0 space-y-6">
+      <section aria-labelledby="chart-title" class="rounded-2xl border border-line bg-card p-4 dark:border-line-dark dark:bg-card-dark">
+        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h2 id="chart-title" class="text-base font-semibold" data-i18n="studio.chartEmpty">Your series will appear here</h2>
+          <p id="chart-sub" class="text-sm text-label-2 dark:text-label-2-dark"></p>
+        </div>
+        <div id="chart" class="mt-3 aspect-[16/9] w-full sm:aspect-[21/9]"></div>
+        <ul id="legend" class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-label-2 dark:text-label-2-dark" hidden>
+          <li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-label dark:bg-label-dark"></span><span data-i18n="studio.legendData">Data</span></li>
+          <li class="flex items-center gap-2"><span class="h-0.5 w-5 bg-brand-blue"></span><span data-i18n="studio.legendFit">Posterior mean</span></li>
+          <li class="flex items-center gap-2"><span class="h-3 w-5 rounded-sm bg-brand-blue/20"></span><span data-i18n="studio.legendBand">95 % band</span></li>
+          <li class="flex items-center gap-2"><span class="h-3 w-5 rounded-sm bg-fill dark:bg-fill-dark"></span><span data-i18n="studio.legendForecast">Beyond the data</span></li>
+        </ul>
+      </section>
+
+      <div id="welcome" class="rounded-2xl border border-dashed border-line p-6 text-label-2 dark:border-line-dark dark:text-label-2-dark">
+        <h2 class="font-serif text-xl text-label dark:text-label-dark" data-i18n="studio.welcomeTitle">What this does</h2>
+        <p class="mt-2 max-w-prose" data-i18n="studio.welcome1">The search builds a model of your series from a handful of pieces (a smooth trend, a straight line, a repeating cycle, noise, a change of regime) and keeps the combination that explains the data best for its size.</p>
+        <p class="mt-2 max-w-prose" data-i18n="studio.welcome2">Each piece then gets a sentence, a chart and a check. Tell it what you already know (a weekly cycle, the date of a promotion) and it reports what it found against that.</p>
+      </div>
+
+      <div id="results" class="space-y-6" hidden>
+        <section aria-labelledby="summary-title" class="rounded-2xl border border-line bg-card p-5 dark:border-line-dark dark:bg-card-dark">
+          <h2 id="summary-title" class="font-serif text-xl" data-i18n="studio.summary">What the search found</h2>
+          <p id="summary-model" class="mt-1 text-sm text-label-2 dark:text-label-2-dark"></p>
+          <ol id="summary-list" class="mt-3 space-y-2"></ol>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <button type="button" id="dl-report" class="chip" data-i18n="studio.dlReport">Report (Markdown)</button>
+            <button type="button" id="dl-json" class="chip" data-i18n="studio.dlJson">Results (JSON)</button>
+            <button type="button" id="dl-context" class="chip" data-i18n="studio.dlContext">Context (YAML)</button>
+          </div>
+        </section>
+
+        <section id="context-results" aria-labelledby="ctx-title" class="rounded-2xl border border-line bg-card p-5 dark:border-line-dark dark:bg-card-dark" hidden>
+          <h2 id="ctx-title" class="font-serif text-xl" data-i18n="studio.againstContext">Against what you knew</h2>
+          <div id="ctx-body" class="mt-3 space-y-3"></div>
+        </section>
+
+        <section aria-labelledby="parts-title">
+          <h2 id="parts-title" class="font-serif text-xl" data-i18n="studio.components">The components, one by one</h2>
+          <div id="parts" class="mt-3 grid gap-4 xl:grid-cols-2"></div>
+        </section>
+
+        <div class="grid gap-6 xl:grid-cols-2">
+          <section aria-labelledby="prob-title" class="rounded-2xl border border-line bg-card p-5 dark:border-line-dark dark:bg-card-dark">
+            <h2 id="prob-title" class="text-base font-semibold" data-i18n="studio.probabilities">How sure is it?</h2>
+            <p class="hint" data-i18n="studio.probHint">Every structure the search scored votes, weighted by how well it explains the data for its size.</p>
+            <ul id="probs" class="mt-3 space-y-2"></ul>
+          </section>
+          <section aria-labelledby="bic-title" class="rounded-2xl border border-line bg-card p-5 dark:border-line-dark dark:bg-card-dark">
+            <h2 id="bic-title" class="text-base font-semibold" data-i18n="studio.bicTitle">Best score at each level</h2>
+            <p class="hint" data-i18n="studio.bicHint">Bayesian information criterion: ↓ lower is better.</p>
+            <div id="bic-chart" class="mt-3 aspect-[2/1] w-full"></div>
+          </section>
+        </div>
+
+        <section aria-labelledby="formula-title" class="rounded-2xl border border-line bg-card p-5 dark:border-line-dark dark:bg-card-dark">
+          <div class="flex items-center gap-2">
+            <h2 id="formula-title" class="text-base font-semibold" data-i18n="studio.formula">The model as a formula</h2>
+            <button type="button" id="copy-formula" class="chip ml-auto" data-i18n="studio.copyLatex">Copy LaTeX</button>
+          </div>
+          <pre id="formula" class="mt-3 overflow-x-auto whitespace-pre-wrap break-words rounded-xl bg-fill p-3 font-mono text-xs dark:bg-fill-dark"></pre>
+        </section>
+      </div>
+
+      <div id="error" class="rounded-2xl border border-brand-red/40 bg-brand-red/10 p-4 text-sm" role="alert" hidden></div>
+    </div>
+  </main>
+
+  <footer class="mx-auto max-w-7xl px-4 pb-8 text-xs text-label-2 sm:px-6 dark:text-label-2-dark">
+    <p><span data-i18n="studio.footer">Served from this machine only: your data never leave it.</span> <a class="text-brand-blue underline-offset-2 hover:underline" href="/form" data-i18n="studio.advanced">All options</a></p>
+  </footer>
+
+  <template id="cycle-row">
+    <li class="grid grid-cols-[1fr_6rem_2.75rem] gap-2">
+      <input class="field" data-key="name" aria-label="Cycle name" data-i18n-label="studio.cycleName" placeholder="weekly">
+      <input class="field font-mono" data-key="period" aria-label="Period" data-i18n-label="studio.period" placeholder="7d">
+      <button type="button" class="remove" aria-label="Remove" data-i18n-label="studio.remove">×</button>
+    </li>
+  </template>
+  <template id="event-row">
+    <li class="grid grid-cols-[1fr_8rem_2.75rem] gap-2">
+      <input class="field" data-key="name" aria-label="Event name" data-i18n-label="studio.eventName" placeholder="promotion">
+      <input class="field font-mono" data-key="at" aria-label="Date" data-i18n-label="studio.date" placeholder="2024-11-05">
+      <button type="button" class="remove" aria-label="Remove" data-i18n-label="studio.remove">×</button>
+    </li>
+  </template>
+
+  <script type="module" src="/static/studio.js"></script>
+</body>
+</html>

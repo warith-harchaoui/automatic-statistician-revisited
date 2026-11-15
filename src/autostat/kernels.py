@@ -1298,7 +1298,11 @@ class PeriodicKernel(_BaseKernel):
         if self.lengthscale is None:
             self.lengthscale = rng.normal(0.0, sd)
         hints = shape.get("period_hints") or []
-        if self.period is None and hints and rng.random() < 0.5:
+        if (
+            self.period is None
+            and hints
+            and rng.random() < shape.get("hint_share", 0.5)
+        ):
             # A period the business expects, a few per cent either way.
             self.period = rng.normal(hints[rng.integers(len(hints))], 0.05)
         if self.period is None:
@@ -2074,7 +2078,11 @@ class ChangePointKernel(_Switch):
         d = self.dimension or 0
         span = shape["x_max"][d] - shape["x_min"][d]
         hints = _inside(shape, d)
-        if self.location is None and hints and rng.random() < 0.5:
+        if (
+            self.location is None
+            and hints
+            and rng.random() < shape.get("hint_share", 0.5)
+        ):
             # A known event's date, give or take one per cent of the span.
             self.location = rng.normal(hints[rng.integers(len(hints))], 0.01 * span)
         if self.location is None:
@@ -2218,7 +2226,11 @@ class ChangeWindowKernel(_Switch):
         d = self.dimension or 0
         span = shape["x_max"][d] - shape["x_min"][d]
         hints = sorted(_inside(shape, d))
-        if self.location is None and len(hints) >= 2 and rng.random() < 0.5:
+        if (
+            self.location is None
+            and len(hints) >= 2
+            and rng.random() < shape.get("hint_share", 0.5)
+        ):
             # A window opened and closed by two known events.
             i, j = sorted(rng.choice(len(hints), size=2, replace=False))
             if hints[j] > hints[i]:

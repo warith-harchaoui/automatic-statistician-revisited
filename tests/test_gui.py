@@ -87,7 +87,7 @@ def test_the_page_loads_nothing_from_another_host(client):
     client : fastapi.testclient.TestClient
         Fixture: the GUI host.
     """
-    html = client.get("/").text
+    html = client.get("/form").text
     assert re.findall(r'(?:src|href)="(?:https?:)?//', html) == []
     assert "only the utilities this page uses" in html
 
@@ -187,5 +187,5 @@ def test_the_page_is_built_once_per_host(monkeypatch):
     built = []
     monkeypatch.setattr(gui, "page", lambda: built.append(1) or "page")
     host = TestClient(gui.create_gui_app())
-    assert [host.get("/").text, host.get("/").text] == ["page", "page"]
+    assert [host.get("/form").text, host.get("/form").text] == ["page", "page"]
     assert len(built) == 1

@@ -17,6 +17,20 @@
   against the model's own counterfactual.
 - `doc/research/context_features.md`: a literature review of
   context-conditioned time-series features.
+- The studio: `autostat-gui` now opens a page that loads a file or an
+  example, takes the business context, runs the search with its levels shown
+  as they finish and draws the result (fit and extrapolation, components with
+  their sentences and checks, context findings, structure probabilities,
+  formula, downloads). Hand-drawn SVG, Tailwind compiled once, self-hosted
+  Roboto, English and French. The command line's form moved to `/form`.
+- `doc/research/watch-2026-11.md`: a research watch of about forty works of
+  2023 to 2026 with eleven ranked actions; the README names the newest
+  neighbours.
+- `Experiment(hint_starts="add")` keeps the `n_rand` blind starts and adds
+  `ceil(n_rand / 2)` starts that all begin at a hint, so the context no
+  longer takes exploration away; `"replace"` (the default) keeps the
+  previous behaviour. Written first in the vendored copy of the Ralph Loops
+  forecasting project.
 - With known event dates, the search also proposes each kept model plus a
   level shift `CP(Zero, Const)`, at every level and once more after the
   last one. On the synthetic jump family the jump is found 5 times out of
