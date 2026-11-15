@@ -343,7 +343,10 @@ minute each.
 
 The Python interface exposes each stage: `prepare` (dates to decimal years,
 long series binned), `search` with an `Experiment`, `describe` for the report,
-`fit` and `posterior` for a single model.
+`fit` and `posterior` for a single model. `mixture_posterior` forecasts with
+every structure a search scored, each weighted by `exp(-BIC / 2)`. Its
+band widens where the structures disagree; when one structure takes all the
+weight, as it often does, it is the best model's forecast.
 
 The API and the MCP server share one application: `autostat-mcp` serves the
 HTTP routes and `/mcp` on port 8000. The MCP tools are `list_series`,

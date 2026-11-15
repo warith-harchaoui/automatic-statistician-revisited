@@ -29,7 +29,9 @@ The families
       Timestral (209M) and TabPFN-TS used zero-shot; NVIDIA's KumoTabular in
       context on lags.
     * ``structure search``: this repository's ports of the 2014 and 2013
-      Automatic Statistician.
+      Automatic Statistician, forecasting with the best model and, in the
+      ``_mixture`` rows, with every scored structure weighted by BIC. Both
+      rows of a preset read one search, kept in ``results/searches/``.
     * ``symbolic regression``: a formula ``y = f(t)`` fitted to the training
       part and continued over the tail, as Eureqa did in 2014: PySR
       (multi-population evolution, Julia backend), gplearn (genetic
@@ -66,6 +68,7 @@ import warnings
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -713,7 +716,45 @@ def kumo_lags(s: Series) -> Forecast:
 # Structure search (this repository)
 
 
-def _autostat(preset: str, n_jobs: int, max_depth: int) -> Callable[[Series], Forecast]:
+def _search(preset: str, n_jobs: int, max_depth: int, s: Series) -> Any:
+    """Search the training part once, keeping the result for every row that reads it.
+
+    The best-model row and the mixture row of a preset read the same search,
+    which costs hours on the longer series; it is written to
+    ``results/searches/<preset>-depth<max_depth>/<dataset>.json`` and read back on the next
+    call, so an interrupted run resumes where it stopped.
+
+    Parameters
+    ----------
+    preset : str
+        ``"abcd_2014"`` or ``"cks_2013"``.
+    n_jobs : int
+        Worker processes for the search.
+    max_depth : int
+        Search levels.
+    s : Series
+        One benchmark series.
+
+    Returns
+    -------
+    autostat.SearchResult
+        The search, with the top five models of each level once read back.
+    """
+    from autostat import Experiment, SearchResult, search
+
+    path = RESULTS / "searches" / f"{preset}-depth{max_depth}" / f"{s.name}.json"
+    if path.exists():
+        return SearchResult.load(path)
+    exp = getattr(Experiment, preset)(max_depth=max_depth, n_jobs=n_jobs)
+    result = search(s.x_train, s.y_train, exp)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    result.save(path)
+    return SearchResult.load(path)
+
+
+def _autostat(
+    preset: str, n_jobs: int, max_depth: int, mixture: bool = False
+) -> Callable[[Series], Forecast]:
     """Wrap this repository's structure search.
 
     Parameters
@@ -724,6 +765,9 @@ def _autostat(preset: str, n_jobs: int, max_depth: int) -> Callable[[Series], Fo
         Worker processes for the search.
     max_depth : int
         Search levels.
+    mixture : bool, optional
+        Forecast with every scored structure weighted by ``exp(-BIC / 2)``
+        (:func:`autostat.mixture_posterior`) instead of the best model only.
 
     Returns
     -------
@@ -744,13 +788,22 @@ def _autostat(preset: str, n_jobs: int, max_depth: int) -> Callable[[Series], Fo
         tuple
             Posterior mean and 90 % predictive interval.
         """
-        from autostat import Experiment, posterior, search
+        from autostat import mixture_posterior, posterior
 
-        exp = getattr(Experiment, preset)(max_depth=max_depth, n_jobs=n_jobs)
-        result = search(s.x_train, s.y_train, exp)
-        mean, var = posterior(result.best, s.x_train, s.y_train, s.x_test, noise=True)
+        result = _search(preset, n_jobs, max_depth, s)
+        if mixture:
+            models = [m for level in result.levels for m in level]
+            mean, var = mixture_posterior(
+                models, s.x_train, s.y_train, s.x_test, noise=True
+            )
+        else:
+            mean, var = posterior(
+                result.best, s.x_train, s.y_train, s.x_test, noise=True
+            )
         # A white-noise kernel is part of the covariance, not of the
         # likelihood, so its variance comes from the kernel's own diagonal.
+        # The mixture is not Gaussian; its 90 % band is the Gaussian one
+        # with the mixture's mean and variance.
         sd = np.sqrt(var)
         return mean, mean - 1.645 * sd, mean + 1.645 * sd
 
@@ -809,6 +862,12 @@ def registry(n_jobs: int, max_depth: int) -> dict[str, Method]:
     )
     methods["cks_2013_port"] = Method(
         "structure search", _autostat("cks_2013", n_jobs, max_depth)
+    )
+    methods["abcd_2014_port_mixture"] = Method(
+        "structure search", _autostat("abcd_2014", n_jobs, max_depth, mixture=True)
+    )
+    methods["cks_2013_port_mixture"] = Method(
+        "structure search", _autostat("cks_2013", n_jobs, max_depth, mixture=True)
     )
     methods["pysr"] = Method("symbolic regression", pysr)
     methods["gplearn"] = Method("symbolic regression", gplearn)

@@ -604,3 +604,111 @@ def posterior(
     if full_cov:
         return mean.numpy(), 0.5 * (cov + cov.T).numpy()
     return mean.numpy(), np.clip(torch.diagonal(cov).numpy(), 0.0, None)
+
+
+def bic_weights(
+    models: list[GPModel], floor: float = 0.0
+) -> tuple[list[GPModel], np.ndarray]:
+    """Weigh distinct structures by ``exp(-BIC / 2)`` under a flat prior.
+
+    Each distinct structure keeps its best fit, so that a structure refitted
+    at several levels votes once. This is the posterior over the structures
+    searched that :mod:`autostat.plausibility` and
+    :func:`autostat.features.structure_probabilities` read.
+
+    Parameters
+    ----------
+    models : list of GPModel
+        Fitted models with their BIC, e.g. every level of a search.
+    floor : float, optional
+        Drop structures whose weight falls below this, then renormalise.
+        ``0`` keeps them all.
+
+    Returns
+    -------
+    models : list of GPModel
+        One per kept structure, heaviest first.
+    weights : numpy.ndarray
+        Their weights, summing to one; empty when no model has a finite BIC.
+    """
+    best: dict[str, GPModel] = {}
+    for model in models:
+        if not math.isfinite(model.bic):
+            continue
+        key = model.kernel.simplified().structure_key()
+        if key not in best or model.bic < best[key].bic:
+            best[key] = model
+    if not best:
+        return [], np.zeros(0)
+    chosen = sorted(best.values(), key=lambda m: m.bic)
+    bics = np.array([m.bic for m in chosen])
+    weights = np.exp(-(bics - bics[0]) / 2)
+    weights /= weights.sum()
+    keep = weights >= floor
+    chosen = [m for m, k in zip(chosen, keep, strict=True) if k]
+    weights = weights[keep] / weights[keep].sum()
+    return chosen, weights
+
+
+def mixture_posterior(
+    models: list[GPModel],
+    x: Any,
+    y: Any,
+    x_star: Any = None,
+    noise: bool = False,
+    floor: float = 1e-4,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Posterior mean and variance averaged over structures, weighted by BIC.
+
+    The best model alone ignores how much the data hesitate between
+    structures. Averaging the predictive distributions of every structure
+    with its weight from :func:`bic_weights` gives a mixture whose mean is
+    ``sum_i w_i m_i`` and whose variance, by the law of total variance, is
+    ``sum_i w_i (v_i + m_i^2) - mean^2``: wider where the structures
+    disagree. This is Bayesian model averaging over the structures searched,
+    as AutoGP (Saad et al., ICML 2023) and Large Language Bayes (NeurIPS
+    2025) predict.
+
+    Parameters
+    ----------
+    models : list of GPModel
+        Fitted models with their BIC, e.g. every level of a search.
+    x, y : array_like
+        Training data.
+    x_star : array_like, optional
+        Where to evaluate; the training inputs when omitted.
+    noise : bool, optional
+        Add each model's likelihood noise to its variance.
+    floor : float, optional
+        Structures lighter than this are left out, to save their solves.
+
+    Returns
+    -------
+    mean : numpy.ndarray
+        Shape ``(m,)``.
+    var : numpy.ndarray
+        Shape ``(m,)``.
+
+    Raises
+    ------
+    ValueError
+        When no model has a finite BIC and a posterior.
+    """
+    chosen, weights = bic_weights(models, floor)
+    moments, kept = [], []
+    for model, w in zip(chosen, weights, strict=True):
+        try:
+            moments.append(posterior(model, x, y, x_star, noise=noise))
+        except np.linalg.LinAlgError:
+            continue
+        kept.append(w)
+    if not kept:
+        raise ValueError("no model has a finite BIC and a posterior")
+    w = np.asarray(kept) / np.sum(kept)
+    means = np.stack([m for m, _ in moments])
+    variances = np.stack([v for _, v in moments])
+    mean = w @ means
+    # Spread around the mixture mean rather than E[m^2] - mean^2, which
+    # cancels catastrophically when the variances are small.
+    var = w @ variances + w @ (means - mean) ** 2
+    return mean, np.clip(var, 0.0, None)

@@ -43,7 +43,7 @@ import numpy as np
 
 from . import kernels as ff
 from .context import Context
-from .model import posterior
+from .model import bic_weights, posterior
 from .plausibility import FEATURES
 from .plausibility import features as kernel_counts
 
@@ -319,7 +319,7 @@ def structure_probabilities(
 
     Every model the search fitted votes, weighted by ``exp(-BIC / 2)`` under
     a flat prior, as :mod:`autostat.plausibility` weighs structures: each
-    distinct structure keeps its best fit. A feature is then the posterior
+    distinct structure keeps its best fit (:func:`autostat.model.bic_weights`). A feature is then the posterior
     probability of a property, for instance "the series has a cycle near
     the expected quarter". Where the kept model says yes or no, this says
     how sure the data are, after Saad et al. (POPL 2019, ICML 2023).
@@ -342,19 +342,9 @@ def structure_probabilities(
         ``entropy`` (in nats, 0 when one structure takes all the weight) and,
         with a context, ``cycle_<name>`` and ``event_<name>``.
     """
-    best: dict[str, GPModel] = {}
-    for model in models:
-        if not math.isfinite(model.bic):
-            continue
-        key = model.kernel.simplified().structure_key()
-        if key not in best or model.bic < best[key].bic:
-            best[key] = model
-    if not best:
+    chosen, weights = bic_weights(models)
+    if not chosen:
         return {}
-    chosen = list(best.values())
-    bics = np.array([m.bic for m in chosen])
-    weights = np.exp(-(bics - bics.min()) / 2)
-    weights /= weights.sum()
     found = [
         (
             {type(k) for k in leaves(m.kernel)},
