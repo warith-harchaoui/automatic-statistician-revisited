@@ -253,6 +253,24 @@ Three related lines of work have no public code we could find:
   plots (Lee et al., arXiv 2509.25946, 2025);
 - scalable kernel composition (Kim and Teh, AISTATS 2018, arXiv 1706.02524).
 
+Newer neighbours, from the research watch of November 2026
+([doc/research/watch-2026-11.md](doc/research/watch-2026-11.md), about forty
+references with what to adopt from each):
+
+- Large Language Bayes, where an LLM proposes models that are then averaged
+  by their marginal likelihood (Domke, NeurIPS 2025, arXiv 2504.14025), the
+  move this package makes with exp(-BIC/2) weights over its own grammar;
+- AutoStan, an agent that improves Stan models from predictive feedback
+  (Dürr, arXiv 2603.27766, 2026);
+- TimeSeriesScientist (arXiv 2510.01538, 2025) and TimeCopilot (Garza and
+  Rosillo, arXiv 2509.00616, 2025), agents that analyse and forecast series
+  in language;
+- GenJAX, the vectorised successor of Gen, the probabilistic programming
+  system behind AutoGP (POPL 2026).
+
+As far as the watch found, none of them takes typed business knowledge (dated events, expected cycles)
+into the structure search, which `autostat.context` does.
+
 The address automaticstatistician.com now serves a site unrelated to the
 project. The original, online from July 2014, survives in web archives.
 
@@ -288,10 +306,24 @@ six check their inputs and behave alike.
 |---|---|---|
 | Python library | `from autostat import analyse` | notebooks and other code |
 | Command line (Click) | `autostat data.csv ...` | a shell or a script |
-| GUI (sprezzature-cli-gui) | `autostat-gui` | a form in the browser, on this machine only |
+| Studio (local web page) | `autostat-gui` | load a file, say what you know, read the result; on this machine only |
 | HTTP API (FastAPI) | `uvicorn autostat.api:app` | another program, with OpenAPI at `/docs` |
 | MCP server (FastAPI-MCP) | `autostat-mcp` | an agent host, at the endpoint `/mcp` |
 | Agent skill | [skills/autostat/SKILL.md](skills/autostat/SKILL.md) | Claude Code or OpenCode, routed by [TRIGGERS.md](TRIGGERS.md) |
+
+`autostat-gui` opens the studio at `http://127.0.0.1:8765/`. Drop a CSV,
+TSV or Parquet file (or pick one of the thirteen 2014 series), choose the
+time and value columns, then, if you know them, the cycles you expect and
+the dates of events that may have moved the series. The search runs with
+two workers by default and shows each level as it finishes. The result is
+the data with the model's mean, its 95 % band and its extrapolation; each
+component with its sentences, its own chart and its checks; how each
+expected cycle and event fared; the probability of a cycle, a trend or a
+change of regime over every structure scored; the best score per level; and
+the model as a formula. The report (Markdown), the results (JSON) and the
+context (YAML, the format `Context.from_yaml` reads) download from the page.
+Nothing is loaded from another site and nothing leaves the machine. The
+form with every option of the command line stays at `/form`.
 
 The command line reads a CSV or Parquet file:
 
