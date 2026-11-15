@@ -26,3 +26,307 @@ gui.run.network:
 gui.footer:
   en: "Served from this machine only. Build command prints the command line; Run on this machine runs it here."
   fr: "Servi depuis cette machine seulement. Build command affiche la ligne de commande ; Lancer sur cette machine l'exécute ici."
+# The studio (static/studio.html and static/studio.js).
+studio.title:
+  en: "studio"
+  fr: "atelier"
+studio.tagline:
+  en: "Find the structure of a series, read it in plain language. Everything stays on this machine."
+  fr: "Trouver la structure d'une série, la lire en clair. Tout reste sur cette machine."
+studio.skip:
+  en: "Skip to the studio"
+  fr: "Aller à l'atelier"
+studio.advanced:
+  en: "All options"
+  fr: "Toutes les options"
+studio.language:
+  en: "Language"
+  fr: "Langue"
+studio.scheme:
+  en: "Switch light or dark"
+  fr: "Passer en clair ou en sombre"
+studio.data:
+  en: "Data"
+  fr: "Données"
+studio.yourFile:
+  en: "Your file"
+  fr: "Votre fichier"
+studio.example:
+  en: "An example"
+  fr: "Un exemple"
+studio.drop:
+  en: "Drop a CSV, TSV or Parquet file, or choose one"
+  fr: "Déposez un fichier CSV, TSV ou Parquet, ou choisissez-en un"
+studio.series:
+  en: "Series"
+  fr: "Série"
+studio.exampleHint:
+  en: "The thirteen series of the 2014 paper."
+  fr: "Les treize séries de l'article de 2014."
+studio.time:
+  en: "Time"
+  fr: "Temps"
+studio.value:
+  en: "Value"
+  fr: "Valeur"
+studio.name:
+  en: "Name"
+  fr: "Nom"
+studio.rowNumber:
+  en: "(row number)"
+  fr: "(numéro de ligne)"
+studio.reading:
+  en: "Reading the file…"
+  fr: "Lecture du fichier…"
+studio.rows:
+  en: "{count} rows"
+  fr: "{count} lignes"
+studio.points_n:
+  en: "{count} points"
+  fr: "{count} points"
+studio.context:
+  en: "What you already know"
+  fr: "Ce que vous savez déjà"
+studio.optional:
+  en: "optional"
+  fr: "facultatif"
+studio.contextHint:
+  en: "Expected cycles and dated events guide where the search starts. The data still decide: a wrong hint is rejected."
+  fr: "Les cycles attendus et les événements datés guident les départs de la recherche. Les données décident toujours : une indication fausse est rejetée."
+studio.positive:
+  en: "Values cannot be negative (sales, counts, prices)"
+  fr: "Les valeurs ne peuvent pas être négatives (ventes, comptages, prix)"
+studio.cycles:
+  en: "Expected cycles"
+  fr: "Cycles attendus"
+studio.addCycle:
+  en: "Add a cycle"
+  fr: "Ajouter un cycle"
+studio.periodHint:
+  en: "Periods such as 7d, 12mo or 1y; plain numbers are in the time unit."
+  fr: "Des périodes comme 7d, 12mo ou 1y ; un nombre seul est dans l'unité du temps."
+studio.events:
+  en: "Dated events"
+  fr: "Événements datés"
+studio.addEvent:
+  en: "Add an event"
+  fr: "Ajouter un événement"
+studio.dateHint:
+  en: "Dates such as 2024-11-05, or a number on the time axis."
+  fr: "Des dates comme 2024-11-05, ou un nombre sur l'axe du temps."
+studio.cycleName:
+  en: "Cycle name"
+  fr: "Nom du cycle"
+studio.period:
+  en: "Period"
+  fr: "Période"
+studio.eventName:
+  en: "Event name"
+  fr: "Nom de l'événement"
+studio.date:
+  en: "Date"
+  fr: "Date"
+studio.remove:
+  en: "Remove"
+  fr: "Retirer"
+studio.search:
+  en: "Search"
+  fr: "Recherche"
+studio.depth:
+  en: "Depth"
+  fr: "Profondeur"
+studio.depthHint:
+  en: "Each level tries every rewrite of the best structure so far. 3 to 4 levels take minutes; 10 can take hours."
+  fr: "Chaque niveau essaie toutes les réécritures de la meilleure structure. 3 à 4 niveaux prennent quelques minutes ; 10 peuvent prendre des heures."
+studio.more:
+  en: "More settings"
+  fr: "Plus de réglages"
+studio.jobs:
+  en: "Workers"
+  fr: "Processus"
+studio.points:
+  en: "Max points"
+  fr: "Points au plus"
+studio.preset:
+  en: "Grammar"
+  fr: "Grammaire"
+studio.seed:
+  en: "Seed"
+  fr: "Graine"
+studio.check:
+  en: "Check each component against the data"
+  fr: "Confronter chaque composante aux données"
+studio.runButton:
+  en: "Find the structure"
+  fr: "Trouver la structure"
+studio.queued:
+  en: "Waiting for the previous search to finish…"
+  fr: "En attente de la fin de la recherche précédente…"
+studio.searching:
+  en: "Level {level} of {depth} · {time}"
+  fr: "Niveau {level} sur {depth} · {time}"
+studio.describing:
+  en: "Describing the components · {time}"
+  fr: "Description des composantes · {time}"
+studio.done:
+  en: "Done in {time}"
+  fr: "Terminé en {time}"
+studio.failed:
+  en: "The search failed"
+  fr: "La recherche a échoué"
+studio.eventStage:
+  en: "event"
+  fr: "évén."
+studio.network:
+  en: "The local host did not answer. Is autostat-gui still running?"
+  fr: "L'hôte local ne répond pas. autostat-gui tourne-t-il encore ?"
+studio.chartEmpty:
+  en: "Your series will appear here"
+  fr: "Votre série apparaîtra ici"
+studio.chartLabel:
+  en: "The series {name}, with the model's mean and 95 % band"
+  fr: "La série {name}, avec la moyenne du modèle et sa bande à 95 %"
+studio.legendData:
+  en: "Data"
+  fr: "Données"
+studio.legendFit:
+  en: "Posterior mean"
+  fr: "Moyenne a posteriori"
+studio.legendBand:
+  en: "95 % band"
+  fr: "Bande à 95 %"
+studio.legendForecast:
+  en: "Beyond the data"
+  fr: "Au-delà des données"
+studio.welcomeTitle:
+  en: "What this does"
+  fr: "Ce que fait l'atelier"
+studio.welcome1:
+  en: "The search builds a model of your series from a handful of pieces (a smooth trend, a straight line, a repeating cycle, noise, a change of regime) and keeps the combination that explains the data best for its size."
+  fr: "La recherche construit un modèle de votre série avec quelques pièces (une tendance lisse, une droite, un cycle, du bruit, un changement de régime) et garde la combinaison qui explique le mieux les données pour sa taille."
+studio.welcome2:
+  en: "Each piece then gets a sentence, a chart and a check. Tell it what you already know (a weekly cycle, the date of a promotion) and it reports what it found against that."
+  fr: "Chaque pièce reçoit ensuite une phrase, un graphique et une vérification. Dites-lui ce que vous savez déjà (un cycle hebdomadaire, la date d'une promotion) : il rend compte de ce qu'il a trouvé par rapport à cela."
+studio.summary:
+  en: "What the search found"
+  fr: "Ce que la recherche a trouvé"
+studio.modelLine:
+  en: "Structure {structure} · BIC {bic} · {n} points"
+  fr: "Structure {structure} · BIC {bic} · {n} points"
+studio.dlReport:
+  en: "Report (Markdown)"
+  fr: "Rapport (Markdown)"
+studio.dlJson:
+  en: "Results (JSON)"
+  fr: "Résultats (JSON)"
+studio.dlContext:
+  en: "Context (YAML)"
+  fr: "Contexte (YAML)"
+studio.againstContext:
+  en: "Against what you knew"
+  fr: "Face à ce que vous saviez"
+studio.cycleFound:
+  en: "Found: period {period}, {share} of the variance."
+  fr: "Trouvé : période {period}, {share} de la variance."
+studio.cycleMissing:
+  en: "Not found in the data."
+  fr: "Absent des données."
+studio.eventFound:
+  en: "The level changes at this date."
+  fr: "Le niveau change à cette date."
+studio.eventMissing:
+  en: "No change of regime at this date."
+  fr: "Pas de changement de régime à cette date."
+studio.effect:
+  en: "Effect over the following window: {effect} (95 % interval {low} to {high})."
+  fr: "Effet sur la fenêtre suivante : {effect} (intervalle à 95 % de {low} à {high})."
+studio.unexpectedCycle:
+  en: "A cycle you did not mention"
+  fr: "Un cycle que vous n'aviez pas mentionné"
+studio.unexpectedCycleText:
+  en: "{count} found; the main one has a period of {period}."
+  fr: "{count} trouvé(s) ; le principal a une période de {period}."
+studio.unexpectedBreak:
+  en: "A change you did not mention"
+  fr: "Un changement que vous n'aviez pas mentionné"
+studio.unexpectedBreakText:
+  en: "{count} change(s) of regime away from every date you gave."
+  fr: "{count} changement(s) de régime loin de toutes les dates données."
+studio.positiveTitle:
+  en: "Negative values"
+  fr: "Valeurs négatives"
+studio.positiveViolated:
+  en: "The model's band goes below zero although the values cannot."
+  fr: "La bande du modèle passe sous zéro alors que les valeurs ne le peuvent pas."
+studio.probabilityOf:
+  en: "Probability over the scored structures: {p}"
+  fr: "Probabilité sur les structures évaluées : {p}"
+studio.hours:
+  en: "{n} hours"
+  fr: "{n} heures"
+studio.days:
+  en: "{n} days"
+  fr: "{n} jours"
+studio.months:
+  en: "{n} months"
+  fr: "{n} mois"
+studio.years:
+  en: "{n} years"
+  fr: "{n} ans"
+studio.components:
+  en: "The components, one by one"
+  fr: "Les composantes, une par une"
+studio.extrapolation:
+  en: "Beyond the data:"
+  fr: "Au-delà des données :"
+studio.varExplained:
+  en: "Variance explained"
+  fr: "Variance expliquée"
+studio.maeChange:
+  en: "Change in held-out error"
+  fr: "Variation de l'erreur hors échantillon"
+studio.checks:
+  en: "Checks:"
+  fr: "Vérifications :"
+studio.checkBad:
+  en: "The data disagree with this component on this statistic (p < 0.05)."
+  fr: "Les données contredisent cette composante sur cette statistique (p < 0,05)."
+studio.checkGood:
+  en: "No disagreement on this statistic."
+  fr: "Pas de désaccord sur cette statistique."
+studio.probabilities:
+  en: "How sure is it?"
+  fr: "Quelle certitude ?"
+studio.probHint:
+  en: "Every structure the search scored votes, weighted by how well it explains the data for its size."
+  fr: "Chaque structure évaluée vote, pondérée par la qualité de son explication pour sa taille."
+studio.pPeriodic:
+  en: "A cycle"
+  fr: "Un cycle"
+studio.pLinear:
+  en: "A straight trend"
+  fr: "Une tendance droite"
+studio.pSmooth:
+  en: "A smooth trend"
+  fr: "Une tendance lisse"
+studio.pChange:
+  en: "A change of regime"
+  fr: "Un changement de régime"
+studio.bicTitle:
+  en: "Best score at each level"
+  fr: "Meilleur score à chaque niveau"
+studio.bicHint:
+  en: "Bayesian information criterion: ↓ lower is better."
+  fr: "Critère d'information bayésien : ↓ plus bas, c'est mieux."
+studio.formula:
+  en: "The model as a formula"
+  fr: "Le modèle en formule"
+studio.copyLatex:
+  en: "Copy LaTeX"
+  fr: "Copier le LaTeX"
+studio.noFormula:
+  en: "No formula for this model."
+  fr: "Pas de formule pour ce modèle."
+studio.footer:
+  en: "Served from this machine only: your data never leave it."
+  fr: "Servi depuis cette machine seulement : vos données ne la quittent jamais."

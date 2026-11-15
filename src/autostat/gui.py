@@ -1,7 +1,8 @@
-"""Local GUI for autostat: the command line as a web form that runs.
+"""Local GUI for autostat: the studio with the command line as a web form.
 
 What this module does
-    It generates the form page from the Click command with
+    The root page is the studio (:mod:`autostat.studio`). At ``/form``,
+    it generates the form page from the Click command with
     ``sprezzature-cli-gui`` (one field per option, defaults filled in, a
     "Build command" button), adds a run panel (``static/run.js``) then
     serves both from a small FastAPI host on 127.0.0.1. "Run on this
@@ -219,9 +220,9 @@ def create_gui_app() -> FastAPI:
     # Generating the page compiles its stylesheet: once per host, not per visit.
     built: list[str] = []
 
-    @host.get("/", response_class=HTMLResponse)
+    @host.get("/form", response_class=HTMLResponse)
     def index() -> str:
-        """Serve the form page.
+        """Serve the form page, the command line's options in full.
 
         Returns
         -------
@@ -312,6 +313,10 @@ def create_gui_app() -> FastAPI:
             raise HTTPException(404, "no such file")
         return FileResponse(runs[run_id][0] / name)
 
+    # The studio owns the root page; the form stays at /form.
+    from .studio import add_routes
+
+    add_routes(host)
     return host
 
 

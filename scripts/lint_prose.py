@@ -41,7 +41,7 @@ SUFFIXES = {".md", ".py", ".yml", ".yaml", ".toml", ".cff", ".txt"}
 
 #: Verbatim copies of other people's text.
 VERBATIM = {"LICENSE-ORIGINAL", "CODING.md"}
-VERBATIM_DIRS = ("src/autostat/reference/",)
+VERBATIM_DIRS = ("src/autostat/reference/", "src/autostat/static/fonts/")
 
 RULES: dict[str, re.Pattern[str]] = {
     "em or en dash": re.compile("[" + chr(0x2013) + chr(0x2014) + "]"),
