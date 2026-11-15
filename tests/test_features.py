@@ -280,3 +280,31 @@ def test_two_very_long_lengthscales_merge_without_a_domain_error():
     merged = product.collapse_multiplicative_idempotency()
     (se,) = [merged] if isinstance(merged, ff.SqExpKernel) else merged.operands
     assert se.lengthscale == pytest.approx(400.0 - 0.5 * math.log(2))
+
+
+def test_added_guided_starts_keep_every_blind_start():
+    """With ``hint_starts="add"`` the blind starts stay; guided ones come on top.
+
+    Nine blind starts plus five that all begin at the hinted period, so the
+    context never takes exploration away from the rest of the series.
+    """
+    import numpy as np
+
+    from autostat import Experiment
+    from autostat.model import GPModel
+    from autostat.search import _restarts, data_shape
+
+    t = np.linspace(2000, 2010, 50)
+    y = np.sin(2 * np.pi * t)
+    model = GPModel(ff.PeriodicKernel(0), ndata=50)
+    exp = Experiment(period_hints=[0.25], hint_starts="add")
+    copies = _restarts(
+        [model], exp, data_shape(t[:, None], y, exp), np.random.default_rng(0)
+    )
+    periods = [math.exp(m.kernel.period) for m in copies]
+    assert len(copies) == 9 + 5
+    assert all(abs(p - 0.25) < 0.05 for p in periods[9:])
+    with pytest.raises(ValueError, match="hint_starts"):
+        _restarts(
+            [model], Experiment(period_hints=[0.25], hint_starts="half"), {}, None
+        )

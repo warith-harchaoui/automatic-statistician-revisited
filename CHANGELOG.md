@@ -17,6 +17,11 @@
   against the model's own counterfactual.
 - `doc/research/context_features.md`: a literature review of
   context-conditioned time-series features.
+- `Experiment(hint_starts="add")` keeps the `n_rand` blind starts and adds
+  `ceil(n_rand / 2)` starts that all begin at a hint, so the context no
+  longer takes exploration away; `"replace"` (the default) keeps the
+  previous behaviour. Written first in the vendored copy of the Ralph Loops
+  forecasting project.
 - With known event dates, the search also proposes each kept model plus a
   level shift `CP(Zero, Const)`, at every level and once more after the
   last one. On the synthetic jump family the jump is found 5 times out of

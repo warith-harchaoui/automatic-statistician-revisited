@@ -131,6 +131,12 @@ class Experiment:
         each kept model plus a level shift (see :func:`_level_shifts`), as
         does one last stage after the levels.
         Empty changes nothing.
+    hint_starts : {"replace", "add"}
+        ``"replace"`` (the default) takes the hinted starts out of the
+        ``n_rand`` blind ones, half each. ``"add"`` keeps the ``n_rand``
+        blind starts as without hints and adds ``ceil(n_rand / 2)`` starts
+        that all begin at a hint, so the context never takes exploration
+        away from the rest of the series.
     """
 
     max_depth: int = 10
@@ -158,6 +164,7 @@ class Experiment:
     likelihood_noise: bool = False
     period_hints: list[float] = field(default_factory=list)
     location_hints: list[float] = field(default_factory=list)
+    hint_starts: str = "replace"
 
     @classmethod
     def abcd_2014(cls, **overrides: Any) -> Experiment:
@@ -400,7 +407,7 @@ def _restarts(
     models : list of GPModel
         Candidates; fitted parameters stay as they are.
     exp : Experiment
-        Supplies ``n_rand`` and ``sd``.
+        Supplies ``n_rand``, ``sd`` and ``hint_starts``.
     shape : dict
         Data summary.
     rng : numpy.random.Generator
@@ -409,13 +416,28 @@ def _restarts(
     Returns
     -------
     list of GPModel
-        ``n_rand`` copies per input model.
+        ``n_rand`` copies per input model, plus ``ceil(n_rand / 2)`` copies
+        started at the hints when ``hint_starts`` is ``"add"``.
+
+    Raises
+    ------
+    ValueError
+        When ``hint_starts`` is neither ``"replace"`` nor ``"add"``.
     """
+    hinted = shape.get("period_hints") or shape.get("location_hints")
+    if exp.hint_starts == "add" and hinted:
+        blind = {**shape, "period_hints": [], "location_hints": []}
+        guided = {**shape, "hint_share": 1.0}
+        plan = [blind] * exp.n_rand + [guided] * math.ceil(exp.n_rand / 2)
+    elif exp.hint_starts in ("add", "replace"):
+        plan = [shape] * exp.n_rand
+    else:
+        raise ValueError(f"unknown hint_starts {exp.hint_starts!r}")
     out = []
     for model in models:
-        for _ in range(exp.n_rand):
+        for start in plan:
             m = model.copy()
-            m.kernel.initialise_params(rng, exp.sd, shape)
+            m.kernel.initialise_params(rng, exp.sd, start)
             out.append(m)
     return out
 
