@@ -111,6 +111,17 @@ EXIT_INVALID = 2
     is_flag=True,
     help="Look for a formula for each smooth component with PySR (optional extra).",
 )
+@click.option(
+    "--context",
+    "context_path",
+    type=click.Path(path_type=Path),
+    help="YAML file of what the business knows: expected cycles, dated events.",
+)
+@click.option(
+    "--propose",
+    metavar="MODEL",
+    help="Local Ollama model that proposes structures at every level (BIC decides).",
+)
 @click.option("--no-check", is_flag=True, help="Skip the model-checking section.")
 @click.option(
     "--json", "as_json", is_flag=True, help="Print one JSON object instead of text."
@@ -130,6 +141,8 @@ def command(
     report_format: str,
     pdf: bool,
     symbolic: bool,
+    context_path: Path | None,
+    propose: str | None,
     no_check: bool,
     as_json: bool,
 ) -> int:
@@ -163,6 +176,10 @@ def command(
         Compile ``report.pdf``.
     symbolic : bool
         Look for formulas for smooth components with PySR.
+    context_path : pathlib.Path or None
+        YAML context file.
+    propose : str or None
+        Ollama model proposing structures.
     no_check : bool
         Skip the model checks.
     as_json : bool
@@ -175,6 +192,11 @@ def command(
     """
     logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stderr)
     try:
+        context = None
+        if context_path is not None:
+            from .context import Context
+
+            context = Context.from_yaml(context_path)
         outcome = analyse_file(
             path,
             time=time,
@@ -191,6 +213,8 @@ def command(
             check=not no_check,
             report_format=report_format,
             pdf=pdf,
+            context=context,
+            propose=propose,
         )
     except (OSError, ValueError) as error:
         LOGGER.error("autostat: %s", error)

@@ -144,3 +144,113 @@ def test_importing_the_library_loads_no_surface():
     )
     done = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
     assert done.stdout.strip() == "[]", done.stderr
+
+
+def test_a_missing_context_file_returns_the_invalid_input_status(tmp_path):
+    """A --context path that does not exist is invalid input, not a crash.
+
+    Parameters
+    ----------
+    tmp_path : pathlib.Path
+        Pytest's temporary directory.
+    """
+    path = tmp_path / "s.csv"
+    pd.DataFrame({"t": np.arange(10), "y": np.arange(10.0)}).to_csv(path, index=False)
+    status = main([str(path), "--time", "t", "--context", str(tmp_path / "no.yaml")])
+    assert status == EXIT_INVALID
+
+
+def test_the_context_seeds_the_search_starts():
+    """The expected periods and event dates reach the search settings."""
+    from autostat.context import Context
+    from autostat.service import experiment_for
+
+    context = Context.from_dict(
+        {
+            "cycles": [{"name": "yearly", "period": "1y"}],
+            "events": [{"name": "reform", "at": 2005.0}],
+        }
+    )
+    exp = experiment_for("abcd-2014", 2, hints=context.search_hints())
+    assert (exp.period_hints, exp.location_hints) == ([1.0], [2005.0])
+
+
+@pytest.mark.slow
+def test_a_language_model_is_asked_at_every_level(tmp_path, capsys, monkeypatch):
+    """--propose asks the named model once per level, told the context.
+
+    Parameters
+    ----------
+    tmp_path : pathlib.Path
+        Pytest's temporary directory.
+    capsys : pytest.CaptureFixture
+        Pytest's capture of standard output and error.
+    monkeypatch : pytest.MonkeyPatch
+        Replaces the Ollama client.
+    """
+    import autostat.propose
+
+    asked = []
+
+    def fake(model: str):
+        """Stand in for :func:`autostat.propose.ollama`.
+
+        Parameters
+        ----------
+        model : str
+            The model named on the command line.
+
+        Returns
+        -------
+        callable
+            Records each prompt and proposes one structure.
+        """
+
+        def ask(prompt: str) -> str:
+            """Record the prompt and answer.
+
+            Parameters
+            ----------
+            prompt : str
+                What the search asks.
+
+            Returns
+            -------
+            str
+                One structure.
+            """
+            asked.append((model, prompt))
+            return "Per x SE + WN"
+
+        return ask
+
+    monkeypatch.setattr(autostat.propose, "ollama", fake)
+    path = tmp_path / "s.csv"
+    t = np.arange(120)
+    pd.DataFrame({"t": t, "y": np.sin(2 * np.pi * t / 12)}).to_csv(path, index=False)
+    context = tmp_path / "context.yaml"
+    context.write_text("cycles:\n  - name: yearly\n    period: 12\n")
+    status = main(
+        [
+            str(path),
+            "--time",
+            "t",
+            "--max-depth",
+            "2",
+            "--n-jobs",
+            "1",
+            "--no-check",
+            "--no-pdf",
+            "--json",
+            "--out",
+            str(tmp_path / "out"),
+            "--context",
+            str(context),
+            "--propose",
+            "some-model",
+        ]
+    )
+    capsys.readouterr()
+    assert status == 0
+    assert [m for m, _ in asked] == ["some-model", "some-model"]
+    assert "'yearly'" in asked[0][1]

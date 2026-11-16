@@ -35,6 +35,7 @@ Warith Harchaoui <warithmetics@deraison.ai>
 from __future__ import annotations
 
 import json
+import logging
 import re
 import urllib.request
 from collections.abc import Callable
@@ -46,6 +47,8 @@ from . import kernels as ff
 if TYPE_CHECKING:
     from .context import Context
     from .model import GPModel
+
+LOGGER = logging.getLogger("autostat.propose")
 
 #: Names a structure may use, mapped to the base kernel they stand for.
 NAMES: dict[str, str] = {
@@ -325,6 +328,7 @@ class Proposer:
             answer = self.ask(prompt(shape, models, self.context, self.count))
         except Exception as error:
             self.history.append({"level": depth, "error": str(error)[:300]})
+            LOGGER.warning("level %d: the language model failed: %s", depth, error)
             return []
         kernels, rejected = [], []
         for line in answer.splitlines():
@@ -336,6 +340,11 @@ class Proposer:
             except ValueError:
                 rejected.append(line)
         kernels = ff.remove_duplicates(kernels)[: self.count]
+        LOGGER.info(
+            "level %d: the language model proposed %s",
+            depth,
+            ", ".join(k.structure_key() for k in kernels) or "nothing usable",
+        )
         self.history.append(
             {
                 "level": depth,

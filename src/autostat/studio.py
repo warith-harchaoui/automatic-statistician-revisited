@@ -38,6 +38,7 @@ from __future__ import annotations
 import io
 import logging
 import math
+import re
 import threading
 import time
 import uuid
@@ -55,6 +56,7 @@ from .context import Context
 from .describe import describe
 from .features import _slug, features, structure_probabilities
 from .model import posterior
+from .propose import Proposer, ollama
 from .search import Experiment, SearchResult, search
 
 #: Largest table the studio accepts, in bytes.
@@ -222,7 +224,8 @@ def run_request(fields: dict[str, Any]) -> dict[str, Any]:
         2014 series), ``time``, ``value``, ``name``, ``context`` (as
         :meth:`autostat.context.Context.from_dict` reads it), ``preset``
         (``abcd-2014`` or ``cks-2013``), ``max_depth``, ``max_points``,
-        ``n_jobs``, ``seed`` and ``check``.
+        ``n_jobs``, ``seed``, ``check`` and ``propose`` (an Ollama model
+        name, or empty for the grammar alone).
 
     Returns
     -------
@@ -236,7 +239,7 @@ def run_request(fields: dict[str, Any]) -> dict[str, Any]:
     """
     known = {
         "dataset", "example", "time", "value", "name", "context", "preset",
-        "max_depth", "max_points", "n_jobs", "seed", "check",
+        "max_depth", "max_points", "n_jobs", "seed", "check", "propose",
     }  # fmt: skip
     unknown = set(fields) - known
     if unknown:
@@ -278,6 +281,9 @@ def run_request(fields: dict[str, Any]) -> dict[str, Any]:
 
     context = fields.get("context") or {}
     Context.from_dict(context)  # fails here, not in the background thread
+    propose = str(fields.get("propose") or "").strip()
+    if propose and not re.fullmatch(r"[A-Za-z0-9._:/-]{1,100}", propose):
+        raise ValueError(f"not an Ollama model name: {propose[:100]!r}")
     return {
         "dataset": fields.get("dataset"),
         "example": fields.get("example"),
@@ -291,6 +297,7 @@ def run_request(fields: dict[str, Any]) -> dict[str, Any]:
         "n_jobs": bounded("n_jobs", DEFAULT_JOBS, 1, 64),
         "seed": bounded("seed", 1, 0, 2**31 - 1),
         "check": bool(fields.get("check", True)),
+        "propose": propose or None,
     }
 
 
@@ -640,6 +647,7 @@ class Studio:
                 random_seed=r["seed"],
                 **context.search_hints(),
             )
+            proposer = Proposer(ollama(r["propose"]), context) if r["propose"] else None
             with self.lock:
                 run.status = "searching"
                 run.started = time.time()
@@ -647,12 +655,19 @@ class Studio:
                 previous = logger.level
                 logger.setLevel(logging.INFO)
                 try:
-                    result = search(x, y, exp)
+                    result = search(x, y, exp, propose=proposer)
                 finally:
                     logger.removeHandler(handler)
                     logger.setLevel(previous)
                 run.status = "describing"
                 run.result = payload(result, x, y, unit, r["name"], context, r["check"])
+                if proposer is not None:
+                    best = result.best.kernel.simplified().structure_key()
+                    proposed = {
+                        k for h in proposer.history for k in h.get("proposed", [])
+                    }
+                    run.result["proposals"] = proposer.history
+                    run.result["best_was_proposed"] = best in proposed
             run.status = "done"
         except Exception as error:  # the page shows it rather than hanging
             run.error = f"{type(error).__name__}: {error}"

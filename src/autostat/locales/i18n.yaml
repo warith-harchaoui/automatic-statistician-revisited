@@ -327,6 +327,30 @@ studio.copyLatex:
 studio.noFormula:
   en: "No formula for this model."
   fr: "Pas de formule pour ce modèle."
+studio.propose:
+  en: "Language model (optional)"
+  fr: "Modèle de langage (facultatif)"
+studio.proposeHint:
+  en: "A model on this machine's Ollama suggests structures at every level, told what you know. The score still decides."
+  fr: "Un modèle de l'Ollama de cette machine propose des structures à chaque niveau, en sachant ce que vous savez. Le score décide toujours."
+studio.proposals:
+  en: "What the language model proposed"
+  fr: "Ce que le modèle de langage a proposé"
+studio.proposedKept:
+  en: "The structure kept was among its proposals."
+  fr: "La structure retenue figurait parmi ses propositions."
+studio.proposedNotKept:
+  en: "The structure kept came from the grammar, not from its proposals."
+  fr: "La structure retenue vient de la grammaire, pas de ses propositions."
+studio.proposalLevel:
+  en: "Level {level}:"
+  fr: "Niveau {level} :"
+studio.proposalNone:
+  en: "nothing usable"
+  fr: "rien d'utilisable"
+studio.proposalError:
+  en: "no answer ({error})"
+  fr: "pas de réponse ({error})"
 studio.footer:
   en: "Served from this machine only: your data never leave it."
   fr: "Servi depuis cette machine seulement : vos données ne la quittent jamais."

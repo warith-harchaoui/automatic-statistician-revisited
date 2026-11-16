@@ -2049,12 +2049,14 @@ def plot_bic(path: SearchPath, out: Path, suffix: str) -> str:
     beyond = sum(1 for s in path.steps if s.level > settled.level)
     # Levels within the tolerance of the lowest BIC are drawn at it, so the
     # mark falls where BIC stopped falling rather than on a later refit that
-    # gained a few hundredths.
+    # gained a few hundredths. The curve is drawn as the excess over the
+    # lowest BIC. A BIC is often negative; the loss-curve figure keeps its
+    # axis at zero or above, which left it no ticks to draw.
     rows = [
         {
             "epoch": s.level,
             "split": "BIC",
-            "loss": floor if s.bic <= floor + path.tolerance else s.bic,
+            "loss": max(s.bic - floor, 0.0) if s.bic > floor + path.tolerance else 0.0,
         }
         for s in path.steps
     ]
@@ -2066,11 +2068,12 @@ def plot_bic(path: SearchPath, out: Path, suffix: str) -> str:
             out=str(out / fname),
             title="BIC per search level",
             subtitle=(
-                "Lower is better. Shaded: levels searched after BIC stopped falling "
-                f"(within {path.tolerance:g} of its lowest, drawn at it)."
+                f"Excess over the lowest BIC ({floor:.1f}); lower is better. Shaded: "
+                "levels searched after BIC stopped falling "
+                f"(within {path.tolerance:g} of its lowest, drawn at 0)."
             ),
             x_label="Search level",
-            y_label="BIC of the level's best structure",
+            y_label="BIC above the lowest",
             best_label=f"BIC settles: level {settled.level}",
             wasted_label=f"{beyond} level(s) past it"
             if beyond

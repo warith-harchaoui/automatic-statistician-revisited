@@ -452,6 +452,7 @@ async function startRun() {
     n_jobs: Number($("jobs").value),
     seed: Number($("seed").value),
     check: $("check").checked,
+    propose: $("propose").value.trim(),
   };
   if (state.source === "example") fields.example = $("example").value;
   else Object.assign(fields, { dataset: state.dataset.id, time: $("time").value, value: $("value").value });
@@ -608,6 +609,28 @@ function showResult(r) {
     label: t("studio.bicTitle"),
   });
   $("formula").textContent = r.formula ? [r.formula.model, ...r.formula.laws].join("\n") : t("studio.noFormula");
+  showProposals(r);
+}
+
+/**
+ * List what the language model proposed at each level, and whether the kept
+ * structure was among its proposals.
+ *
+ * @param {Object} r The run's result.
+ */
+function showProposals(r) {
+  const history = r.proposals || [];
+  $("proposals").hidden = history.length === 0;
+  if (!history.length) return;
+  $("proposals-verdict").textContent = t(r.best_was_proposed ? "studio.proposedKept" : "studio.proposedNotKept");
+  $("proposals-list").replaceChildren(
+    ...history.map((h) => {
+      const item = document.createElement("li");
+      const what = h.error ? t("studio.proposalError", { error: h.error }) : (h.proposed.join(" · ") || t("studio.proposalNone"));
+      item.textContent = `${t("studio.proposalLevel", { level: h.level + 1 })} ${what}`;
+      return item;
+    }),
+  );
 }
 
 /**
