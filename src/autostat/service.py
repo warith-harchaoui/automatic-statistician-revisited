@@ -91,7 +91,12 @@ class Outcome:
 
 
 def experiment_for(
-    preset: str, max_depth: int, n_jobs: int = -1, seed: int = 1, patience: int = 0
+    preset: str,
+    max_depth: int,
+    n_jobs: int = -1,
+    seed: int = 1,
+    patience: int = 0,
+    hints: dict[str, Any] | None = None,
 ) -> Experiment:
     """Build the search settings a surface asked for.
 
@@ -108,6 +113,9 @@ def experiment_for(
     patience : int, optional
         Stop after this many levels without a BIC fall (0: search all
         ``max_depth`` levels, as published).
+    hints : dict, optional
+        Expected periods and event dates, from
+        :meth:`autostat.context.Context.search_hints`.
 
     Returns
     -------
@@ -133,7 +141,7 @@ def experiment_for(
     }
     if patience:
         settings.update(stopping_criteria=["no_improvement"], patience=patience)
-    return factory(**settings)
+    return factory(**settings, **(hints or {}))
 
 
 def check_format(report_format: str) -> None:
@@ -312,6 +320,8 @@ def analyse_series(
     pdf: bool = True,
     patience: int = 0,
     symbolic: bool = False,
+    context: Any = None,
+    propose: str | None = None,
 ) -> Outcome:
     """Search one series, describe the winner and write its report.
 
@@ -344,6 +354,12 @@ def analyse_series(
         ``max_depth`` levels.
     symbolic : bool, optional
         Look for a formula for each smooth component with PySR.
+    context : autostat.context.Context, optional
+        What the business knows: its expected periods and event dates seed
+        the search's starts; a language model, when asked for, is told.
+    propose : str, optional
+        An Ollama model (e.g. ``"gemma3:12b"``) that proposes structures at
+        every level, beside the grammar; BIC decides.
 
     Returns
     -------
@@ -351,7 +367,13 @@ def analyse_series(
         The structure, its score, the component summaries and the files.
     """
     check_format(report_format)
-    experiment = experiment_for(preset, max_depth, n_jobs, seed, patience)
+    hints = context.search_hints() if context is not None else None
+    experiment = experiment_for(preset, max_depth, n_jobs, seed, patience, hints)
+    proposer = None
+    if propose:
+        from .propose import Proposer, ollama
+
+        proposer = Proposer(ollama(propose), context)
     result, report = analyse(
         series,
         name,
@@ -362,6 +384,7 @@ def analyse_series(
         report_format=report_format,
         pdf=pdf,
         symbolic=symbolic,
+        propose=proposer,
     )
     return _outcome(result.best, report, None if out_dir is None else Path(out_dir))
 

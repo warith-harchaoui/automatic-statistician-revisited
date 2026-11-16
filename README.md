@@ -342,12 +342,18 @@ autostat data.csv --time date --value y --preset cks-2013 --max-depth 4
 autostat data.csv --time date --value y --max-depth 20 --patience 2
 autostat data.csv --time date --value y --symbolic --out report/
 autostat data.csv --time date --value y --no-check --no-pdf --json
+autostat data.csv --time date --value y --context context.yaml
+autostat data.csv --time date --value y --context context.yaml --propose gemma3:12b
 ```
 
 The published configuration searches `--max-depth` levels and no fewer.
 `--patience 2` stops once BIC has not fallen for two levels in a row.
 `--symbolic` asks PySR for a formula for each smooth component, about a
 minute each.
+`--context` reads what the business knows (expected cycles, dated events)
+from the YAML the studio downloads; half the random starts then begin near
+those periods and dates. `--propose` names a local Ollama model that
+suggests structures at every level, told the context; BIC decides.
 
 The Python interface exposes each stage: `prepare` (dates to decimal years,
 long series binned), `search` with an `Experiment`, `describe` for the report,

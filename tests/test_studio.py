@@ -209,3 +209,16 @@ def test_each_sentence_goes_with_its_own_component():
             assert "Per" in part["structure"]
         if "noise" in part["summary"].lower():
             assert "WN" in part["structure"]
+
+
+def test_a_language_model_name_is_checked_before_the_run():
+    """An Ollama model name passes; anything that is not one is refused."""
+    from autostat.studio import run_request
+
+    assert (
+        run_request({"example": "01-airline", "propose": "gemma3:12b"})["propose"]
+        == "gemma3:12b"
+    )
+    assert run_request({"example": "01-airline"})["propose"] is None
+    with pytest.raises(ValueError, match="Ollama"):
+        run_request({"example": "01-airline", "propose": "x; rm -rf /"})

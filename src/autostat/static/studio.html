@@ -134,6 +134,11 @@
               <input id="seed" type="number" min="0" value="1" class="field">
             </div>
           </div>
+          <div class="mt-2">
+            <label for="propose" class="field-label" data-i18n="studio.propose">Language model (optional)</label>
+            <input id="propose" type="text" placeholder="gemma3:12b" autocomplete="off" spellcheck="false" class="field">
+            <p class="hint" data-i18n="studio.proposeHint">A model on this machine's Ollama suggests structures at every level, told what you know. The score still decides.</p>
+          </div>
           <label class="mt-2 flex min-h-11 items-center gap-3">
             <input id="check" type="checkbox" checked class="h-5 w-5 accent-brand-blue">
             <span data-i18n="studio.check">Check each component against the data</span>
@@ -213,6 +218,12 @@
             <button type="button" id="copy-formula" class="chip ml-auto" data-i18n="studio.copyLatex">Copy LaTeX</button>
           </div>
           <pre id="formula" class="mt-3 overflow-x-auto whitespace-pre-wrap break-words rounded-xl bg-fill p-3 font-mono text-xs dark:bg-fill-dark"></pre>
+        </section>
+
+        <section id="proposals" aria-labelledby="proposals-title" class="rounded-2xl border border-line bg-card p-5 dark:border-line-dark dark:bg-card-dark" hidden>
+          <h2 id="proposals-title" class="text-base font-semibold" data-i18n="studio.proposals">What the language model proposed</h2>
+          <p id="proposals-verdict" class="hint"></p>
+          <ol id="proposals-list" class="mt-3 space-y-1 font-mono text-xs"></ol>
         </section>
       </div>
 

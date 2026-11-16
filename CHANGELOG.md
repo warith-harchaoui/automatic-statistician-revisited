@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- The studio has a "Language model" field (an Ollama model name, checked
+  before the run) and a card listing what the model proposed at each level,
+  with whether the kept structure was among its proposals.
+- Fixed: a report whose BIC is negative crashed while drawing the BIC per
+  level, because the loss-curve figure keeps its axis at zero or above. The
+  curve now shows the excess over the lowest BIC.
+- The command line takes the business context (`--context context.yaml`)
+  and a language model's proposals (`--propose gemma3:12b`); both reach the
+  search through `service.analyse_series` and `analyse(..., propose=...)`.
+  The proposals are logged level by level.
 - `autostat.propose`: `parse` reads a structure written as text (the
   inverse of `structure_key`, checked on every 2014 level winner);
   `Proposer` asks a language model for structures at every level, from the

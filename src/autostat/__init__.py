@@ -37,6 +37,7 @@ in ``LICENSE-ORIGINAL``.
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -137,6 +138,7 @@ def analyse(
     report_format: str = "markdown",
     pdf: bool = True,
     symbolic: bool = False,
+    propose: Any = None,
 ) -> tuple[SearchResult, Report]:
     """Search, describe, check and optionally write a report for one series.
 
@@ -161,6 +163,9 @@ def analyse(
         Compile ``report.pdf``.
     symbolic : bool, optional
         Look for a formula for each smooth component with PySR.
+    propose : callable, optional
+        Structures to fit beside the grammar at every level, e.g. a
+        :class:`autostat.propose.Proposer`; see :func:`search`.
 
     Returns
     -------
@@ -168,7 +173,7 @@ def analyse(
         The search and the description of its winner.
     """
     x, y, unit = prepare(series, max_points)
-    result = search(x, y, experiment)
+    result = search(x, y, experiment, propose=propose)
     path = search_path(
         result.best_per_level(),
         x,
