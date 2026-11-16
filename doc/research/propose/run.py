@@ -1,4 +1,4 @@
-"""Do a language model's proposals help the search, and can a wrong context mislead them?
+"""Measure whether proposals from a language model help the search and resist a wrong context.
 
 What this script does
     It reuses the two synthetic families of ``doc/research/context_search``
