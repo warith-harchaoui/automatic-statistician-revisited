@@ -175,6 +175,44 @@ def test_the_context_seeds_the_search_starts():
     assert (exp.period_hints, exp.location_hints) == ([1.0], [2005.0])
 
 
+def test_spectral_asks_for_periodogram_starts(tmp_path, monkeypatch):
+    """--spectral N reaches the search settings; the presets keep 0.
+
+    Parameters
+    ----------
+    tmp_path : pathlib.Path
+        Pytest's temporary directory.
+    monkeypatch : pytest.MonkeyPatch
+        Replaces the analysis with a recorder.
+    """
+    import autostat.service
+
+    seen = []
+
+    def record(series, name, out_dir, experiment, *args, **kwargs):
+        """Keep the settings and stop before any search.
+
+        Parameters
+        ----------
+        series, name, out_dir, experiment, *args, **kwargs
+            What :func:`autostat.service.analyse_series` passes.
+
+        Raises
+        ------
+        ValueError
+            Always, once the settings are kept.
+        """
+        seen.append(experiment.spectral_starts)
+        raise ValueError("recorded")
+
+    monkeypatch.setattr(autostat.service, "analyse", record)
+    path = tmp_path / "data.csv"
+    pd.DataFrame({"t": np.arange(24.0), "y": np.arange(24.0)}).to_csv(path, index=False)
+    for extra in ([], ["--spectral", "3"]):
+        assert main([str(path), "--time", "t", *extra]) == EXIT_INVALID
+    assert seen == [0, 3]
+
+
 @pytest.mark.slow
 def test_a_language_model_is_asked_at_every_level(tmp_path, capsys, monkeypatch):
     """--propose asks the named model once per level, told the context.

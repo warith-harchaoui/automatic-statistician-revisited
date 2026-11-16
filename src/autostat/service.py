@@ -322,6 +322,7 @@ def analyse_series(
     symbolic: bool = False,
     context: Any = None,
     propose: str | None = None,
+    spectral: int = 0,
 ) -> Outcome:
     """Search one series, describe the winner and write its report.
 
@@ -360,6 +361,9 @@ def analyse_series(
     propose : str, optional
         An Ollama model (e.g. ``"gemma3:12b"``) that proposes structures at
         every level, beside the grammar; BIC decides.
+    spectral : int, optional
+        Start half the periods at the data's ``spectral`` highest
+        periodogram peaks (``Experiment.spectral_starts``); 0 for none.
 
     Returns
     -------
@@ -367,7 +371,9 @@ def analyse_series(
         The structure, its score, the component summaries and the files.
     """
     check_format(report_format)
-    hints = context.search_hints() if context is not None else None
+    hints = context.search_hints() if context is not None else {}
+    if spectral:
+        hints = {**hints, "spectral_starts": spectral}
     experiment = experiment_for(preset, max_depth, n_jobs, seed, patience, hints)
     proposer = None
     if propose:

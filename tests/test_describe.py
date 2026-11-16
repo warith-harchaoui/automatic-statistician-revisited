@@ -206,3 +206,28 @@ def test_reports_are_signed_by_the_method_not_the_project_author(airline_report)
     assert REPORT_AUTHOR == "Some Math empowered by some AI guided by some researchers"
     assert airline_report.markdown().startswith(f'---\nauthor: "{REPORT_AUTHOR}"\n---')
     assert rf"\author{{{REPORT_AUTHOR}}}" in airline_report.latex()
+
+
+def test_a_product_of_very_long_lengthscales_is_described():
+    """Two huge SE lengthscales combine on the log scale, not into log(0)."""
+    import math
+
+    from autostat import kernels as ff
+    from autostat.describe import _census
+
+    huge = _census(
+        [
+            ff.SqExpKernel(0, lengthscale=400.0, sf=0.0),
+            ff.SqExpKernel(0, lengthscale=500.0, sf=0.0),
+        ]
+    )
+    unit = _census(
+        [
+            ff.SqExpKernel(0, lengthscale=0.0, sf=0.0),
+            ff.SqExpKernel(0, lengthscale=0.0, sf=0.0),
+        ]
+    )
+    assert math.log(huge.lengthscale) == pytest.approx(
+        400.0 - 0.5 * math.log(1 + math.exp(-200))
+    )
+    assert unit.lengthscale == pytest.approx(1 / math.sqrt(2))

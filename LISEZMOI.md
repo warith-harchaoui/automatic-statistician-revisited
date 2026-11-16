@@ -237,6 +237,15 @@ s'effondrent jamais. Eureqa se trompe 590 fois plus que la meilleure méthode
 sur une série. PySR, sur la même découpe, reste borné sur cette série (4,56).
 Le tableau se trouve dans [benchmark/RESULTS.md](benchmark/RESULTS.md).
 
+Treize séries ne classent vingt-quatre méthodes que grossièrement. Un
+bootstrap sur les séries ne sépare pas 15 d'entre elles de la première,
+Chronos-2&nbsp;: les recherches de structure de 2014 et de 2013, les modèles
+classiques, les réseaux profonds et tous les modèles de fondation sont dans ce
+groupe. La recherche publiée en 2013 arrive en tête dans 29&nbsp;% des
+tirages, plus souvent que toute autre méthode. Les modèles de fondation ont
+pu voir ces séries publiques pendant leur entraînement&nbsp;: leurs lignes
+sont donc une borne haute.
+
 ## La famille de l'Automatic Statistician
 
 Chaque projet que nous avons trouvé, des articles d'origine à leurs
@@ -267,6 +276,26 @@ Trois travaux voisins n'ont aucun code public que nous ayons trouvé&nbsp;:
   noyaux sur leurs graphiques (Lee et al., arXiv 2509.25946, 2025)&nbsp;;
 - la composition de noyaux à grande échelle (Kim et Teh, AISTATS 2018, arXiv
   1706.02524).
+
+Voisins plus récents, issus de la veille de novembre 2026
+([doc/research/watch-2026-11.md](doc/research/watch-2026-11.md), une
+quarantaine de références avec ce qu'il faut reprendre de chacune)&nbsp;:
+
+- Large Language Bayes, où un LLM propose des modèles ensuite moyennés selon
+  leur vraisemblance marginale (Domke, NeurIPS 2025, arXiv 2504.14025)&nbsp;;
+  c'est le geste que fait ce paquet avec des poids exp(-BIC/2) sur sa propre
+  grammaire&nbsp;;
+- AutoStan, un agent qui améliore des modèles Stan à partir de leurs
+  prévisions (Dürr, arXiv 2603.27766, 2026)&nbsp;;
+- TimeSeriesScientist (arXiv 2510.01538, 2025) et TimeCopilot (Garza et
+  Rosillo, arXiv 2509.00616, 2025), des agents qui analysent et prévoient des
+  séries en langue naturelle&nbsp;;
+- GenJAX, le successeur vectorisé de Gen, le système de programmation
+  probabiliste derrière AutoGP (POPL 2026).
+
+Pour autant que la veille l'ait trouvé, aucun d'eux ne fait entrer dans la
+recherche de structure une connaissance métier typée (événements datés,
+cycles attendus), ce que fait `autostat.context`.
 
 L'adresse automaticstatistician.com sert aujourd'hui un site sans rapport avec
 le projet. Le site d'origine, en ligne depuis juillet 2014, survit dans les
@@ -305,10 +334,29 @@ bien que les six vérifient leurs entrées et se comportent de la même manière
 |---|---|---|
 | Bibliothèque Python | `from autostat import analyse` | un carnet de notes, un autre programme |
 | Ligne de commande (Click) | `autostat data.csv ...` | un terminal, un script |
-| Interface graphique (sprezzature-cli-gui) | `autostat-gui` | un formulaire dans le navigateur, sur cette machine seulement |
+| Studio (page web locale) | `autostat-gui` | charger un fichier, dire ce que l'on sait, lire le résultat&nbsp;; sur cette machine seulement |
 | API HTTP (FastAPI) | `uvicorn autostat.api:app` | un autre programme, avec OpenAPI sur `/docs` |
 | Serveur MCP (FastAPI-MCP) | `autostat-mcp` | un hôte d'agents, au point d'accès `/mcp` |
 | Skill d'agent | [skills/autostat/SKILL.md](skills/autostat/SKILL.md) | Claude Code ou OpenCode, aiguillés par [TRIGGERS.md](TRIGGERS.md) |
+
+`autostat-gui` ouvre le studio sur `http://127.0.0.1:8765/`. Déposez un
+fichier CSV, TSV ou Parquet (ou choisissez l'une des treize séries de 2014),
+choisissez les colonnes du temps et de la valeur, puis, si vous les
+connaissez, les cycles attendus et les dates des événements qui ont pu
+déplacer la série. La recherche tourne par défaut sur deux processus et
+affiche chaque niveau dès qu'il se termine. Le résultat montre les données
+avec la moyenne du modèle, sa bande à 95&nbsp;% et son extrapolation&nbsp;;
+chaque composante avec ses phrases, son graphique et ses vérifications&nbsp;;
+le sort de chaque cycle et événement attendu&nbsp;; la probabilité d'un cycle,
+d'une tendance ou d'un changement de régime sur toutes les structures
+évaluées&nbsp;; le meilleur score par niveau&nbsp;; le modèle sous forme de
+formule. Dans les réglages avancés, un modèle de langue de l'Ollama local peut
+proposer des structures à chaque niveau&nbsp;; une carte dit ce qu'il a
+proposé et si la structure retenue en faisait partie. Le rapport (Markdown),
+les résultats (JSON) et le contexte (YAML, le format que lit
+`Context.from_yaml`) se téléchargent depuis la page. Rien n'est chargé depuis
+un autre site et rien ne quitte la machine. Le formulaire qui reprend toutes
+les options de la ligne de commande reste sur `/form`.
 
 La ligne de commande lit un fichier CSV ou Parquet&nbsp;:
 
@@ -319,17 +367,50 @@ autostat data.csv --time date --value y --preset cks-2013 --max-depth 4
 autostat data.csv --time date --value y --max-depth 20 --patience 2
 autostat data.csv --time date --value y --symbolic --out rapport/
 autostat data.csv --time date --value y --no-check --no-pdf --json
+autostat data.csv --time date --value y --context contexte.yaml
+autostat data.csv --time date --value y --context contexte.yaml --propose gemma3:12b
+autostat data.csv --time date --value y --spectral 3
 ```
 
 La configuration publiée cherche `--max-depth` niveaux, pas un de moins.
 `--patience 2` arrête la recherche quand le BIC n'a pas baissé deux niveaux de
 suite. `--symbolic` demande à PySR une formule pour chaque composante lisse,
-environ une minute chacune.
+environ une minute chacune. `--context` lit ce que sait le métier (cycles
+attendus, événements datés) dans le YAML que télécharge le studio&nbsp;; la
+moitié des départs aléatoires commence alors près de ces périodes et de ces
+dates. `--propose` nomme un modèle Ollama local qui suggère des structures à
+chaque niveau, en connaissant le contexte&nbsp;; le BIC tranche.
+`--spectral 3` fait partir la moitié des périodes des trois plus hauts pics
+du périodogramme des données&nbsp;: sur quarante séries tirées de la
+grammaire, la vraie période est retrouvée 9 fois sur 10 au lieu de 4
+([doc/research/recovery](doc/research/recovery/README.md)). Les
+préréglages ne l'activent pas, comme à la publication.
 
 L'interface Python expose chaque étape&nbsp;: `prepare` (dates en années
 décimales, longues séries regroupées par paquets), `search` avec une
 `Experiment`, `describe` pour le rapport, `fit` et `posterior` pour un modèle
-seul.
+seul. `mixture_posterior` prévoit avec toutes les structures évaluées par une
+recherche, chacune pondérée par `exp(-BIC / 2)`&nbsp;: sa bande s'élargit là où
+les structures divergent. Quand une structure prend tout le poids, comme
+souvent, c'est la prévision du meilleur modèle.
+
+`autostat.propose` laisse un modèle de langue suggérer des structures à chaque
+niveau, à partir de l'étendue de la série, du contexte métier et des
+meilleures structures trouvées&nbsp;:
+`search(x, y, exp, propose=Proposer(ollama("gemma3:12b"), contexte))`. Les
+propositions sont ajustées à côté des voisines de la grammaire et le BIC seul
+décide&nbsp;; un modèle qui répond mal, ou pas du tout, laisse la recherche
+telle quelle. `ollama` interroge un serveur local, si bien que rien ne quitte
+la machine. `parse` lit une structure écrite en texte, l'inverse de
+`structure_key`.
+
+`autostat.synthetic` fait tourner la grammaire dans l'autre sens&nbsp;: `draw`
+la parcourt au hasard jusqu'à une structure, lui donne des paramètres comme
+le font les départs de la recherche et tire une série de ce processus
+gaussien, rendue avec l'expression qui l'a produite. Il sert aux tests de
+retrouvaille (un cycle annuel tiré est retrouvé à 0,9998 an) et c'est l'a
+priori par composition de noyaux sur lequel s'entraînent KernelSynth (pour
+Chronos) et TempoPFN.
 
 L'API et le serveur MCP partagent une même application&nbsp;: `autostat-mcp`
 sert les routes HTTP et `/mcp` sur le port 8000. Les outils MCP s'appellent

@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- `doc/research/propose` measures gemma3:12b's proposals on two synthetic
+  families, 24 runs: on a level jump the grammar alone never finds it in
+  three levels, the proposals find it on 8 runs of 9 and lower BIC by up
+  to 77; on a quarterly cycle the effect is mixed. The model writes the
+  shape of a context, not its numbers, so a wrong context did little harm.
+- `Experiment.spectral_starts` and `--spectral N`: half the periodic starts
+  begin at the data's N highest Lomb-Scargle peaks. On the forty series of
+  `doc/research/recovery`, a true period is found within 5 % on 9 of 10
+  instead of 4, every cycle is found and none invented. The presets keep 0.
+- Fixed: torch's strong-Wolfe line search could raise `IndexError` when its
+  bracket collapsed, ending a search; the fit stops there instead. A report
+  on a product of two very long smooth terms crashed on `log(0)`; the
+  lengthscales are combined on the log scale.
 - The studio has a "Language model" field (an Ollama model name, checked
   before the run) and a card listing what the model proposed at each level,
   with whether the kept structure was among its proposals.
