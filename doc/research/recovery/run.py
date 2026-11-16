@@ -20,8 +20,10 @@ What this script does
     resumes; then the whole list.
 
 Usage
-    ``python doc/research/recovery/run.py results.json [series]``
-    ``series`` defaults to 40. Light settings: three levels, four random
+    ``python doc/research/recovery/run.py results.json [series] [spectral]``
+    ``series`` defaults to 40; ``spectral`` adds the three highest
+    periodogram peaks to the period starts (``Experiment.spectral_starts``),
+    with the same draws and seeds, for a paired comparison. Light settings: three levels, four random
     starts, 100 optimiser iterations, two worker processes.
 
 Author
@@ -150,6 +152,8 @@ def main() -> int:
     warnings.filterwarnings("ignore")
     count = int(sys.argv[2]) if len(sys.argv) > 2 else 40
     settings = {"max_depth": 3, "n_rand": 4, "iters": 100, "n_jobs": 2}
+    if "spectral" in sys.argv[3:]:
+        settings["spectral_starts"] = 3
     lines = Path(sys.argv[1]).with_suffix(".jsonl")
     rows = (
         [json.loads(line) for line in lines.read_text(encoding="utf-8").splitlines()]

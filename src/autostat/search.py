@@ -132,6 +132,10 @@ class Experiment:
         each kept model plus a level shift (see :func:`_level_shifts`), as
         does one last stage after the levels.
         Empty changes nothing.
+    spectral_starts : int
+        Add the periods of the data's ``spectral_starts`` highest
+        periodogram peaks (Lomb-Scargle, within the admissible range) to the
+        period hints. ``0`` (the published configurations) adds none.
     hint_starts : {"replace", "add"}
         ``"replace"`` (the default) takes the hinted starts out of the
         ``n_rand`` blind ones, half each. ``"add"`` keeps the ``n_rand``
@@ -165,6 +169,7 @@ class Experiment:
     likelihood_noise: bool = False
     period_hints: list[float] = field(default_factory=list)
     location_hints: list[float] = field(default_factory=list)
+    spectral_starts: int = 0
     hint_starts: str = "replace"
 
     @classmethod
@@ -333,6 +338,40 @@ def _min_abs_diff(values: np.ndarray) -> float:
     return float(diffs.min()) if diffs.size else 1.0
 
 
+def spectral_periods(
+    x: np.ndarray, y: np.ndarray, shortest: float, longest: float, count: int
+) -> list[float]:
+    """Find the periods of the highest peaks of the data's periodogram.
+
+    The Lomb-Scargle periodogram handles unevenly spaced inputs. It is
+    evaluated on a log-spaced grid of periods between the bounds the search
+    admits; its local maxima are ranked by power.
+
+    Parameters
+    ----------
+    x, y : numpy.ndarray
+        Inputs ``(n,)`` and targets ``(n,)``.
+    shortest, longest : float
+        The admissible range of periods.
+    count : int
+        Peaks returned at most.
+
+    Returns
+    -------
+    list of float
+        Periods, strongest first; empty when the range is empty.
+    """
+    from scipy.signal import find_peaks, lombscargle
+
+    if not 0 < shortest < longest:
+        return []
+    grid = np.geomspace(shortest, longest, 2000)
+    power = lombscargle(x, y - y.mean(), 2 * np.pi / grid, precenter=False)
+    peaks, _ = find_peaks(power)
+    strongest = peaks[np.argsort(power[peaks])[::-1][:count]]
+    return [float(grid[i]) for i in strongest]
+
+
 def data_shape(x: np.ndarray, y: np.ndarray, exp: Experiment) -> dict[str, Any]:
     """Summarise location and scale to seed initialisation and bounds.
 
@@ -391,6 +430,17 @@ def data_shape(x: np.ndarray, y: np.ndarray, exp: Experiment) -> dict[str, Any]:
     ]
     # What the business expects: read by the kernels' random starts only.
     shape["period_hints"] = [math.log(p) for p in exp.period_hints if p > 0]
+    if exp.spectral_starts and x.shape[1] == 1 and shape["min_period"]:
+        shape["period_hints"] += [
+            math.log(p)
+            for p in spectral_periods(
+                x[:, 0],
+                y,
+                math.exp(shape["min_period"][0]),
+                math.exp(shape["max_period"][0]),
+                exp.spectral_starts,
+            )
+        ]
     shape["location_hints"] = [float(t) for t in exp.location_hints]
     return shape
 

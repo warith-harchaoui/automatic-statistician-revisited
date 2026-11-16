@@ -99,3 +99,27 @@ def test_the_2013_search_never_builds_a_changepoint():
     result = search(x, y, Experiment.cks_2013(max_depth=2, n_jobs=4))
     structures = {m.kernel.structure() for level in result.levels for m in level}
     assert not any("CP" in s or "CW" in s for s in structures)
+
+
+def test_the_periodogram_finds_two_hidden_cycles():
+    """The two strongest peaks are the two periods that drew the series."""
+    from autostat.search import spectral_periods
+
+    x = 2000 + np.arange(120) / 12
+    noise = 0.2 * np.random.default_rng(0).standard_normal(120)
+    y = np.sin(2 * np.pi * x / 0.305) + 0.5 * np.sin(2 * np.pi * x / 1.19) + noise
+    found = spectral_periods(x, y, 0.25, 2.0, 2)
+    assert found[0] == pytest.approx(0.305, rel=0.02)
+    assert found[1] == pytest.approx(1.19, rel=0.02)
+
+
+def test_spectral_starts_add_period_hints_only_when_asked():
+    """The published settings add no hint; ``spectral_starts`` adds its peaks."""
+    from autostat.search import data_shape
+
+    x = (2000 + np.arange(120) / 12)[:, None]
+    y = np.sin(2 * np.pi * x[:, 0] / 0.7)
+    assert data_shape(x, y, Experiment())["period_hints"] == []
+    hints = data_shape(x, y, Experiment(spectral_starts=1))["period_hints"]
+    assert len(hints) == 1
+    assert np.exp(hints[0]) == pytest.approx(0.7, rel=0.02)
