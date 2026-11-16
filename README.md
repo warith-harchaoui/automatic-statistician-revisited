@@ -223,6 +223,14 @@ misses one series 590 times worse than the best method. PySR, on the same
 split, stays bounded on that series (4.56). The table is in
 [benchmark/RESULTS.md](benchmark/RESULTS.md).
 
+Thirteen series rank twenty-four methods only coarsely. A bootstrap over the
+series cannot tell 15 of them from the leader, Chronos-2: the 2014 and 2013
+structure searches, the classical models, the deep networks and every
+foundation model are in that group. The published 2013 search leads in 29 %
+of the resamples, more than any other method. The foundation models may also
+have seen these public series during pretraining, so their rows are an upper
+bound.
+
 ## The Automatic Statistician family
 
 Every project we found, from the original papers to their successors of 2026,
