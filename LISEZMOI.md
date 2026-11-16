@@ -369,6 +369,7 @@ autostat data.csv --time date --value y --symbolic --out rapport/
 autostat data.csv --time date --value y --no-check --no-pdf --json
 autostat data.csv --time date --value y --context contexte.yaml
 autostat data.csv --time date --value y --context contexte.yaml --propose gemma3:12b
+autostat data.csv --time date --value y --spectral 3
 ```
 
 La configuration publiée cherche `--max-depth` niveaux, pas un de moins.
@@ -379,6 +380,11 @@ attendus, événements datés) dans le YAML que télécharge le studio&nbsp;; la
 moitié des départs aléatoires commence alors près de ces périodes et de ces
 dates. `--propose` nomme un modèle Ollama local qui suggère des structures à
 chaque niveau, en connaissant le contexte&nbsp;; le BIC tranche.
+`--spectral 3` fait partir la moitié des périodes des trois plus hauts pics
+du périodogramme des données&nbsp;: sur quarante séries tirées de la
+grammaire, la vraie période est retrouvée 9 fois sur 10 au lieu de 4
+([doc/research/recovery](doc/research/recovery/README.md)). Les
+préréglages ne l'activent pas, comme à la publication.
 
 L'interface Python expose chaque étape&nbsp;: `prepare` (dates en années
 décimales, longues séries regroupées par paquets), `search` avec une

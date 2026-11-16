@@ -344,6 +344,7 @@ autostat data.csv --time date --value y --symbolic --out report/
 autostat data.csv --time date --value y --no-check --no-pdf --json
 autostat data.csv --time date --value y --context context.yaml
 autostat data.csv --time date --value y --context context.yaml --propose gemma3:12b
+autostat data.csv --time date --value y --spectral 3
 ```
 
 The published configuration searches `--max-depth` levels and no fewer.
@@ -354,6 +355,11 @@ minute each.
 from the YAML the studio downloads; half the random starts then begin near
 those periods and dates. `--propose` names a local Ollama model that
 suggests structures at every level, told the context; BIC decides.
+`--spectral 3` starts half the periods at the data's three highest
+periodogram peaks: on forty series drawn from the grammar, the true period
+was found on 9 of 10 instead of 4
+([doc/research/recovery](doc/research/recovery/README.md)). The presets
+leave it off, as published.
 
 The Python interface exposes each stage: `prepare` (dates to decimal years,
 long series binned), `search` with an `Experiment`, `describe` for the report,

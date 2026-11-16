@@ -50,6 +50,44 @@ the first centre is in range; it reaches a period far from one year by its
 spread alone. The second measurement below starts half the periods at
 the peaks of the data's periodogram instead.
 
+## Second measurement: periodogram starts
+
+The same forty series, the same settings and seeds, with
+`spectral_starts=3`: the periods of the data's three highest Lomb-Scargle
+peaks join the start hints, so half the periodic starts begin at one of
+them (`python doc/research/recovery/run.py results-spectral.json spectral`,
+2.0 hours of search, rows in
+[results-spectral.json](results-spectral.json)).
+
+| component | present | found, fixed centres | found, periodogram | invented when absent, fixed / periodogram |
+|---|---|---|---|---|
+| cycle | 10 | 7 | 10 | 1 / 0 |
+| changepoint or window | 14 | 11 | 10 | 2 / 2 |
+| linear trend | 18 | 16 | 15 | 5 / 5 |
+| smooth term | 14 | 9 | 8 | 4 / 4 |
+
+- **A true period is found within 5 % on 9 series of 10**, against 4. Every
+  cycle is found; none is invented. The miss left is seed 0, two cycles of
+  0.436 and 0.5 years multiplied inside a window, where 0.70 is found.
+- The search's model scores within 2 of the refitted truth, or better, on
+  35 series of 40 (34 before); no fit falls short of the right structure
+  any more (one before). The exact structure: 6 of 40 again.
+- Series by series, the search's best BIC is lower by more than 2 on 7
+  series, higher by more than 2 on 2, within 2 on 31. The gains are the
+  cycles: seed 35 from -17.9 to -144.2, seed 38 from 85.0 to -27.8, seed
+  6 from 956.4 to 815.6, seed 27 from 481.7 to 405.4. The two losses carry
+  no cycle error. On seed 19 the period is found as before (0.691) but the
+  changepoint is lost (545.0 to 639.7); on seed 31, which has no cycle, a
+  window is fitted worse (441.6 to 458.1). Half the periodic starts are
+  hints now, so the random starts left differ: with four random starts, a
+  different draw moves a search with no relation to the cycles.
+- The changepoint row loses one series and the linear and smooth rows one
+  each, within the same variation.
+
+The published presets stay as published: `spectral_starts` is 0 in
+`Experiment.abcd_2014()` and `Experiment.cks_2013()`; a caller asks for
+the periodogram starts explicitly (`--spectral 3` on the command line).
+
 Forty draws at light settings are a first measure. The table counts what
 the grammar's own prior produces, where products with constants and
 switches are frequent; real series are not drawn from it.
