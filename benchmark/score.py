@@ -15,6 +15,14 @@ What this script does
     the result against ``published/paper_table_standardised_rmse.parquet``. The
     full ranking then puts the 2014 and 2026 methods on one scale.
 
+    Thirteen series cannot rank twenty methods finely. A bootstrap over the
+    series (resampled with replacement) gives each median a 95 % interval,
+    the share of resamples each method leads. It also names the methods that
+    cannot be told apart from the leader: those whose median exceeds the
+    leader's in fewer than 97.5 % of the paired resamples. This is the resolution
+    reporting of Sikder and Pillutla (NeurIPS 2026 workshop), with the
+    bootstrap fev-bench uses.
+
 What it produces
     ``results/scores.parquet`` (one row per method and series),
     ``results/summary.parquet`` (one row per method) and ``RESULTS.md``.
@@ -54,6 +62,10 @@ PAPER_COLUMNS = {
     "SE": "SE",
     "LN": "LN",
 }
+
+#: Bootstrap resamples of the series and their seed.
+N_BOOT = 2000
+SEED = 0
 
 #: Families of the 2014 methods, for the combined table.
 FAMILIES_2014 = {
@@ -166,6 +178,52 @@ def ape_tables(
         grouped.mean().unstack("method"),
         grouped.median().unstack("method"),
         ape.isna().groupby(keys).sum().unstack("method"),
+    )
+
+
+def resolution(
+    standardised: pd.DataFrame, n_boot: int = N_BOOT, seed: int = SEED
+) -> pd.DataFrame:
+    """Say how finely the series separate the methods, by bootstrap.
+
+    The series are resampled with replacement; each resample gives every
+    method its median standardised RMSE. The leader is the method with the
+    lowest median on the series themselves. A method is separated from the
+    leader when its median exceeds the leader's in at least 97.5 % of the
+    resamples (the lower end of the paired 95 % interval of the difference
+    is above zero); otherwise it is tied with it.
+
+    Parameters
+    ----------
+    standardised : pandas.DataFrame
+        Standardised RMSE, series in rows and methods in columns, complete.
+    n_boot : int, optional
+        Number of resamples.
+    seed : int, optional
+        Seed of the resampling.
+
+    Returns
+    -------
+    pandas.DataFrame
+        One row per method: ``low`` and ``high`` (95 % interval of the
+        median), ``p_best`` (share of resamples it leads, ties shared) and
+        ``tied`` (cannot be told apart from the leader; true for the leader).
+    """
+    values = standardised.to_numpy()
+    rng = np.random.default_rng(seed)
+    rows = rng.integers(0, len(values), size=(n_boot, len(values)))
+    medians = np.median(values[rows], axis=1)
+    leader = int(np.argmin(np.median(values, axis=0)))
+    best = medians == medians.min(axis=1, keepdims=True)
+    gap = medians - medians[:, [leader]]
+    return pd.DataFrame(
+        {
+            "low": np.quantile(medians, 0.025, axis=0),
+            "high": np.quantile(medians, 0.975, axis=0),
+            "p_best": (best / best.sum(axis=1, keepdims=True)).mean(axis=0),
+            "tied": np.quantile(gap, 0.025, axis=0) <= 0,
+        },
+        index=standardised.columns,
     )
 
 
@@ -314,11 +372,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     mape, mdape, undefined = ape_tables(combined)
     mase, mdase = mase_tables(combined)
     columns = standardised.columns
+    resolved = resolution(standardised)
     summary = pd.DataFrame(
         {
             "family": [families.get(m, "") for m in columns],
             "median_standardised_rmse": standardised.median().to_numpy(),
             "mean_standardised_rmse": standardised.mean().to_numpy(),
+            "median_low": resolved["low"].to_numpy(),
+            "median_high": resolved["high"].to_numpy(),
+            "p_best": resolved["p_best"].to_numpy(),
+            "tied_with_leader": resolved["tied"].to_numpy(),
             "series_won": (standardised == 1.0).sum().to_numpy(),
             "coverage90": [coverage.get(m, np.nan) for m in columns],
             # Percentage errors: per-series MAPE and MdAPE, then the median
@@ -346,6 +409,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         "series among every method listed, so 1.00 is the best. Median over the",
         f"{len(standardised)} series; lower is better.",
         "",
+        f"95 % interval and P(best): a bootstrap over the series ({N_BOOT}",
+        f"resamples, seed {SEED}) gives the median's 95 % interval and the",
+        "share of resamples in which the method has the lowest median. Tied:",
+        "the method's median exceeds the leader's in fewer than 97.5 % of the",
+        "paired resamples, so these series cannot tell it from the leader.",
+        "",
         "MASE and MdASE: mean and median absolute error of each series scaled",
         "by the mean absolute one-step change of its training part; MASE is",
         "their median (and mean MASE their mean) across series; lower is better.",
@@ -355,20 +424,42 @@ def main(argv: Sequence[str] | None = None) -> int:
         "MAPE) across series; lower is better. A zero actual value has no",
         "percentage error and is left out.",
         "",
-        "| method | family | median | mean | series won | 90 % coverage "
+        "| method | family | median | 95 % interval | P(best) | tied | mean "
+        "| series won | 90 % coverage "
         "| MASE | mean MASE | MdASE | MAPE | mean MAPE | MdAPE |",
-        "|---|---|---|---|---|---|---|---|---|---|---|---|",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for name, row in summary.iterrows():
         cov = "" if np.isnan(row["coverage90"]) else f"{row['coverage90']:.2f}"
         lines.append(
-            f"| {name} | {row['family']} | {row['median_standardised_rmse']:.2f} | "
-            f"{row['mean_standardised_rmse']:.2f} | {int(row['series_won'])} | {cov} "
+            f"| {name} | {row['family']} | {row['median_standardised_rmse']:.2f} "
+            f"| {row['median_low']:.2f} to {row['median_high']:.2f} "
+            f"| {row['p_best']:.2f} | {'yes' if row['tied_with_leader'] else ''} "
+            f"| {row['mean_standardised_rmse']:.2f} | {int(row['series_won'])} | {cov} "
             f"| {row['median_mase']:.2f} | {row['mean_mase']:.2f} "
             f"| {row['median_mdase']:.2f} "
             f"| {row['median_mape']:.1f} | {row['mean_mape']:.1f} "
             f"| {row['median_mdape']:.1f} |"
         )
+    tied = summary.index[summary["tied_with_leader"]].tolist()
+    lines += [
+        "",
+        "## Resolution",
+        "",
+        f"{len(tied)} of {len(summary)} methods cannot be told apart from the "
+        f"leader on these {len(standardised)} series: " + ", ".join(tied) + ".",
+        "The order inside that group is not established by this benchmark.",
+        "",
+        "## Contamination and context",
+        "",
+        "The thirteen series have been public for decades, most of them in",
+        "Rob Hyndman's Time Series Data Library. The foundation models may",
+        "have seen them, held-out tails included, during pretraining; nothing",
+        "here can rule that out, so their rows are an upper bound on what they",
+        "would score on unseen series. Every method receives the whole",
+        "training part as its history (129 to 909 points), within the context",
+        "limit of each foundation model (TimesFM 2.5 is set to 1,024).",
+    ]
     if incomplete:
         lines += [
             "",

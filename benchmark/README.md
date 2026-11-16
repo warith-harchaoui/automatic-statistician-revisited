@@ -121,6 +121,14 @@ time taken, the failures and the chosen hyper-parameters. `score.py` writes
 `results/scores.parquet`, `results/summary.parquet` and
 [RESULTS.md](RESULTS.md).
 
+`score.py` also bootstraps the series (2,000 resamples, seed 0): each
+median gets a 95 % interval, each method the share of resamples it leads,
+and the methods that the thirteen series cannot tell from the leader are
+marked as tied. This follows the resolution reporting of Sikder and
+Pillutla (NeurIPS 2026 workshop). Every method receives the whole training
+part as history; the series are public, so a foundation model may have seen
+them in pretraining.
+
 The symbolic-regression family needs
 `.venv-bench/bin/pip install pysr gplearn pyoperon`. PySR installs Julia on
 first use. Each of these methods fits `y = f(t)` on centred, scaled time,

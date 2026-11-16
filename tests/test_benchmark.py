@@ -68,3 +68,29 @@ def test_rmse_of_a_perfect_forecast_is_zero():
         }
     )
     assert score.rmse_table(frame).loc["a", "m"] == 0.0
+
+
+def test_a_method_far_ahead_is_separated_and_twins_are_tied():
+    """Resolution separates a clear gap and ties two identical methods.
+
+    On thirteen series, one method twice as good everywhere is the only
+    one that leads; a copy of another method is tied with it, never with
+    the leader.
+    """
+    rng = np.random.default_rng(1)
+    base = 2.0 + rng.random(13)
+    table = pd.DataFrame({"good": np.ones(13), "a": base, "b": base})
+    resolved = score.resolution(table, n_boot=500)
+    assert resolved.loc["good", "p_best"] == 1.0
+    assert resolved["tied"].tolist() == [True, False, False]
+    assert resolved.loc["a", "p_best"] == resolved.loc["b", "p_best"] == 0.0
+    assert resolved["p_best"].sum() == pytest.approx(1.0)
+
+
+def test_close_methods_on_few_series_cannot_be_ranked():
+    """Two methods trading wins on the series are tied, each leading at times."""
+    table = pd.DataFrame({"x": [1.0, 1.2] * 6 + [1.0], "y": [1.2, 1.0] * 6 + [1.1]})
+    resolved = score.resolution(table, n_boot=500)
+    assert resolved["tied"].all()
+    assert 0 < resolved.loc["y", "p_best"] < 1
+    assert (resolved["low"] <= resolved["high"]).all()

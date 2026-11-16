@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- `autostat.synthetic` draws series from the grammar: `random_structure`
+  walks the rules at random, `sample` draws parameters as the search's
+  starts do and samples the Gaussian process, `draw` does both. A slow test
+  checks that the search finds again the yearly cycle that drew a series.
+- The benchmark reports its resolution: a bootstrap over the thirteen
+  series gives each median a 95 % interval and each method the share of
+  resamples it leads; the methods tied with the leader are marked (15 of 24).
+  `RESULTS.md` also states that the public series may sit in the foundation
+  models' pretraining data and that every method sees the whole training
+  part.
 - `mixture_posterior` forecasts with every structure a search scored,
   weighted by `exp(-BIC / 2)` (Bayesian model averaging over the structures
   searched, the first action of the research watch). The variance follows

@@ -223,6 +223,14 @@ misses one series 590 times worse than the best method. PySR, on the same
 split, stays bounded on that series (4.56). The table is in
 [benchmark/RESULTS.md](benchmark/RESULTS.md).
 
+Thirteen series rank twenty-four methods only coarsely. A bootstrap over the
+series cannot tell 15 of them from the leader, Chronos-2: the 2014 and 2013
+structure searches, the classical models, the deep networks and every
+foundation model are in that group. The published 2013 search leads in 29 %
+of the resamples, more than any other method. The foundation models may also
+have seen these public series during pretraining, so their rows are an upper
+bound.
+
 ## The Automatic Statistician family
 
 Every project we found, from the original papers to their successors of 2026,
@@ -347,6 +355,12 @@ long series binned), `search` with an `Experiment`, `describe` for the report,
 every structure a search scored, each weighted by `exp(-BIC / 2)`. Its
 band widens where the structures disagree; when one structure takes all the
 weight, as it often does, it is the best model's forecast.
+`autostat.synthetic` runs the grammar the other way: `draw` walks it at
+random to a structure, gives it parameters as the search's starts do and
+samples a series from that Gaussian process, returned with the expression
+that made it. It serves recovery tests (a drawn yearly cycle is found again
+at 0.9998 years) and is the kernel-composition prior that Chronos'
+KernelSynth and TempoPFN train on.
 
 The API and the MCP server share one application: `autostat-mcp` serves the
 HTTP routes and `/mcp` on port 8000. The MCP tools are `list_series`,
