@@ -78,8 +78,9 @@ five structures to fit.
 
 ## What follows
 
-- Proposals that date a switch, `CP(a, b, 2014.5)`, could start its
-  location as `Per(p)` starts a period: the language model already writes
-  them so.
+- Proposals that date a switch, `CP(a, b, 2014.5)`, now start its
+  location there, as `Per(p)` starts a period; the prompt offers both
+  forms. Whether that lets a wrong date mislead the search is the next
+  measurement: the numbers of a context would then reach the starts.
 - Three seeds per family is a first look. The jump result is large and
   consistent; the quarterly result is not distinguishable from noise.

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- A language model may date a switch: `CP(a, b, 2014.5)` starts the
+  changepoint at that date, `CW(a, b, 2010, 2012)` the window between
+  those dates, as `Per(0.25)` starts a period. gemma3:12b wrote them so
+  unprompted in the proposal study; the prompt now offers them.
 - `doc/research/propose` measures gemma3:12b's proposals on two synthetic
   families, 24 runs: on a level jump the grammar alone never finds it in
   three levels, the proposals find it on 8 runs of 9 and lower BIC by up
