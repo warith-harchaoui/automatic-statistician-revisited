@@ -68,6 +68,19 @@ def test_the_prompt_carries_the_context_and_the_best_so_far():
     assert "'yearly' of 1 years" in text
     assert "'reform' happened at 2005.00" in text
     assert "BIC" in text and "Propose 3" in text
+    assert "CP(a, b, t)" in text and "Per(p)" in text
+
+
+def test_the_prompt_offers_numbers_only_for_what_the_context_gives():
+    """No context, no dated switch or numbered period: guessed dates mislead."""
+    x = np.linspace(2000, 2010, 50)
+    shape = data_shape(x[:, None], np.sin(x), Experiment())
+    blind = prompt(shape, [], None, 3)
+    cycles = prompt(
+        shape, [], Context.from_dict({"cycles": [{"name": "y", "period": "1y"}]}), 3
+    )
+    assert ("CP(a, b, t)" in blind, "Per(p)" in blind) == (False, False)
+    assert ("CP(a, b, t)" in cycles, "Per(p)" in cycles) == (False, True)
 
 
 def test_a_chatty_answer_still_gives_its_structures():

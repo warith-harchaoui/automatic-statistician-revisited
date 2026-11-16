@@ -106,11 +106,46 @@ proposals found it 16 times of 18. The quarterly differences between arms
 (up to 40 BIC in one run) are of the size of the run-to-run variation (23
 BIC on the grammar arm alone) and say nothing either way.
 
+## Third run: the dates reach the search
+
+Run again once named dates were read and a fit repeated itself
+([results-named.json](results-named.json)). The language model now dated
+most of its switches; the dates it wrote were those it was told:
+2014.5 when told the truth, 2012 when told the wrong date; guesses
+from 2010 to 2017 when told nothing. No dated line was refused.
+
+| jump family, seed | grammar | llm_none | llm_true | llm_wrong |
+|---|---|---|---|---|
+| 0 | 494.0 | 485.9 | **418.7** | 486.0 |
+| 1 | 474.8 | 391.8 | **387.8** | 394.2 |
+| 2 | 489.3 | 500.2 | **428.5** | 463.8 |
+| mean | 486.0 | 459.3 | **411.7** | 448.0 |
+
+- **The true date helps, a wrong date now costs.** Told the truth, the
+  search kept the lowest BIC on all three series, with the jump 0.004 to
+  0.083 years from its date. Told 2012, it missed the jump on seed 0 and
+  kept a window with an extra changepoint on seed 2: 67 and 35 above the
+  true context. In the second run, when dates did not reach the starts,
+  the wrong context scored as well as the true one or better on every
+  series.
+- **BIC still refused the wrong date.** Where a jump was kept, it sat at
+  the true date, never at 2012: a start at the wrong date either climbed
+  to the right one or lost to a model with no jump.
+- **Guessed dates mislead too.** Told nothing, the model invented dates;
+  on seeds 0 and 2 the search kept a window instead of the step; on
+  seed 2 its BIC was worse than the grammar alone (500.2 against 489.3).
+- The grammar arm now repeats itself; its values differ from the first
+  two runs where the fix changed the arithmetic (quarterly seeds 1 and 2).
+  The language-model arms still vary between runs, the model sampling at
+  temperature 0.7.
+
+So a context's numbers are worth giving when they are right; the
+prompt should not invite dates nobody gave.
+
 ## What follows
 
 - Proposals that date a switch, `CP(a, b, 2014.5)` or
-  `CP(a, b, t=2014.5)`, now start its location there, as `Per(p)` starts
-  a period. Whether a wrong date then misleads the search is the next
-  measurement, now that a run repeats itself.
+  `CP(a, b, t=2014.5)`, start its location there, as `Per(p)` starts a
+  period. The third run measured what a wrong date then costs.
 - Three seeds per family is a first look. The jump result is large and
   consistent; the quarterly result is not distinguishable from noise.

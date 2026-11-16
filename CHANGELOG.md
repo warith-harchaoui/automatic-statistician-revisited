@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- The proposer's prompt offers `Per(p)` only when the context names a
+  cycle, dated switches only when it names an event; it asks for no other
+  date. In the third proposal run, dates the model guessed kept a window
+  instead of the jump on two series of three; a wrong date given cost 35
+  to 67 BIC against the true one (`doc/research/propose`).
 - Fixed: the same search with the same seed could keep another model on
   macOS. Apple's Accelerate solves a triangular system with one right-hand
   side differently from one call to the next at some sizes (64 or 96 rows),
