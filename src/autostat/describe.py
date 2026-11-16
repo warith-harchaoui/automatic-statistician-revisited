@@ -551,9 +551,9 @@ def _census(kernels: list[ff.Kernel]) -> _Census:
     for k in kernels:
         if isinstance(k, ff.SqExpKernel):
             c.se += 1
-            log_ell = -0.5 * math.log(
-                math.exp(-2 * log_ell) + math.exp(-2 * k.lengthscale)
-            )
+            # On the log scale: two huge lengthscales underflow both
+            # exponentials to 0, whose log is a domain error.
+            log_ell = -0.5 * float(np.logaddexp(-2 * log_ell, -2 * k.lengthscale))
         elif isinstance(k, ff.GammaExpKernel):
             # Counted as smooth; its correlation falls to exp(-1/2) at
             # l 2**(-1/gamma), where an SE's does at its lengthscale.
@@ -561,7 +561,7 @@ def _census(kernels: list[ff.Kernel]) -> _Census:
             c.ge += 1
             c.gamma = min(c.gamma, k.gamma)
             ell = k.lengthscale - math.log(2) / k.gamma
-            log_ell = -0.5 * math.log(math.exp(-2 * log_ell) + math.exp(-2 * ell))
+            log_ell = -0.5 * float(np.logaddexp(-2 * log_ell, -2 * ell))
         elif isinstance(k, ff.LinearKernel):
             c.lin += 1
             c.lin_location = k.location
@@ -572,7 +572,7 @@ def _census(kernels: list[ff.Kernel]) -> _Census:
             c.noise += 1
         elif not isinstance(k, ff.ConstKernel):
             c.unknown += 1
-    c.lengthscale = math.exp(log_ell)
+    c.lengthscale = math.exp(log_ell) if log_ell < 700 else math.inf
     return c
 
 
