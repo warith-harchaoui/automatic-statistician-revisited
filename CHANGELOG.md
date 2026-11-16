@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- `doc/research/propose` measures gemma3:12b's proposals on two synthetic
+  families, 24 runs: on a level jump the grammar alone never finds it in
+  three levels, the proposals find it on 8 runs of 9 and lower BIC by up
+  to 77; on a quarterly cycle the effect is mixed. The model writes the
+  shape of a context, not its numbers, so a wrong context did little harm.
 - `Experiment.spectral_starts` and `--spectral N`: half the periodic starts
   begin at the data's N highest Lomb-Scargle peaks. On the forty series of
   `doc/research/recovery`, a true period is found within 5 % on 9 of 10
