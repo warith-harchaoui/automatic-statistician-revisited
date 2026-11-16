@@ -3,15 +3,15 @@
 What this module does
     It walks the search grammar at random to build a kernel expression, gives
     the expression parameters with the same data-dependent draws the search
-    starts from, and samples series from the Gaussian process prior it
-    defines. Each series comes with the expression that made it.
+    starts from. It then samples series from the Gaussian process prior the
+    expression defines. Each series comes with the expression that made it.
 
 Why it exists as a separate module
     Kernel composition is the standard synthetic prior of the 2024 to 2026
     foundation models (KernelSynth for Chronos, CauKer, TempoPFN). Here the
     same grammar that searches also generates, which gives three uses:
     recovery tests (does the search find the structure that drew the
-    series?), training data for amortised initialisation, and a sampler for
+    series?), training data for amortised initialisation, a sampler for
     others.
 
 What it consumes

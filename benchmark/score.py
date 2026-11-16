@@ -17,9 +17,9 @@ What this script does
 
     Thirteen series cannot rank twenty methods finely. A bootstrap over the
     series (resampled with replacement) gives each median a 95 % interval,
-    the share of resamples each method leads, and the methods that cannot be
-    told apart from the leader: those whose median exceeds the leader's in
-    fewer than 97.5 % of the paired resamples. This is the resolution
+    the share of resamples each method leads. It also names the methods that
+    cannot be told apart from the leader: those whose median exceeds the
+    leader's in fewer than 97.5 % of the paired resamples. This is the resolution
     reporting of Sikder and Pillutla (NeurIPS 2026 workshop), with the
     bootstrap fev-bench uses.
 
@@ -191,7 +191,7 @@ def resolution(
     lowest median on the series themselves. A method is separated from the
     leader when its median exceeds the leader's in at least 97.5 % of the
     resamples (the lower end of the paired 95 % interval of the difference
-    is above zero), and tied with it otherwise.
+    is above zero); otherwise it is tied with it.
 
     Parameters
     ----------
