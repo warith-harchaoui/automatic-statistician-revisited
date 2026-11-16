@@ -315,8 +315,17 @@ def prompt(
         "Lin (linear trend), RQ (multi-scale smooth), C (constant), WN (white",
         "noise); ' x ' multiplies, ' + ' adds, brackets group, CP(a, b) switches",
         "from a to b at one date and CW(a, b) is b inside a window and a outside.",
-        "Per(p) starts a cycle at a period of p years; CP(a, b, t) starts the",
-        "switch at date t; CW(a, b, s, e) starts the window from s to e.",
+    ]
+    # Numbers are offered only for what the business gave: a date the
+    # model guesses misleads the search (doc/research/propose, third run).
+    if context is not None and context.cycles:
+        lines.append("Per(p) starts a cycle at a period of p years.")
+    if context is not None and context.events:
+        lines.append(
+            "CP(a, b, t) starts the switch at date t; CW(a, b, s, e) starts the"
+            " window from s to e. Use only the dates given below."
+        )
+    lines += [
         "",
         f"The series spans {shape['x_min'][0]:.2f} to {shape['x_max'][0]:.2f}"
         " (time in years).",

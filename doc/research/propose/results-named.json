@@ -1,0 +1,1173 @@
+[
+ {
+  "family": "quarterly",
+  "seed": 0,
+  "arm": "grammar",
+  "bic": 389.08206556689726,
+  "structure": "Lin + Per + WN",
+  "best_was_proposed": false,
+  "proposals": [],
+  "seconds": 229.47554195798875,
+  "cycle_quarterly_present": true,
+  "cycle_quarterly_period": 0.25021191392775854,
+  "cycle_quarterly_size_sd": 0.8041581882477233,
+  "cycle_quarterly_size_pct": 8.860350575478787,
+  "cycle_quarterly_share": 40.22080042333702,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "quarterly",
+  "seed": 0,
+  "arm": "llm_none",
+  "bic": 400.22312570718844,
+  "structure": "Lin + Lin x Per + Per + WN",
+  "best_was_proposed": false,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "Lin + SE + WN",
+     "C + Per + RQ",
+     "CP(SE, Per) + Lin + SE",
+     "CW(Per, Lin) + SE"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(5)\nSE + Lin + WN\nRQ + Per(3) + C\nSE + Lin + CP(SE, Per(4), 2013.00)\nSE + CW(Per(2), Lin, 2010.00, 2015.00)\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "SE + WN",
+     "Per + WN",
+     "Lin + SE + WN",
+     "Per + WN",
+     "Lin + Per + WN"
+    ],
+    "rejected": [],
+    "answer": "SE + WN\nPer(1) + WN\nLin + SE + WN\nPer(2) + WN\nLin + Per(1) + WN\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "Lin x Per + SE + WN",
+     "Per + RQ + WN",
+     "Lin + Per + SE",
+     "Lin + Per x SE",
+     "Lin + RQ + SE"
+    ],
+    "rejected": [],
+    "answer": "SE + Lin x Per + WN\nRQ + Per + WN\nSE + Lin + Per\nSE x Per + Lin\nSE + RQ + Lin\n"
+   }
+  ],
+  "seconds": 248.82461712500663,
+  "cycle_quarterly_present": true,
+  "cycle_quarterly_period": 0.2501376297030298,
+  "cycle_quarterly_size_sd": 0.7854041073678383,
+  "cycle_quarterly_size_pct": 8.653714948626876,
+  "cycle_quarterly_share": 39.5403806906163,
+  "unexpected_cycles": 1,
+  "unexpected_main_period": 0.42332693498576024,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "quarterly",
+  "seed": 0,
+  "arm": "llm_true",
+  "bic": 389.0820647396267,
+  "structure": "Lin + Per + WN",
+  "best_was_proposed": false,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "Per + SE + WN",
+     "Lin + Per + SE",
+     "Per + RQ",
+     "C + Per + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(0.25)\nSE + Per(0.25) + WN\nSE + Per(0.25) + Lin\nRQ + Per(0.25)\nSE + Per(0.25) + C + WN\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "C + Per + SE + WN",
+     "C + Per + RQ + SE + WN",
+     "C + CP(SE, WN) + Per + SE + WN",
+     "C + CW(SE, WN) + Per + SE + WN",
+     "C + Lin + Per + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "C + Per(0.25) + SE + WN\nC + Per(0.25) + SE + RQ + WN\nC + Per(0.25) + SE + CP(SE, WN) + WN\nC + Per(0.25) + SE + CW(SE, WN, 2013, 2015) + WN\nC + Per(0.25) + SE + Lin + WN\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "C + Per + SE",
+     "RQ + SE + WN",
+     "C + Per + SE + WN",
+     "Lin + Per + SE",
+     "CP(SE, Per) + WN"
+    ],
+    "rejected": [],
+    "answer": "Per(0.25) + SE + C\nRQ + SE + WN\nPer(0.25) + SE + C + WN\nLin + SE + Per(0.25)\nCP(SE, Per(0.25), 2013.00) + WN\n"
+   }
+  ],
+  "seconds": 481.00995312500163,
+  "cycle_quarterly_present": true,
+  "cycle_quarterly_period": 0.25021191195085135,
+  "cycle_quarterly_size_sd": 0.8041582420431649,
+  "cycle_quarterly_size_pct": 8.860351168206037,
+  "cycle_quarterly_share": 40.21989540692787,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "quarterly",
+  "seed": 0,
+  "arm": "llm_wrong",
+  "bic": 397.25606945341764,
+  "structure": "Per + SE + WN",
+  "best_was_proposed": true,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "Lin + Per + SE",
+     "Per + SE + WN",
+     "Per + RQ",
+     "CP(SE, Lin) + Per + SE"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(0.4167)\nSE + Per(0.4167) + Lin\nSE + Per(0.4167) + WN\nRQ + Per(0.4167)\nSE + Per(0.4167) + CP(SE, Lin, 2013.00)\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "Per + SE + WN",
+     "Lin + Per + SE + WN",
+     "Per + RQ + SE + WN",
+     "C + Per + SE + WN",
+     "CP(Per, SE) + WN"
+    ],
+    "rejected": [],
+    "answer": "Per(0.4167) + SE + WN\nLin + Per(0.4167) + SE + WN\nRQ + Per(0.4167) + SE + WN\nPer(0.4167) + SE + C + WN\nCP(Per(0.4167), SE, 2013.00) + WN\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "Per + SE + WN",
+     "Lin + Per + SE + WN",
+     "Per + RQ + SE + WN",
+     "C + Per + SE + WN",
+     "CW(Per, SE) + WN"
+    ],
+    "rejected": [],
+    "answer": "Per(0.4167) + SE + WN\nLin + Per(0.4167) + SE + WN\nRQ + Per(0.4167) + SE + WN\nPer(0.4167) + SE + C + WN\nCW(Per(0.4167), SE, 2013.00, 2015.00) + WN\n"
+   }
+  ],
+  "seconds": 310.4097392499971,
+  "cycle_quarterly_present": true,
+  "cycle_quarterly_period": 0.2502176143552551,
+  "cycle_quarterly_size_sd": 0.8047600595015596,
+  "cycle_quarterly_size_pct": 8.866982094486152,
+  "cycle_quarterly_share": 40.29057670534712,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "quarterly",
+  "seed": 1,
+  "arm": "grammar",
+  "bic": 383.266216003608,
+  "structure": "Lin + Lin x Lin x Per + WN",
+  "best_was_proposed": false,
+  "proposals": [],
+  "seconds": 234.60899095800414,
+  "cycle_quarterly_present": true,
+  "cycle_quarterly_period": 0.2500806216041211,
+  "cycle_quarterly_size_sd": 0.8664811208695259,
+  "cycle_quarterly_size_pct": 9.572763013228478,
+  "cycle_quarterly_share": 47.037080979450664,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "quarterly",
+  "seed": 1,
+  "arm": "llm_none",
+  "bic": 382.02462629073113,
+  "structure": "Per + SE + WN",
+  "best_was_proposed": true,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "Lin + SE + WN",
+     "C + Per + RQ",
+     "CP(SE, Per) + Lin + SE",
+     "CW(Per, Lin) + SE"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(5)\nSE + Lin + WN\nRQ + Per(3) + C\nSE + Lin + CP(SE, Per(4), 2013.00)\nSE + CW(Per(2), Lin, 2010.00, 2015.00)\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "SE + WN",
+     "Per + WN",
+     "Lin + SE + WN",
+     "Per + SE + WN",
+     "Lin + Per + WN"
+    ],
+    "rejected": [],
+    "answer": "SE + WN\nPer(1) + WN\nLin + SE + WN\nPer(2) + SE + WN\nLin + Per(1) + WN\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "Lin + Per + SE",
+     "RQ + SE + WN",
+     "Per + RQ + SE",
+     "CW(Per, SE) + WN",
+     "CP(Per, SE) + WN"
+    ],
+    "rejected": [],
+    "answer": "Per + SE + Lin\nRQ + SE + WN\nPer + RQ + SE\nCW(Per, SE, 2012.00, 2015.00) + WN\nCP(Per, SE, 2013.00) + WN\n"
+   }
+  ],
+  "seconds": 208.97229808400152,
+  "cycle_quarterly_present": true,
+  "cycle_quarterly_period": 0.2500355678532565,
+  "cycle_quarterly_size_sd": 0.864924686170984,
+  "cycle_quarterly_size_pct": 9.555567738968197,
+  "cycle_quarterly_share": 46.031795665098606,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "quarterly",
+  "seed": 1,
+  "arm": "llm_true",
+  "bic": 382.0246649609197,
+  "structure": "Per + SE + WN",
+  "best_was_proposed": true,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [],
+    "rejected": [
+     "SE() + Per(0.25)",
+     "SE() + Per(0.25) + WN()",
+     "SE() + Per(0.25) + Lin()",
+     "RQ() + Per(0.25)",
+     "SE() + Per(0.25) + CP(SE(), WN(), 2013.00)"
+    ],
+    "answer": "SE() + Per(0.25)\nSE() + Per(0.25) + WN()\nSE() + Per(0.25) + Lin()\nRQ() + Per(0.25)\nSE() + Per(0.25) + CP(SE(), WN(), 2013.00)\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "Lin + SE + WN",
+     "Per + SE + WN",
+     "Lin + RQ + WN",
+     "Lin + Per + SE + WN",
+     "Per + RQ + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "SE + Lin + WN\nSE + Per(0.25) + WN\nRQ + Lin + WN\nSE + Per(0.25) + Lin + WN\nSE + Per(0.25) + RQ + WN\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "C + Lin + Per + SE",
+     "Lin + Per + RQ + WN",
+     "C + Lin + Per + SE + WN",
+     "Per + RQ + SE + WN",
+     "CP(SE, WN) + Lin + Per + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "Lin + Per + SE + C\nLin + Per + RQ + WN\nLin + Per + SE + WN + C\nRQ + Per + SE + WN\nLin + Per + SE + WN + CP(SE, WN, 2013.5)\n"
+   }
+  ],
+  "seconds": 336.9271917080041,
+  "cycle_quarterly_present": true,
+  "cycle_quarterly_period": 0.2500172046332785,
+  "cycle_quarterly_size_sd": 0.8649192417387845,
+  "cycle_quarterly_size_pct": 9.555507589637841,
+  "cycle_quarterly_share": 46.03171864365089,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "quarterly",
+  "seed": 1,
+  "arm": "llm_wrong",
+  "bic": 394.50694714550576,
+  "structure": "Per + SE",
+  "best_was_proposed": true,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "Lin + Per + SE",
+     "Per + RQ",
+     "Lin + Per + SE + WN",
+     "CP(Per, WN) + Lin + SE"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(0.4167)\nSE + Lin + Per(0.4167)\nRQ + Per(0.4167)\nSE + Lin + Per(0.4167) + WN\nSE + Lin + CP(Per(0.4167), WN, 2013.00)\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "Lin + Per + SE",
+     "RQ + SE",
+     "Per + SE + WN",
+     "CW(Per, SE) + SE",
+     "CP(Per, SE) + SE"
+    ],
+    "rejected": [],
+    "answer": "Per + SE + Lin\nRQ + SE\nPer + SE + WN\nCW(Per, SE, 2012.00, 2015.00) + SE\nCP(Per, SE, 2013.00) + SE\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "Lin + Per + SE",
+     "RQ + SE",
+     "Per + SE + WN",
+     "CP(Per, SE) + SE",
+     "CW(Per, SE) + SE"
+    ],
+    "rejected": [],
+    "answer": "Per + SE + Lin\nRQ + SE\nPer + SE + WN\nCP(Per, SE, 2013.5) + SE\nCW(Per, SE, 2012.0, 2015.0) + SE\n"
+   }
+  ],
+  "seconds": 135.45103699999163,
+  "cycle_quarterly_present": true,
+  "cycle_quarterly_period": 0.2500007792361665,
+  "cycle_quarterly_size_sd": 1.625511783920714,
+  "cycle_quarterly_size_pct": 17.958428300281874,
+  "cycle_quarterly_share": 96.30833517376973,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "quarterly",
+  "seed": 2,
+  "arm": "grammar",
+  "bic": 412.6119294082509,
+  "structure": "Lin + Lin x Per + WN",
+  "best_was_proposed": false,
+  "proposals": [],
+  "seconds": 217.18724058399675,
+  "cycle_quarterly_present": false,
+  "cycle_quarterly_period": null,
+  "cycle_quarterly_size_sd": null,
+  "cycle_quarterly_size_pct": null,
+  "cycle_quarterly_share": null,
+  "unexpected_cycles": 1,
+  "unexpected_main_period": 0.5000000000004018,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "quarterly",
+  "seed": 2,
+  "arm": "llm_none",
+  "bic": 410.0556126144309,
+  "structure": "Lin + Lin x WN + Per",
+  "best_was_proposed": false,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "SE",
+     "Per + SE",
+     "Lin + SE",
+     "RQ + SE",
+     "CP(SE, WN) + SE"
+    ],
+    "rejected": [],
+    "answer": "SE\nPer(5)+SE\nLin+SE\nRQ+SE\nCP(SE,WN,2013.0)+SE\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "SE + WN",
+     "Lin + SE + WN",
+     "Per + WN",
+     "Lin + Per + WN",
+     "Per + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "SE + WN\nLin + SE + WN\nPer + WN\nLin + Per + WN\nSE + Per + WN\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "Per + SE",
+     "Lin + Per + SE",
+     "Per + RQ",
+     "Lin + Per + RQ",
+     "Per + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "SE + Per\nLin + SE + Per\nRQ + Per\nLin + RQ + Per\nSE + Per + WN\n"
+   }
+  ],
+  "seconds": 109.80818545799411,
+  "cycle_quarterly_present": false,
+  "cycle_quarterly_period": null,
+  "cycle_quarterly_size_sd": null,
+  "cycle_quarterly_size_pct": null,
+  "cycle_quarterly_share": null,
+  "unexpected_cycles": 1,
+  "unexpected_main_period": 0.49996631830801463,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "quarterly",
+  "seed": 2,
+  "arm": "llm_true",
+  "bic": 413.1114189587668,
+  "structure": "Lin + Lin x Per + WN",
+  "best_was_proposed": false,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "Per + SE + WN",
+     "Lin + Per + SE",
+     "Per + RQ",
+     "C + Per + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(0.25)\nSE + Per(0.25) + WN\nSE + Per(0.25) + Lin\nRQ + Per(0.25)\nSE + Per(0.25) + C + WN\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "SE + WN",
+     "Per + SE",
+     "Lin + Per",
+     "RQ + WN",
+     "Lin + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "SE + WN\nPer(0.25) + SE\nLin + Per(0.25)\nRQ + WN\nLin + SE + WN\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "Per + SE + WN",
+     "Lin + Per + SE + WN",
+     "Per + RQ + WN",
+     "CW(SE, Per) + Lin + SE + WN",
+     "CP(SE, WN) + Per + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(0.25) + WN\nSE + Lin + Per(0.25) + WN\nRQ + Per(0.25) + WN\nSE + Lin + CW(SE, Per(0.25), 2012.00, 2015.00) + WN\nSE + Per(0.25) + CP(SE, WN, 2013.00) + WN\n"
+   }
+  ],
+  "seconds": 75.8776830410061,
+  "cycle_quarterly_present": false,
+  "cycle_quarterly_period": null,
+  "cycle_quarterly_size_sd": null,
+  "cycle_quarterly_size_pct": null,
+  "cycle_quarterly_share": null,
+  "unexpected_cycles": 1,
+  "unexpected_main_period": 0.5000000022629196,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "quarterly",
+  "seed": 2,
+  "arm": "llm_wrong",
+  "bic": 412.44309253249145,
+  "structure": "Per + SE + WN",
+  "best_was_proposed": true,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "Lin + Per + SE",
+     "Per + RQ",
+     "Lin + Per + RQ + SE",
+     "CW(Per, WN) + Lin + SE"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(0.4167)\nSE + Lin + Per(0.4167)\nRQ + Per(0.4167)\nSE + Lin + RQ + Per(0.4167)\nSE + Lin + CW(Per(0.4167), WN, 2013.00, 2015.00)\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "Lin + Per + SE",
+     "Lin + RQ + SE",
+     "Per + RQ + SE",
+     "C + Lin + Per + RQ + SE",
+     "Lin + Per + RQ + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "Lin + Per + SE\nLin + RQ + SE\nPer + RQ + SE\nLin + Per + RQ + SE + C\nLin + Per + RQ + SE + WN\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "Per + SE + WN",
+     "Lin + Per + SE + WN",
+     "Per + RQ + SE + WN",
+     "C + Per + SE + WN",
+     "CW(Per, SE) + WN"
+    ],
+    "rejected": [],
+    "answer": "Per(0.4167) + SE + WN\nLin + Per(0.4167) + SE + WN\nRQ + Per(0.4167) + SE + WN\nPer(0.4167) + SE + C + WN\nCW(Per(0.4167), SE, 2013.00, 2015.00) + WN\n"
+   }
+  ],
+  "seconds": 537.5127218330017,
+  "cycle_quarterly_present": false,
+  "cycle_quarterly_period": null,
+  "cycle_quarterly_size_sd": null,
+  "cycle_quarterly_size_pct": null,
+  "cycle_quarterly_share": null,
+  "unexpected_cycles": 1,
+  "unexpected_main_period": 0.4999999975610099,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "jump",
+  "seed": 0,
+  "arm": "grammar",
+  "bic": 493.970662796378,
+  "structure": "Lin + SE + WN",
+  "best_was_proposed": false,
+  "proposals": [],
+  "seconds": 151.0369642089936,
+  "cycle_yearly_present": false,
+  "cycle_yearly_period": null,
+  "cycle_yearly_size_sd": null,
+  "cycle_yearly_size_pct": null,
+  "cycle_yearly_share": null,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "event_reform_changepoint": false,
+  "event_reform_gap": null,
+  "event_reform_effect": 4.231071408969524,
+  "event_reform_low": -0.12372929445626735,
+  "event_reform_high": 8.585872112395315,
+  "event_reform_effect_pct": 15.164151864677212,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "jump",
+  "seed": 0,
+  "arm": "llm_none",
+  "bic": 485.91355462455954,
+  "structure": "CW(Lin, C) + SE + WN",
+  "best_was_proposed": true,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "Lin + SE + WN",
+     "C + Per + RQ",
+     "CP(SE, Per) + Lin + SE",
+     "CW(Lin, WN) + SE"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(5)\nSE + Lin + WN\nRQ + Per(3) + C\nSE + Lin + CP(SE, Per(4), 2015.00)\nSE + CW(Lin, WN, 2012.00, 2016.00)\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "Lin + Per + SE",
+     "Lin + RQ + WN",
+     "Per + SE + WN",
+     "Lin + Per + SE + WN",
+     "C + Per + RQ"
+    ],
+    "rejected": [],
+    "answer": "Lin + SE + Per(2)\nLin + RQ + WN\nSE + Per(4) + WN\nLin + SE + Per(1) + WN\nRQ + Per(3) + C"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "CW(Per, C) + SE + WN",
+     "CP(Lin, SE) + RQ + WN",
+     "C + CW(Lin, SE) + WN",
+     "Per + SE + WN",
+     "CW(Lin, C) + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "CW(Per(2), C, 2015.00, 2017.00) + SE + WN\nCP(Lin, SE, 2012.00) + RQ + WN\nCW(Lin, SE, 2010.00, 2019.92) + C + WN\nPer(4) + SE + WN\nCW(Lin, C, 2014.00, 2016.00) + SE + WN\n"
+   }
+  ],
+  "seconds": 360.6586500409903,
+  "cycle_yearly_present": false,
+  "cycle_yearly_period": null,
+  "cycle_yearly_size_sd": null,
+  "cycle_yearly_size_pct": null,
+  "cycle_yearly_share": null,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "event_reform_changepoint": true,
+  "event_reform_gap": 0.0003460000000359287,
+  "event_reform_effect": 4.188650489990201,
+  "event_reform_low": -0.023158109171211194,
+  "event_reform_high": 8.400459089151614,
+  "event_reform_effect_pct": 14.989326126185304,
+  "unexpected_changepoints": 1
+ },
+ {
+  "family": "jump",
+  "seed": 0,
+  "arm": "llm_true",
+  "bic": 418.70573423867825,
+  "structure": "CP(SE, WN) + Per + SE + WN",
+  "best_was_proposed": true,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "CP(SE, WN) + Per + SE",
+     "CW(SE, WN) + Per + SE",
+     "CP(RQ, Lin) + Per + RQ",
+     "C + CP(Per, SE) + Per + WN"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(1)\nSE + Per(1) + CP(SE, WN, 2014.50)\nSE + Per(1) + CW(SE, WN, 2010.00, 2014.50)\nRQ + Per(1) + CP(RQ, Lin, 2014.50)\nC + Per(1) + WN + CP(Per(1), SE, 2014.50)\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "Per + SE + WN",
+     "CP(SE, WN) + Per + SE + WN",
+     "CW(SE, WN) + Per + SE + WN",
+     "Per + RQ + WN",
+     "CP(SE, Per) + Per + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(1) + WN\nSE + Per(1) + CP(SE, WN, 2014.50) + WN\nSE + Per(1) + CW(SE, WN, 2010.00, 2019.92) + WN\nRQ + Per(1) + WN\nSE + Per(1) + CP(SE, Per(1), 2014.50) + WN\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "CP(SE, Per) + Per + SE + WN",
+     "CW(SE, Per) + SE + WN",
+     "C + CP(SE, Per) + Per + SE + WN",
+     "CP(SE, Per) + Lin + Per + SE + WN",
+     "CP(RQ, Per) + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "CP(SE, Per, 2014.50) + SE + Per + WN\nCW(SE, Per, 2010.00, 2019.92) + SE + WN\nCP(SE, Per) + SE + Per + WN + C\nCP(SE, Per) + SE + Per + WN + Lin\nCP(RQ, Per, 2014.50) + SE + WN\n"
+   }
+  ],
+  "seconds": 883.7380243340012,
+  "cycle_yearly_present": true,
+  "cycle_yearly_period": 1.0001475763529273,
+  "cycle_yearly_size_sd": 0.42200673595585825,
+  "cycle_yearly_size_pct": 9.845841022636094,
+  "cycle_yearly_share": 14.591438653499038,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "event_reform_changepoint": true,
+  "event_reform_gap": 0.04991100000006554,
+  "event_reform_effect": 6.515470799316926,
+  "event_reform_low": 5.744441285894345,
+  "event_reform_high": 7.286500312739507,
+  "event_reform_effect_pct": 25.433769638554413,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "jump",
+  "seed": 0,
+  "arm": "llm_wrong",
+  "bic": 485.96088414448775,
+  "structure": "Per + SE + SE + WN",
+  "best_was_proposed": true,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "CP(SE, WN) + Per + SE",
+     "CW(SE, WN) + Per + SE",
+     "CP(Per, SE) + Lin + Per + SE",
+     "CW(Per, Lin) + Per + SE"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(1)\nSE + Per(1) + CP(SE, WN, 2012)\nSE + Per(1) + CW(SE, WN, 2010, 2012)\nSE + Per(1) + Lin + CP(Per(1), SE, 2012)\nSE + Per(1) + CW(Per(1), Lin, 2010, 2019)\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "Per + SE + WN",
+     "CP(SE, WN) + Per + SE + WN",
+     "CW(SE, WN) + Per + SE + WN",
+     "CP(SE, WN) + Per + Per + SE + WN",
+     "CW(SE, WN) + Per + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(1) + WN\nSE + Per(1) + CP(SE, WN, 2012) + WN\nSE + Per(1) + CW(SE, WN, 2010, 2012) + WN\nSE + Per(1) + CP(SE, WN, 2012) + Per(1) + WN\nSE + Per(1) + CW(SE, WN, 2010, 2019) + WN\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "Per + SE + WN",
+     "Per + SE + SE + WN",
+     "CP(SE, WN) + Per + SE + WN",
+     "CW(SE, WN) + Per + SE + WN",
+     "Per + RQ + WN"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(1) + WN\nSE + Per(1) + SE + WN\nSE + Per(1) + CP(SE, WN, 2012) + WN\nSE + Per(1) + CW(SE, WN, 2010, 2012) + WN\nRQ + Per(1) + WN\n"
+   }
+  ],
+  "seconds": 179.43189320899546,
+  "cycle_yearly_present": true,
+  "cycle_yearly_period": 1.0005903635086804,
+  "cycle_yearly_size_sd": 0.38892287338944576,
+  "cycle_yearly_size_pct": 9.073961278807285,
+  "cycle_yearly_share": 7.984146077898972,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "event_reform_changepoint": false,
+  "event_reform_gap": null,
+  "event_reform_effect": 7.361983609546457,
+  "event_reform_low": 3.8675314199047377,
+  "event_reform_high": 10.856435799188176,
+  "event_reform_effect_pct": 29.7203051604128,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "jump",
+  "seed": 1,
+  "arm": "grammar",
+  "bic": 474.79845690149887,
+  "structure": "Lin + SE + WN",
+  "best_was_proposed": false,
+  "proposals": [],
+  "seconds": 130.346960416995,
+  "cycle_yearly_present": false,
+  "cycle_yearly_period": null,
+  "cycle_yearly_size_sd": null,
+  "cycle_yearly_size_pct": null,
+  "cycle_yearly_share": null,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "event_reform_changepoint": false,
+  "event_reform_gap": null,
+  "event_reform_effect": 5.062080850633588,
+  "event_reform_low": 0.6934624663960758,
+  "event_reform_high": 9.430699234871101,
+  "event_reform_effect_pct": 18.7563017533548,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "jump",
+  "seed": 1,
+  "arm": "llm_none",
+  "bic": 391.7563219477012,
+  "structure": "CP(SE, SE) + Lin + Per x SE + WN",
+  "best_was_proposed": false,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "Lin + SE + WN",
+     "C + Per + RQ",
+     "CP(SE, WN) + Lin + SE",
+     "CW(Per, Lin) + SE"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(5)\nSE + Lin + WN\nRQ + Per(3) + C\nSE + Lin + CP(SE, WN, 2015)\nSE + CW(Per(4), Lin, 2012, 2017)"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "Lin + Per + SE",
+     "Lin + RQ + WN",
+     "Per + SE + WN",
+     "Lin + Per + SE",
+     "C + Per + RQ"
+    ],
+    "rejected": [],
+    "answer": "Lin + SE + Per(2)\nLin + RQ + WN\nSE + Per(2) + WN\nLin + SE + Per(4)\nRQ + Per(2) + C\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "Lin + Per x RQ + SE + WN",
+     "Per x SE + RQ + WN",
+     "Lin + Per x SE + RQ + WN",
+     "Lin + Per x SE + WN",
+     "(RQ + SE) x Per + Lin + WN"
+    ],
+    "rejected": [],
+    "answer": "Lin + Per x RQ + SE + WN\nRQ + Per x SE + WN\nLin + Per x SE + RQ + WN\nLin + SE x Per + WN\nPer x (SE + RQ) + Lin + WN\n"
+   }
+  ],
+  "seconds": 620.9760256250011,
+  "cycle_yearly_present": true,
+  "cycle_yearly_period": 1.00140187336403,
+  "cycle_yearly_size_sd": 0.4259428569956276,
+  "cycle_yearly_size_pct": 9.915925620907537,
+  "cycle_yearly_share": 14.671723401684982,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "event_reform_changepoint": true,
+  "event_reform_gap": 0.04432900000006157,
+  "event_reform_effect": 7.092625571204624,
+  "event_reform_low": 6.504916422845779,
+  "event_reform_high": 7.680334719563469,
+  "event_reform_effect_pct": 28.418075175662974,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "jump",
+  "seed": 1,
+  "arm": "llm_true",
+  "bic": 387.83356350264734,
+  "structure": "C + CP(WN, Lin) + Lin + Per + WN",
+  "best_was_proposed": false,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "CP(SE, WN) + Per + SE",
+     "CW(SE, WN) + Per + SE",
+     "CP(RQ, Lin) + Per + RQ",
+     "C + CP(Per, Lin) + Per + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(1)\nSE + Per(1) + CP(SE, WN, 2014.50)\nSE + Per(1) + CW(SE, WN, 2010.00, 2014.50)\nRQ + Per(1) + CP(RQ, Lin, 2014.50)\nC + SE + Per(1) + WN + CP(Per(1), Lin, 2014.50)\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "C + CP(Per, Lin) + SE + WN",
+     "C + Per + SE + WN",
+     "C + CP(Per, Lin) + Per + SE + WN",
+     "C + CP(Per, Lin) + SE + WN",
+     "C + Lin + Per + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "C + CP(Per, Lin, 2014.50) + SE + WN\nC + Per + SE + WN\nC + CP(Per, Lin, 2014.50) + Per + SE + WN\nC + CP(Per, Lin) + SE + WN\nC + Per + SE + Lin + WN\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "C + CP(WN, Lin) + Per + SE",
+     "C + CP(WN, Lin) + Per + RQ",
+     "C + CP(WN, Lin) + Per + SE + WN",
+     "C + CP(WN, Lin) + RQ + SE",
+     "C + CP(WN, Lin) + CW(WN, Lin) + Per + SE"
+    ],
+    "rejected": [],
+    "answer": "C + CP(WN, Lin) + Per + SE\nC + CP(WN, Lin) + Per + RQ\nC + CP(WN, Lin) + Per + SE + WN\nC + CP(WN, Lin) + RQ + SE\nC + CP(WN, Lin) + Per + SE + CW(WN, Lin, 2010.00, 2014.50)\n"
+   }
+  ],
+  "seconds": 3943.660614959008,
+  "cycle_yearly_present": true,
+  "cycle_yearly_period": 1.0012083089923498,
+  "cycle_yearly_size_sd": 0.4239166296850151,
+  "cycle_yearly_size_pct": 9.868755163713342,
+  "cycle_yearly_share": 14.467058982374587,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "event_reform_changepoint": true,
+  "event_reform_gap": 0.08283899999992173,
+  "event_reform_effect": 7.183684438455565,
+  "event_reform_low": 6.644168409029078,
+  "event_reform_high": 7.723200467882052,
+  "event_reform_effect_pct": 28.888319356011753,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "jump",
+  "seed": 1,
+  "arm": "llm_wrong",
+  "bic": 394.1855596295342,
+  "structure": "CP(SE, SE) + Per + WN",
+  "best_was_proposed": false,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "CP(SE, WN) + Per + SE",
+     "CW(SE, WN) + Per + SE",
+     "CP(SE, WN) + Lin + Per + SE",
+     "CP(RQ, WN) + Per + RQ"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(1)\nSE + Per(1) + CP(SE, WN, 2012.00)\nSE + Per(1) + CW(SE, WN, 2010.00, 2019.92)\nSE + Per(1) + Lin + CP(SE, WN, 2012.00)\nRQ + Per(1) + CP(RQ, WN, 2012.00)\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "CP(SE, Per) + SE + WN",
+     "CW(Per, SE) + SE + WN",
+     "CP(WN, SE) + Per + SE",
+     "CP(SE, WN) + Per + RQ + SE",
+     "CP(SE, WN) + Lin + Per + SE"
+    ],
+    "rejected": [],
+    "answer": "CP(SE, Per, 2012.00) + SE + WN\nCW(Per, SE, 2010.00, 2019.92) + SE + WN\nSE + Per + CP(WN, SE, 2012.00)\nSE + Per + RQ + CP(SE, WN, 2012.00)\nLin + SE + Per + CP(SE, WN, 2012.00)\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "CP(SE, Per) + SE + WN",
+     "CW(SE, Per) + SE + WN",
+     "CP(SE, SE) + Lin + Per",
+     "CP(RQ, SE) + Per + WN",
+     "CP(SE, WN) + Per + SE"
+    ],
+    "rejected": [],
+    "answer": "CP(SE, Per, t=2012.00) + SE + WN\nCW(SE, Per, s=2010.00, e=2019.92) + SE + WN\nCP(SE, SE, t=2012.00) + Per + Lin\nCP(RQ, SE) + Per + WN\nCP(SE, WN, t=2012.00) + Per + SE\n"
+   }
+  ],
+  "seconds": 1039.2509914580005,
+  "cycle_yearly_present": true,
+  "cycle_yearly_period": 1.0012957336788912,
+  "cycle_yearly_size_sd": 0.4247619610720416,
+  "cycle_yearly_size_pct": 9.88843443059411,
+  "cycle_yearly_share": 0.964647142856026,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "event_reform_changepoint": true,
+  "event_reform_gap": 0.011856000000079803,
+  "event_reform_effect": 7.317332211859558,
+  "event_reform_low": 6.571112517854858,
+  "event_reform_high": 8.063551905864259,
+  "event_reform_effect_pct": 29.584770605534498,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "jump",
+  "seed": 2,
+  "arm": "grammar",
+  "bic": 489.27313792250834,
+  "structure": "Lin + Per x SE + SE + WN",
+  "best_was_proposed": false,
+  "proposals": [],
+  "seconds": 122.27422712500265,
+  "cycle_yearly_present": true,
+  "cycle_yearly_period": 0.9999682916828929,
+  "cycle_yearly_size_sd": 0.35765267654563765,
+  "cycle_yearly_size_pct": 8.283349673685539,
+  "cycle_yearly_share": 6.639161447225114,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "event_reform_changepoint": false,
+  "event_reform_gap": null,
+  "event_reform_effect": 5.353138275980997,
+  "event_reform_low": 2.341747103031005,
+  "event_reform_high": 8.364529448930988,
+  "event_reform_effect_pct": 19.723062168891094,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "jump",
+  "seed": 2,
+  "arm": "llm_none",
+  "bic": 500.23013140998324,
+  "structure": "CW(Lin, Lin) + SE + WN",
+  "best_was_proposed": false,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "Lin + SE + WN",
+     "C + Per + RQ",
+     "Lin + Per + SE + WN",
+     "CW(SE, Per) + RQ"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(5)\nSE + Lin + WN\nRQ + Per(3) + C\nSE + Lin + Per(4) + WN\nRQ + CW(SE, Per(6), 2013.00, 2016.00)\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "Lin + Per + SE",
+     "Lin + RQ + WN",
+     "Per + SE + WN",
+     "Lin + Per + SE + WN",
+     "C + Per + RQ"
+    ],
+    "rejected": [],
+    "answer": "Lin + SE + Per(2)\nLin + RQ + WN\nSE + Per(4) + WN\nLin + SE + Per(1) + WN\nRQ + Per(3) + C"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "CW(Lin, Per) + SE + WN",
+     "CP(SE, Per) + SE + WN",
+     "CW(Per, Per) + SE + WN",
+     "(SE + WN) x Lin + C",
+     "RQ + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "CW(Lin, Per(5)) + SE + WN\nCP(SE, Per(5), 2015.0) + SE + WN\nCW(Per(2), Per(8), 2013.0, 2017.0) + SE + WN\n(SE + WN) x Lin + C\nRQ + SE + WN\n"
+   }
+  ],
+  "seconds": 363.32813420800085,
+  "cycle_yearly_present": false,
+  "cycle_yearly_period": null,
+  "cycle_yearly_size_sd": null,
+  "cycle_yearly_size_pct": null,
+  "cycle_yearly_share": null,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "event_reform_changepoint": true,
+  "event_reform_gap": 0.04060899999990397,
+  "event_reform_effect": 5.232316083294797,
+  "event_reform_low": 0.6552585857464628,
+  "event_reform_high": 9.80937358084313,
+  "event_reform_effect_pct": 19.192469295989305,
+  "unexpected_changepoints": 1
+ },
+ {
+  "family": "jump",
+  "seed": 2,
+  "arm": "llm_true",
+  "bic": 428.52681213452416,
+  "structure": "CP(SE, WN) + Per + Per + SE",
+  "best_was_proposed": false,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "C + Per + SE",
+     "CP(SE, WN) + Per + SE",
+     "CW(SE, WN) + Per + SE",
+     "C + CP(RQ, SE) + Per + RQ"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(1)\nSE + Per(1) + C\nSE + Per(1) + CP(SE, WN, 2014.50)\nSE + Per(1) + CW(SE, WN, 2010.00, 2019.92)\nRQ + Per(1) + C + CP(RQ, SE, 2014.50)\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "CP(SE, Per) + SE + WN",
+     "CW(SE, Per) + SE + WN",
+     "CP(WN, SE) + Per + SE",
+     "CP(SE, WN) + Per + RQ + SE",
+     "CP(SE, Per) + Per + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "CP(SE, Per, 2014.50) + SE + WN\nCW(SE, Per, 2010.00, 2019.92) + SE + WN\nSE + Per + CP(WN, SE, 2014.50)\nSE + Per + RQ + CP(SE, WN, 2014.50)\nSE + Per + WN + CP(SE, Per, 2014.50)\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "CP(SE, Per) + WN",
+     "CW(SE, Per) + SE + WN",
+     "CP(SE, WN) + Per x RQ + SE",
+     "CP(SE, WN) + Per + RQ",
+     "Lin + Per + SE + WN"
+    ],
+    "rejected": [],
+    "answer": "CP(SE, Per, 2014.50) + WN\nCW(SE, Per, 2010.00, 2019.92) + SE + WN\nSE + Per x RQ + CP(SE, WN, 2014.50)\nRQ + Per + CP(SE, WN, 2014.50)\nLin + SE + Per + WN\n"
+   }
+  ],
+  "seconds": 1420.2704051249893,
+  "cycle_yearly_present": true,
+  "cycle_yearly_period": 0.9989223871598853,
+  "cycle_yearly_size_sd": 0.39563327876597393,
+  "cycle_yearly_size_pct": 9.162992493772354,
+  "cycle_yearly_share": 12.71771324682719,
+  "unexpected_cycles": 1,
+  "unexpected_main_period": 1.2479481424868215,
+  "event_reform_changepoint": true,
+  "event_reform_gap": 0.004278000000113025,
+  "event_reform_effect": 7.429296241814566,
+  "event_reform_low": 6.648318698221196,
+  "event_reform_high": 8.210273785407935,
+  "event_reform_effect_pct": 29.6396960639539,
+  "unexpected_changepoints": 0
+ },
+ {
+  "family": "jump",
+  "seed": 2,
+  "arm": "llm_wrong",
+  "bic": 463.8012819513328,
+  "structure": "CW(WN, Lin + WN) + Per + RQ",
+  "best_was_proposed": false,
+  "proposals": [
+   {
+    "level": 0,
+    "proposed": [
+     "Per + SE",
+     "CP(SE, WN) + Per + SE",
+     "CW(SE, WN) + Per + SE",
+     "CP(Per, SE) + Lin + Per + SE",
+     "CW(RQ, WN) + Per + RQ"
+    ],
+    "rejected": [],
+    "answer": "SE + Per(1)\nSE + Per(1) + CP(SE, WN, 2012)\nSE + Per(1) + CW(SE, WN, 2010, 2012)\nSE + Per(1) + Lin + CP(Per(1), SE, 2012)\nRQ + Per(1) + CW(RQ, WN, 2010, 2019)\n"
+   },
+   {
+    "level": 1,
+    "proposed": [
+     "CW(SE, WN) + Per + SE",
+     "CP(SE, WN) + Per + RQ",
+     "CW(RQ, SE) + Lin + Per",
+     "CP(RQ, Per) + RQ + WN",
+     "CW(SE, WN) + Per + RQ"
+    ],
+    "rejected": [],
+    "answer": "CW(SE, WN, 2012.00, 2012.92) + Per + SE\nCP(SE, WN, 2012.00) + Per + RQ\nCW(RQ, SE, 2010.00, 2019.92) + Per + Lin\n(CP(RQ, Per, 2012.00) + RQ) + WN\nRQ + Per + CW(SE, WN, 2012.00, 2013.00)\n"
+   },
+   {
+    "level": 2,
+    "proposed": [
+     "CP(Per, RQ) + Lin + WN",
+     "CW(Lin + WN, RQ) + Per + RQ",
+     "Lin + Per + RQ + WN",
+     "CP(Per, Lin + WN) + RQ"
+    ],
+    "rejected": [
+     "CW(RQ, Lin + WN, 2012.00, 2012.00) + Per + RQ"
+    ],
+    "answer": "CW(RQ, Lin + WN, 2012.00, 2012.00) + Per + RQ\nCP(Per, RQ, 2012.00) + Lin + WN\nRQ + Per + CW(Lin + WN, RQ, 2012.00, 2019.92)\nRQ + Per + Lin + WN\nRQ + CP(Per, Lin + WN, 2012.00)\n"
+   }
+  ],
+  "seconds": 1117.779277249996,
+  "cycle_yearly_present": true,
+  "cycle_yearly_period": 0.9990418616450216,
+  "cycle_yearly_size_sd": 0.3855397084867786,
+  "cycle_yearly_size_pct": 8.929222197724183,
+  "cycle_yearly_share": 7.537846097293444,
+  "unexpected_cycles": 0,
+  "unexpected_main_period": null,
+  "event_reform_changepoint": true,
+  "event_reform_gap": 0.012433000000100947,
+  "event_reform_effect": 7.228491615038124,
+  "event_reform_low": 5.3597451481423946,
+  "event_reform_high": 9.097238081933854,
+  "event_reform_effect_pct": 28.60937539044718,
+  "unexpected_changepoints": 1
+ }
+]
