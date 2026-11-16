@@ -86,12 +86,16 @@ def sample(
     n: int = 1,
     sd: float = 1.0,
     noise: float = 0.1,
+    tries: int = 50,
 ) -> tuple[np.ndarray, ff.Kernel]:
     """Draw series from the Gaussian process the kernel defines.
 
     Unset parameters are drawn as the search draws its starts, against a
     series of unit spread on ``x``: lengthscales and periods scale with the
-    span of ``x``, so one expression yields series of every kind.
+    span of ``x``, so one expression yields series of every kind. Draws the
+    search would reject as out of bounds (a period shorter than a few
+    samples or longer than the span allows) are drawn again, so every series
+    holds a structure the search can find.
 
     Parameters
     ----------
@@ -107,6 +111,8 @@ def sample(
         Spread of the parameter draws, on the log scale.
     noise : float, optional
         Standard deviation of white noise added to every value.
+    tries : int, optional
+        Parameter draws before giving up on out-of-bounds values.
 
     Returns
     -------
@@ -118,13 +124,19 @@ def sample(
     Raises
     ------
     ValueError
-        When the covariance has no Cholesky factor even with jitter.
+        When every draw is out of bounds, or the covariance has no Cholesky
+        factor even with jitter.
     """
     xs = np.asarray(x, dtype=float).reshape(len(x), -1)
     unit = rng.standard_normal(len(xs))
     shape = data_shape(xs, unit / unit.std(), Experiment())
-    drawn = kernel.copy()
-    drawn.initialise_params(rng, sd, shape)
+    for _ in range(tries):
+        drawn = kernel.copy()
+        drawn.initialise_params(rng, sd, shape)
+        if not drawn.out_of_bounds(shape):
+            break
+    else:
+        raise ValueError(f"{kernel.pretty_print()}: every draw is out of bounds")
     xt = ff.as_input(xs)
     theta = torch.as_tensor(drawn.param_vector, dtype=torch.float64)
     with torch.no_grad():
