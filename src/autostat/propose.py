@@ -68,7 +68,7 @@ NAMES: dict[str, str] = {
 _TIMES = "\u00d7"
 
 _TOKEN = re.compile(
-    r"\s*(CP|CW|[A-Za-z]+|[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?|[()+,*\u00d7])"
+    r"\s*(CP|CW|[A-Za-z]+|[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?|[()+,*=\u00d7])"
 )
 
 
@@ -112,7 +112,8 @@ def parse(text: str, dimension: int = 0) -> ff.Kernel:
     optimisation at a period of 0.25 time units: language models told the
     business's expected period write it so. Told of a dated event, they
     write ``CP(a, b, 2014.5)``, a switch starting at that date, or
-    ``CW(a, b, 2010, 2012)``, a window starting between those dates.
+    ``CW(a, b, 2010, 2012)``, a window starting between those dates; a
+    date may be named, ``CP(a, b, t=2014.5)``.
 
     Parameters
     ----------
@@ -242,6 +243,10 @@ def parse(text: str, dimension: int = 0) -> ff.Kernel:
             dates = []
             while peek() == ",":
                 take()
+                if at + 1 < len(tokens) and tokens[at + 1] == "=":
+                    # A named date, as in CP(SE, SE, t=2012.0).
+                    take()
+                    take("=")
                 dates.append(number())
             take(")")
             if token == "CP":
@@ -349,7 +354,8 @@ class Proposer:
     count : int, optional
         Structures asked for per level.
     history : list of dict
-        Filled as the search runs: the level, the answer and what parsed.
+        Filled as the search runs: the level, the model's whole answer,
+        what parsed and the lines that did not.
     """
 
     ask: Callable[[str], str]
@@ -405,6 +411,7 @@ class Proposer:
                 "level": depth,
                 "proposed": [k.structure_key() for k in kernels],
                 "rejected": rejected,
+                "answer": answer,
             }
         )
         return kernels

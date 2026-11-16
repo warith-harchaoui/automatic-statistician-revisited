@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Fixed: the same search with the same seed could keep another model on
+  macOS. Apple's Accelerate solves a triangular system with one right-hand
+  side differently from one call to the next at some sizes (64 or 96 rows),
+  in the last bits; L-BFGS amplified that near ill-conditioned points;
+  one refit of `C + WN` from one start ended 35 BIC from another. Every
+  solve now goes through `model.cholesky_solve`, which pads a single
+  column to two; it repeats itself exactly. Results computed before this
+  fix were one draw among several on such series.
+- A date may be named in a proposal, `CP(a, b, t=2014.5)`, as gemma3:12b
+  writes it; the proposer keeps the model's whole answer in its history.
 - A language model may date a switch: `CP(a, b, 2014.5)` starts the
   changepoint at that date, `CW(a, b, 2010, 2012)` the window between
   those dates, as `Per(0.25)` starts a period. gemma3:12b wrote them so

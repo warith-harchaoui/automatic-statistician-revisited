@@ -313,6 +313,35 @@ class GPModel:
         return mean, theta[i : i + n], lik
 
 
+def cholesky_solve(b: torch.Tensor, chol: torch.Tensor) -> torch.Tensor:
+    """Solve ``K a = b`` from the lower Cholesky factor of ``K``, reproducibly.
+
+    Apple's Accelerate solves a triangular system with one right-hand side
+    (``trsv``) differently from one call to the next at some sizes (64 or
+    96 rows, not 40 or 120): the last bits change; so do the gradients
+    L-BFGS follows. Near an ill-conditioned point the difference grows until
+    the same search, with the same seed, keeps another model. With two
+    columns the matrix routine is used, which repeats itself exactly; a
+    single column is solved beside a zero one.
+
+    Parameters
+    ----------
+    b : torch.Tensor
+        Right-hand side, shape ``(n, m)``.
+    chol : torch.Tensor
+        Lower Cholesky factor, shape ``(n, n)``.
+
+    Returns
+    -------
+    torch.Tensor
+        Shape ``(n, m)``.
+    """
+    if b.shape[1] != 1:
+        return torch.cholesky_solve(b, chol)
+    padded = torch.cat([b, torch.zeros_like(b)], dim=1)
+    return torch.cholesky_solve(padded, chol)[:, :1]
+
+
 def _targets(y: Any) -> torch.Tensor:
     """Convert targets to a float64 vector.
 
@@ -406,7 +435,7 @@ def negative_log_likelihood(
     if chol is None:
         return torch.tensor(math.inf, dtype=torch.float64)
     resid = (y - mean)[:, None]
-    alpha = torch.cholesky_solve(resid, chol)
+    alpha = cholesky_solve(resid, chol)
     n = y.shape[0]
     return (
         0.5 * (resid * alpha).sum()
@@ -595,9 +624,9 @@ def posterior(
         theta_p = torch.as_tensor(part.param_vector, dtype=torch.float64)
         k_sx = part.cov(xs, xt, theta_p, same=at_data)
         k_ss = part.cov(xs, xs, theta_p, same=True)
-        alpha = torch.cholesky_solve((yt - mean0)[:, None], chol)
+        alpha = cholesky_solve((yt - mean0)[:, None], chol)
         mean = (k_sx @ alpha).ravel() + (mean0 if component is None else 0.0)
-        v = torch.cholesky_solve(k_sx.T, chol)
+        v = cholesky_solve(k_sx.T, chol)
         cov = k_ss - k_sx @ v
         if noise and component is None and lik is not None:
             cov = cov + torch.exp(2 * lik) * torch.eye(

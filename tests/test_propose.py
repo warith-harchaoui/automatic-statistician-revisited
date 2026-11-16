@@ -84,6 +84,7 @@ def test_a_chatty_answer_still_gives_its_structures():
         "Per + Per",
     ]
     assert proposer.history[0]["rejected"] == ["Here are some:"]
+    assert proposer.history[0]["answer"] == answer
 
 
 def test_a_failing_model_gives_no_proposal_and_no_crash():
@@ -159,7 +160,16 @@ def test_a_dated_switch_written_by_the_model_becomes_a_starting_value():
     assert switch.location == 2014.5
     assert (window.location, window.width) == (2011.0, pytest.approx(math.log(2)))
     assert parse("CP(SE, SE)").location is None
-    for bad in ("CP(SE, SE, 1, 2)", "CW(SE, SE, 2012)", "CW(SE, SE, 2012, 2010)"):
+    assert parse("CP(SE, SE, t=2014.5)").location == 2014.5
+    named = parse("CW(SE, Lin, s=2010, e=2012)")
+    assert (named.location, named.width) == (window.location, window.width)
+    for bad in (
+        "CP(SE, SE, 1, 2)",
+        "CW(SE, SE, 2012)",
+        "CW(SE, SE, 2012, 2010)",
+        "CP(SE, SE, t=)",
+        "SE = Per",
+    ):
         with pytest.raises(ValueError):
             parse(bad)
 
