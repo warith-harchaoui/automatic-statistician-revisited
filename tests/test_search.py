@@ -156,3 +156,25 @@ def test_a_collapsing_line_search_keeps_the_best_parameters(monkeypatch):
     model = GPModel(ff.SqExpKernel(0, lengthscale=0.0, sf=0.0), ndata=20)
     fitted = fit(model, x, np.sin(6 * x), iters=5, subset=False)
     assert np.isfinite(fitted.nll)
+
+
+@pytest.mark.parametrize("n", [64, 96])
+def test_the_same_fit_gives_the_same_result(n):
+    """Refitting one start gives bit-identical results.
+
+    On macOS, Accelerate's one-column triangular solve varies in its last
+    bits at these sizes; amplified by L-BFGS near an ill-conditioned point,
+    a constant plus noise once ended 35 BIC apart from the same start.
+
+    Parameters
+    ----------
+    n : int
+        Series length.
+    """
+    rng = np.random.default_rng(0)
+    x = np.linspace(2000, 2010, n)
+    y = 50 + rng.standard_normal(n)
+    kernel = ff.SumKernel([ff.ConstKernel(sf=-0.84), ff.NoiseKernel(sf=3.6)])
+    model = GPModel(kernel, lik_sf=-np.inf, ndata=n)
+    fits = [fit(model, x, y, iters=100) for _ in range(4)]
+    assert len({(m.nll, *m.theta_vector()) for m in fits}) == 1

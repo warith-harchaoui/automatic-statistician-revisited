@@ -76,11 +76,41 @@ the grammar alone, on a machine shared with other measurements (load
 around 100). A level waits for the model's answer; the proposals add
 five structures to fit.
 
+## A second run: what it showed about the first
+
+The study was run again once the prompt offered dated switches
+([results-dated.json](results-dated.json)). The language model wrote its
+dates named, `CP(SE, SE, t=2012.00)`, which the reader then refused
+(5 lines); named dates are read since. The run measured something else
+instead: the grammar arm, unchanged, did not repeat itself. Quarterly
+seed 2 went from 432.8 to 409.6, seed 1 from 389.9 to 388.5.
+
+The cause was numerical, not statistical. On macOS, Apple's Accelerate
+solves a triangular system with one right-hand side differently from one
+call to the next at some sizes (this series has 96 points), in the last
+bits. L-BFGS amplified that near ill-conditioned points: one refit of
+`C + WN` from a fixed start ended anywhere between 313 and 348. Every
+solve now pads a single column to two, which takes a routine that repeats
+itself exactly; the same fit then gives the same bits; a test checks
+it.
+
+So both runs above were draws among several. What held in both:
+
+| | grammar | llm_none | llm_true | llm_wrong |
+|---|---|---|---|---|
+| jump found, first run | 0 of 3 | 2 of 3 | 3 of 3 | 3 of 3 |
+| jump found, second run | 0 of 3 | 3 of 3 | 2 of 3 | 3 of 3 |
+
+The jump result stands: the grammar alone missed it six times of six, the
+proposals found it 16 times of 18. The quarterly differences between arms
+(up to 40 BIC in one run) are of the size of the run-to-run variation (23
+BIC on the grammar arm alone) and say nothing either way.
+
 ## What follows
 
-- Proposals that date a switch, `CP(a, b, 2014.5)`, now start its
-  location there, as `Per(p)` starts a period; the prompt offers both
-  forms. Whether that lets a wrong date mislead the search is the next
-  measurement: the numbers of a context would then reach the starts.
+- Proposals that date a switch, `CP(a, b, 2014.5)` or
+  `CP(a, b, t=2014.5)`, now start its location there, as `Per(p)` starts
+  a period. Whether a wrong date then misleads the search is the next
+  measurement, now that a run repeats itself.
 - Three seeds per family is a first look. The jump result is large and
   consistent; the quarterly result is not distinguishable from noise.
