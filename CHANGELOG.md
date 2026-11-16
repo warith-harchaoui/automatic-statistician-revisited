@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- `mixture_posterior` forecasts with every structure a search scored,
+  weighted by `exp(-BIC / 2)` (Bayesian model averaging over the structures
+  searched, the first action of the research watch). The variance follows
+  the law of total variance, so the band widens where structures disagree.
+  `bic_weights` is now the one place that weighs structures;
+  `structure_probabilities` reads it. The benchmark gains
+  `abcd_2014_port_mixture` and `cks_2013_port_mixture`; both rows of a preset
+  read one search, kept in `benchmark/results/searches/` so a run resumes.
 - `autostat.context`: what the business knows about a family of series
   (unit, positivity, expected cycles, dated events), read from YAML.
   `Context.search_hints()` feeds two new `Experiment` fields,
