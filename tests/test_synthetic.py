@@ -90,3 +90,16 @@ def test_the_search_recovers_the_cycle_that_drew_a_series():
     exp = Experiment.abcd_2014(max_depth=2, n_jobs=1, n_rand=3)
     found = periods(search(x, y[0], exp).best.kernel)
     assert any(abs(p - 1.0) < 0.05 for p in found)
+
+
+def test_no_draw_is_out_of_the_search_bounds():
+    """Every drawn period fits a few samples per cycle and a few cycles in the span."""
+    from autostat.search import Experiment, data_shape
+
+    shape = data_shape(
+        X[:, None], np.random.default_rng(0).standard_normal(80), Experiment()
+    )
+    rng = np.random.default_rng(5)
+    for _ in range(30):
+        _, kernel = sy.draw(X, rng)
+        assert not kernel.out_of_bounds(shape)

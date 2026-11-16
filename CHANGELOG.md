@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- `autostat.propose`: `parse` reads a structure written as text (the
+  inverse of `structure_key`, checked on every 2014 level winner);
+  `Proposer` asks a language model for structures at every level, from the
+  span, the context and the best so far; `search(..., propose=...)` fits
+  them beside the grammar's neighbours under the same score. `ollama`
+  queries a local server. On airline, gemma3:12b gave five structures that
+  all parse, in 51 s.
+- The synthetic generator redraws parameters the search would reject as out
+  of bounds; `doc/research/recovery/run.py` measures whether the search
+  finds the structure that drew a series. `doc/references.bib` gains the
+  newest neighbours, checked against arXiv and Crossref.
 - `autostat.synthetic` draws series from the grammar: `random_structure`
   walks the rules at random, `sample` draws parameters as the search's
   starts do and samples the Gaussian process, `draw` does both. A slow test
