@@ -355,6 +355,14 @@ long series binned), `search` with an `Experiment`, `describe` for the report,
 every structure a search scored, each weighted by `exp(-BIC / 2)`. Its
 band widens where the structures disagree; when one structure takes all the
 weight, as it often does, it is the best model's forecast.
+`autostat.propose` lets a language model suggest structures at every level,
+from the series' span, the business context and the best structures so far:
+`search(x, y, exp, propose=Proposer(ollama("gemma3:12b"), context))`. The
+proposals are fitted beside the grammar's neighbours and BIC alone decides;
+a model that answers badly or not at all leaves the search as it was.
+`ollama` asks a local server, so nothing leaves the machine. `parse` reads a
+structure written as text, the inverse of `structure_key`.
+
 `autostat.synthetic` runs the grammar the other way: `draw` walks it at
 random to a structure, gives it parameters as the search's starts do and
 samples a series from that Gaussian process, returned with the expression

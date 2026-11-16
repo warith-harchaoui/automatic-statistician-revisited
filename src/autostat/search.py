@@ -47,6 +47,7 @@ import json
 import logging
 import math
 import time
+from collections.abc import Callable
 from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
 from typing import Any
@@ -639,6 +640,8 @@ def search(
     y: Any,
     exp: Experiment | None = None,
     start: ff.Kernel | None = None,
+    propose: Callable[[list[GPModel], dict[str, Any], int], list[ff.Kernel]]
+    | None = None,
 ) -> SearchResult:
     """Search for the kernel structure that best explains ``y`` given ``x``.
 
@@ -653,6 +656,11 @@ def search(
         Settings; the 2014 preset when omitted.
     start : Kernel, optional
         Structure to expand first; set by ``exp.start`` when omitted.
+    propose : callable, optional
+        Called before every level with the best models so far (none before
+        the first), the data summary and the level; the structures it
+        returns are fitted beside the grammar's neighbours, under the same
+        score. :class:`autostat.propose.Proposer` asks a language model.
 
     Returns
     -------
@@ -689,6 +697,11 @@ def search(
     stalled_levels = 0
 
     for depth in range(exp.max_depth):
+        if propose is not None:
+            known = {m.kernel.structure_key() for m in current}
+            for kernel in propose(best_models or [], shape, depth):
+                if kernel.structure_key() not in known:
+                    current.append(GPModel(kernel, lik_sf=lik_sf, ndata=y.size))
         current = _restarts(current, exp, shape, rng)
         current = ff.remove_duplicates([m.simplified() for m in current])
         current = _jitter(current, exp.jitter_sd, rng)
