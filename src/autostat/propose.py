@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import re
 import urllib.request
 from collections.abc import Callable
@@ -66,7 +67,9 @@ NAMES: dict[str, str] = {
 #: The multiplication sign a language model may write for a product.
 _TIMES = "\u00d7"
 
-_TOKEN = re.compile(r"\s*(CP|CW|[A-Za-z]+|[()+,*\u00d7])")
+_TOKEN = re.compile(
+    r"\s*(CP|CW|[A-Za-z]+|[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?|[()+,*\u00d7])"
+)
 
 
 def _tokens(text: str) -> list[str]:
@@ -105,7 +108,9 @@ def parse(text: str, dimension: int = 0) -> ff.Kernel:
     The grammar: a sum of products of atoms, an atom being a base kernel
     name (``SE``, ``Per``, ``Lin``, ``RQ``, ``GE``, ``C``, ``WN``), a
     bracketed structure or a switch ``CP(a, b)`` / ``CW(a, b)``. Products
-    bind tighter than sums.
+    bind tighter than sums. ``Per(0.25)`` is a cycle that starts its
+    optimisation at a period of 0.25 time units: language models told the
+    business's expected period write it so.
 
     Parameters
     ----------
@@ -219,6 +224,13 @@ def parse(text: str, dimension: int = 0) -> ff.Kernel:
         if token not in NAMES:
             raise ValueError(f"unknown kernel {token!r} in {text!r}")
         cls = ff.BASE_KERNELS[NAMES[token]]
+        if token == "Per" and peek() == "(":
+            take("(")
+            period = float(take())
+            take(")")
+            if not period > 0:
+                raise ValueError(f"a period must be positive in {text!r}")
+            return cls(dimension=dimension, period=math.log(period))
         return cls() if cls.is_thunk else cls(dimension=dimension)
 
     kernel = total()
@@ -257,6 +269,7 @@ def prompt(
         "Lin (linear trend), RQ (multi-scale smooth), C (constant), WN (white",
         "noise); ' x ' multiplies, ' + ' adds, brackets group, CP(a, b) switches",
         "from a to b at one date and CW(a, b) is b inside a window and a outside.",
+        "Per(p) starts a cycle at a period of p years.",
         "",
         f"The series spans {shape['x_min'][0]:.2f} to {shape['x_max'][0]:.2f}"
         " (time in years).",

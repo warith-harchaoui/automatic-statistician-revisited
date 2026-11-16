@@ -7,6 +7,8 @@ Warith Harchaoui <warithmetics@deraison.ai>
 
 from __future__ import annotations
 
+import math
+
 import numpy as np
 import pytest
 
@@ -118,3 +120,32 @@ def test_a_proposed_structure_is_fitted_beside_the_grammar():
     result = search(x, y, exp, propose=proposer)
     keys = {m.kernel.simplified().structure_key() for m in result.levels[0]}
     assert "Lin + Per x SE + WN" in keys
+
+
+def test_a_period_written_by_the_model_becomes_a_starting_value():
+    """``Per(0.25)`` starts the cycle at a quarter; malformed periods fail."""
+    import math
+
+    kernel = parse("SE + Per(0.25)")
+    periods = [k.period for k in kernel.operands if hasattr(k, "period")]
+    assert periods == [pytest.approx(math.log(0.25))]
+    for bad in ("Per(0)", "Per(", "Per(a)", "SE(1)"):
+        with pytest.raises(ValueError):
+            parse(bad)
+
+
+def test_a_proposal_with_a_period_is_kept_beside_the_same_structure():
+    """A cycle with a starting period is fitted even if the grammar offers ``Per``."""
+    x = np.linspace(2000, 2010, 80)
+    y = np.sin(2 * np.pi * x / 0.7) + 0.1 * np.random.default_rng(0).standard_normal(80)
+    proposer = Proposer(ask=lambda _: "Per(0.7) + WN")
+    # The other parameters still start at random: give them a few starts.
+    exp = Experiment.abcd_2014(max_depth=1, n_jobs=1, n_rand=3, iters=50)
+    result = search(x, y, exp, propose=proposer)
+    periods = [
+        math.exp(k.period)
+        for m in result.levels[0]
+        for k in [m.kernel, *getattr(m.kernel, "operands", [])]
+        if getattr(k, "period", None) is not None
+    ]
+    assert any(abs(p - 0.7) < 0.02 for p in periods)

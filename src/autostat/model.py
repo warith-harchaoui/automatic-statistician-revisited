@@ -472,9 +472,11 @@ def _minimise(model: GPModel, x: torch.Tensor, y: torch.Tensor, iters: int) -> N
             best["theta"] = theta.detach().numpy().copy()
         return value
 
-    # A numerically hopeless model makes the optimiser itself raise. The best
-    # parameters seen so far are kept either way.
-    with contextlib.suppress(RuntimeError):
+    # A numerically hopeless model makes the optimiser itself raise: a
+    # RuntimeError, or an IndexError from the strong-Wolfe line search of
+    # torch's L-BFGS when its bracket collapses. The best parameters seen so
+    # far are kept either way.
+    with contextlib.suppress(RuntimeError, IndexError):
         optimiser.step(closure)
     model.load_theta_vector(best["theta"])
 

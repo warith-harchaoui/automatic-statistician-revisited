@@ -750,7 +750,10 @@ def search(
         if propose is not None:
             known = {m.kernel.structure_key() for m in current}
             for kernel in propose(best_models or [], shape, depth):
-                if kernel.structure_key() not in known:
+                # A structure the grammar already offers is new only when it
+                # brings a starting value, e.g. the period of Per(0.25).
+                started = np.isfinite(kernel.param_vector).any()
+                if started or kernel.structure_key() not in known:
                     current.append(GPModel(kernel, lik_sf=lik_sf, ndata=y.size))
         current = _restarts(current, exp, shape, rng)
         current = ff.remove_duplicates([m.simplified() for m in current])
