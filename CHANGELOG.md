@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- `autostat.synthetic` draws series from the grammar: `random_structure`
+  walks the rules at random, `sample` draws parameters as the search's
+  starts do and samples the Gaussian process, `draw` does both. A slow test
+  checks that the search finds again the yearly cycle that drew a series.
 - The benchmark reports its resolution: a bootstrap over the thirteen
   series gives each median a 95 % interval and each method the share of
   resamples it leads; the methods tied with the leader are marked (15 of 24).

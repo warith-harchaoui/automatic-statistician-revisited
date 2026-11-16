@@ -355,6 +355,12 @@ long series binned), `search` with an `Experiment`, `describe` for the report,
 every structure a search scored, each weighted by `exp(-BIC / 2)`. Its
 band widens where the structures disagree; when one structure takes all the
 weight, as it often does, it is the best model's forecast.
+`autostat.synthetic` runs the grammar the other way: `draw` walks it at
+random to a structure, gives it parameters as the search's starts do and
+samples a series from that Gaussian process, returned with the expression
+that made it. It serves recovery tests (a drawn yearly cycle is found again
+at 0.9998 years) and is the kernel-composition prior that Chronos'
+KernelSynth and TempoPFN train on.
 
 The API and the MCP server share one application: `autostat-mcp` serves the
 HTTP routes and `/mcp` on port 8000. The MCP tools are `list_series`,
