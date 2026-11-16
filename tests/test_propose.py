@@ -149,3 +149,33 @@ def test_a_proposal_with_a_period_is_kept_beside_the_same_structure():
         if getattr(k, "period", None) is not None
     ]
     assert any(abs(p - 0.7) < 0.02 for p in periods)
+
+
+def test_a_dated_switch_written_by_the_model_becomes_a_starting_value():
+    """``CP(a, b, t)`` starts the switch at t, ``CW(a, b, s, e)`` the window."""
+    change = parse("CP(SE, SE, 2014.5) + WN")
+    window = parse("CW(SE, Lin, 2010, 2012)")
+    switch = next(k for k in change.operands if getattr(k, "id", None) == "CP")
+    assert switch.location == 2014.5
+    assert (window.location, window.width) == (2011.0, pytest.approx(math.log(2)))
+    assert parse("CP(SE, SE)").location is None
+    for bad in ("CP(SE, SE, 1, 2)", "CW(SE, SE, 2012)", "CW(SE, SE, 2012, 2010)"):
+        with pytest.raises(ValueError):
+            parse(bad)
+
+
+def test_a_proposal_with_a_date_finds_the_jump():
+    """A level jump proposed at its date is fitted there."""
+    x = np.linspace(2000, 2010, 80)
+    noise = 0.1 * np.random.default_rng(0).standard_normal(80)
+    y = np.where(x > 2006.3, 2.0, 0.0) + noise
+    proposer = Proposer(ask=lambda _: "CP(C, C, 2006.3) + WN")
+    exp = Experiment.abcd_2014(max_depth=1, n_jobs=1, n_rand=3, iters=50)
+    result = search(x, y, exp, propose=proposer)
+    locations = [
+        k.location
+        for m in result.levels[0]
+        for k in [m.kernel, *getattr(m.kernel, "operands", [])]
+        if getattr(k, "id", None) == "CP"
+    ]
+    assert any(abs(t - 2006.3) < 0.1 for t in locations)

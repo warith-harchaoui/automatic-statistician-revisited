@@ -110,7 +110,9 @@ def parse(text: str, dimension: int = 0) -> ff.Kernel:
     bracketed structure or a switch ``CP(a, b)`` / ``CW(a, b)``. Products
     bind tighter than sums. ``Per(0.25)`` is a cycle that starts its
     optimisation at a period of 0.25 time units: language models told the
-    business's expected period write it so.
+    business's expected period write it so. Told of a dated event, they
+    write ``CP(a, b, 2014.5)``, a switch starting at that date, or
+    ``CW(a, b, 2010, 2012)``, a window starting between those dates.
 
     Parameters
     ----------
@@ -167,6 +169,25 @@ def parse(text: str, dimension: int = 0) -> ff.Kernel:
         at += 1
         return token
 
+    def number() -> float:
+        """Take a number.
+
+        Returns
+        -------
+        float
+            Its value.
+
+        Raises
+        ------
+        ValueError
+            When the next token is not a number.
+        """
+        token = take()
+        try:
+            return float(token)
+        except ValueError:
+            raise ValueError(f"expected a number, not {token!r}, in {text!r}") from None
+
     def total() -> ff.Kernel:
         """Read a sum.
 
@@ -218,15 +239,35 @@ def parse(text: str, dimension: int = 0) -> ff.Kernel:
             first = total()
             take(",")
             second = total()
+            dates = []
+            while peek() == ",":
+                take()
+                dates.append(number())
             take(")")
-            cls = ff.ChangePointKernel if token == "CP" else ff.ChangeWindowKernel
-            return cls(dimension, operands=[first, second])
+            if token == "CP":
+                if len(dates) > 1:
+                    raise ValueError(f"a changepoint takes one date in {text!r}")
+                location = dates[0] if dates else None
+                return ff.ChangePointKernel(
+                    dimension, location=location, operands=[first, second]
+                )
+            if len(dates) not in (0, 2):
+                raise ValueError(f"a window takes two dates in {text!r}")
+            location = width = None
+            if dates:
+                start, end = dates
+                if not end > start:
+                    raise ValueError(f"a window must end after it starts in {text!r}")
+                location, width = (start + end) / 2, math.log(end - start)
+            return ff.ChangeWindowKernel(
+                dimension, location=location, width=width, operands=[first, second]
+            )
         if token not in NAMES:
             raise ValueError(f"unknown kernel {token!r} in {text!r}")
         cls = ff.BASE_KERNELS[NAMES[token]]
         if token == "Per" and peek() == "(":
             take("(")
-            period = float(take())
+            period = number()
             take(")")
             if not period > 0:
                 raise ValueError(f"a period must be positive in {text!r}")
@@ -269,7 +310,8 @@ def prompt(
         "Lin (linear trend), RQ (multi-scale smooth), C (constant), WN (white",
         "noise); ' x ' multiplies, ' + ' adds, brackets group, CP(a, b) switches",
         "from a to b at one date and CW(a, b) is b inside a window and a outside.",
-        "Per(p) starts a cycle at a period of p years.",
+        "Per(p) starts a cycle at a period of p years; CP(a, b, t) starts the",
+        "switch at date t; CW(a, b, s, e) starts the window from s to e.",
         "",
         f"The series spans {shape['x_min'][0]:.2f} to {shape['x_max'][0]:.2f}"
         " (time in years).",
