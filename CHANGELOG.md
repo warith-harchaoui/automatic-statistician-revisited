@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- A note on changepoint detectors (`doc/research/changepoints`): a pilot
+  with `ruptures` finds the jump family's date 5 times of 5, with no false
+  break on the quarterly family, only when the trend and the cycle are
+  inside the detector's cost; on raw values or STL components it cuts
+  every cycle. The residual of the grammar's `Lin + SE + WN` hides the
+  jump. Next: the detector as a proposer of dated switches.
 - The proposer's prompt offers `Per(p)` only when the context names a
   cycle, dated switches only when it names an event; it asks for no other
   date. In the third proposal run, dates the model guessed kept a window
