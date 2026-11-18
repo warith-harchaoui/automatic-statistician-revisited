@@ -136,6 +136,12 @@ class Experiment:
         Add the periods of the data's ``spectral_starts`` highest
         periodogram peaks (Lomb-Scargle, within the admissible range) to the
         period hints. ``0`` (the published configurations) adds none.
+    break_starts : int
+        Propose a level shift at each of the ``break_starts`` strongest
+        breaks a detector finds, with the trend and the strongest
+        periodogram cycle inside its cost (:mod:`autostat.breaks`). The
+        proposals are fitted beside the grammar's neighbours at every level;
+        BIC decides. ``0`` (the published configurations) proposes none.
     hint_starts : {"replace", "add"}
         ``"replace"`` (the default) takes the hinted starts out of the
         ``n_rand`` blind ones, half each. ``"add"`` keeps the ``n_rand``
@@ -170,6 +176,7 @@ class Experiment:
     period_hints: list[float] = field(default_factory=list)
     location_hints: list[float] = field(default_factory=list)
     spectral_starts: int = 0
+    break_starts: int = 0
     hint_starts: str = "replace"
 
     @classmethod
@@ -442,6 +449,26 @@ def data_shape(x: np.ndarray, y: np.ndarray, exp: Experiment) -> dict[str, Any]:
             )
         ]
     shape["location_hints"] = [float(t) for t in exp.location_hints]
+    shape["break_hints"], shape["break_period"], shape["break_fit"] = [], None, None
+    if exp.break_starts and x.shape[1] == 1 and shape["min_period"]:
+        from .breaks import detect, steps
+
+        line = np.column_stack([np.ones_like(y), x[:, 0] - x[:, 0].mean()])
+        trendless = y - line @ np.linalg.lstsq(line, y, rcond=None)[0]
+        cycles = spectral_periods(
+            x[:, 0],
+            trendless,
+            math.exp(shape["min_period"][0]),
+            math.exp(shape["max_period"][0]),
+            1,
+        )
+        shape["break_period"] = cycles[0] if cycles else None
+        shape["break_hints"] = detect(
+            x[:, 0], y, exp.break_starts, shape["break_period"]
+        )
+        shape["break_fit"] = steps(
+            x[:, 0], y, shape["break_hints"], shape["break_period"]
+        )
     return shape
 
 
@@ -746,10 +773,16 @@ def search(
     best_score = math.inf
     stalled_levels = 0
 
+    proposers = [] if propose is None else [propose]
+    if shape["break_hints"]:
+        from .breaks import proposals
+
+        LOGGER.info("breaks detected at %s", shape["break_hints"])
+        proposers.append(proposals)
     for depth in range(exp.max_depth):
-        if propose is not None:
-            known = {m.kernel.structure_key() for m in current}
-            for kernel in propose(best_models or [], shape, depth):
+        known = {m.kernel.structure_key() for m in current}
+        for proposer in proposers:
+            for kernel in proposer(best_models or [], shape, depth):
                 # A structure the grammar already offers is new only when it
                 # brings a starting value, e.g. the period of Per(0.25).
                 started = np.isfinite(kernel.param_vector).any()

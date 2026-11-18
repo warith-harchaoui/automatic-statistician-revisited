@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- `--breaks N` (`Experiment.break_starts`, `autostat.breaks`): a PELT
+  detector with a line and the periodogram's cycle inside its cost
+  proposes a `CP(Zero, C)` shift at each of its N strongest dates, plus
+  its own first-level model started from one regression; BIC decides.
+  On the jump family the search kept the jump on 5 seeds of 5 (grammar
+  0, periodogram alone 1), median BIC 431 against 489; on the quarterly
+  family it proposed nothing. Searches with dates took about 4.6 times
+  as long (`doc/research/changepoints`).
 - A note on changepoint detectors (`doc/research/changepoints`): a pilot
   with `ruptures` finds the jump family's date 5 times of 5, with no false
   break on the quarterly family, only when the trend and the cycle are

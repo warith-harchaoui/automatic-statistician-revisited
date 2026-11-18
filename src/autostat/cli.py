@@ -130,6 +130,14 @@ EXIT_INVALID = 2
     metavar="N",
     help="Start half the periods at the data's N highest periodogram peaks.",
 )
+@click.option(
+    "--breaks",
+    type=click.IntRange(min=0),
+    default=0,
+    show_default=True,
+    metavar="N",
+    help="Propose a level shift at the data's N strongest detected breaks.",
+)
 @click.option("--no-check", is_flag=True, help="Skip the model-checking section.")
 @click.option(
     "--json", "as_json", is_flag=True, help="Print one JSON object instead of text."
@@ -152,6 +160,7 @@ def command(
     context_path: Path | None,
     propose: str | None,
     spectral: int,
+    breaks: int,
     no_check: bool,
     as_json: bool,
 ) -> int:
@@ -191,6 +200,8 @@ def command(
         Ollama model proposing structures.
     spectral : int
         Periodogram peaks used as period starts; 0 for none.
+    breaks : int
+        Detected breaks proposed as level shifts; 0 for none.
     no_check : bool
         Skip the model checks.
     as_json : bool
@@ -227,6 +238,7 @@ def command(
             context=context,
             propose=propose,
             spectral=spectral,
+            breaks=breaks,
         )
     except (OSError, ValueError) as error:
         LOGGER.error("autostat: %s", error)

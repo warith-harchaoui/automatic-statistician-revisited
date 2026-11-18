@@ -323,6 +323,7 @@ def analyse_series(
     context: Any = None,
     propose: str | None = None,
     spectral: int = 0,
+    breaks: int = 0,
 ) -> Outcome:
     """Search one series, describe the winner and write its report.
 
@@ -364,6 +365,9 @@ def analyse_series(
     spectral : int, optional
         Start half the periods at the data's ``spectral`` highest
         periodogram peaks (``Experiment.spectral_starts``); 0 for none.
+    breaks : int, optional
+        Propose a level shift at each of the data's ``breaks`` strongest
+        detected breaks (``Experiment.break_starts``); 0 for none.
 
     Returns
     -------
@@ -374,6 +378,8 @@ def analyse_series(
     hints = context.search_hints() if context is not None else {}
     if spectral:
         hints = {**hints, "spectral_starts": spectral}
+    if breaks:
+        hints = {**hints, "break_starts": breaks}
     experiment = experiment_for(preset, max_depth, n_jobs, seed, patience, hints)
     proposer = None
     if propose:

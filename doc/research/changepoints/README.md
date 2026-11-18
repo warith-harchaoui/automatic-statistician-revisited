@@ -137,3 +137,71 @@ light settings):
 The pilot has one easy jump of eight noise units. Before any claim, the
 measurement needs smaller jumps, several breaks, changes of slope and
 real series.
+
+## Step 1 measured: the detector as a proposer
+
+`autostat.breaks` runs the line-and-harmonics detector (PELT, cycle from
+the periodogram) and passes at most `break_starts` dates to the search.
+At the first level it proposes its own model, `Lin + Per + WN` plus one
+`CP(Zero, C)` shift per date, started from one regression: slope, cycle
+amplitude, shift sizes and noise as the data give them, the switch steep.
+At every level it adds a shift at each date the best model does not
+already hold. BIC decides; nothing is forced. From random starts the same
+structure ended 400 to 600 BIC; from the regression's values it ends
+near 400 at once.
+
+`run.py` searches both families with three arms, five seeds, three
+levels, four random starts and 100 iterations. `spectral` adds the
+periodogram's peak alone, which separates what the cycle brings from
+what the dates bring. BIC of the best model, lower is better:
+
+| Family | Arm | Seeds 0 to 4 | Median | Jump kept |
+|---|---|---|---|---|
+| jump | grammar | 494.0, 474.8, 489.3, 498.1, 485.6 | 489.3 | 0 / 5 |
+| jump | spectral | 480.3, 473.6, 489.3, 454.8, 485.6 | 480.3 | 1 / 5 |
+| jump | breaks | 483.2, 471.7, 406.7, 431.0, 402.8 | 431.0 | 5 / 5 |
+| quarterly | grammar | 389.1, 383.3, 412.6, 417.4, 422.3 | 412.6 | |
+| quarterly | spectral | 389.1, 381.0, 397.8, 433.7, 408.7 | 397.8 | |
+| quarterly | breaks | 389.1, 383.3, 412.6, 417.4, 422.3 | 412.6 | |
+
+- **The jump.** With the dates, the search keeps a shift at the jump on
+  every seed, 0.005 to 0.08 years from it, sized 6.5 to 7.8 against 8.
+  Three seeds of five end on the true structure, `CP(Zero, C) + Lin +
+  Per + WN`, 67 to 83 BIC below the grammar, with a band on the jump's
+  size about 1.3 wide where the grammar's smooth step had 6 to 9. On
+  the other two the cycle is missed (`SE` in its place), the band stays
+  7 to 9 wide and the gain is 3 to 11. The periodogram's peak alone
+  kept the jump once of five.
+- **No false break.** On the quarterly family the detector finds no
+  date; the arm is the grammar, number for number.
+- **Cost.** The jump family's searches took 4.6 times as long (19
+  minutes against 4 on average), on a machine shared with another
+  benchmark; each shift adds a model per date and level.
+
+`real.py` runs the same detector on the thirteen series of the 2014
+reports and compares its dates with the switches of the published
+models, as a share of each series' span:
+
+| Series | Detector | Published switch | Distance / span |
+|---|---|---|---|
+| solar | 1714.00, 1779.00, 1644.00 | 1642.87, 1715.97 | 0.005, 0.157, 0.003 |
+| call-centre | 1974.13, 1968.96, 1973.37 | 1974.10, 1973.36, 1973.75 | 0.002, 0.295, 0.001 |
+| radio | 1945.63, 1950.21, 1947.37 | 1942.02, 1945.53 | 0.005, 0.235, 0.093 |
+| unemployment | 1970.37, 1962.88, 1950.46 | 1962.35, 1966.60 | 0.111, 0.015, 0.351 |
+| sulphuric | 1989.29, 1976.29, 1980.29 | 1964.30, 1990.63, 1969.59, 1977.21 | 0.035, 0.024, 0.080 |
+| gas-production | 1969.46, 1993.13, 1994.21 | 1967.29, 1971.13 | 0.042, 0.556, 0.583 |
+| internet | 2005.03, 2005.05, 2004.95 | 2004.98, 2005.01 | 0.072, 0.175, 0.157 |
+| wheat | 1817.50, 1809.50, 1845.50 | 1741.83, 1775.12 | 0.115, 0.093, 0.191 |
+| wages | 1972.50, 1912.50, 1920.50 | 1604.65, 1704.63 | 0.365, 0.283, 0.294 |
+
+On solar, call-centre and radio the strongest date falls within half a
+percent of the span from a published switch; the window of solar is
+found at both ends. Wheat and wages agree on nothing: their published
+switches sit in the first part of a long series, where the detector,
+cutting one line and one cycle, sees a slow bend rather than a break.
+On internet the cycle found is one day; the dates crowd one week.
+
+On airline, Mauna Loa, temperature and births the published model has
+no switch and the detector proposes one to three dates; BIC then decides
+whether a shift pays. The flag is `--breaks N` (`break_starts` in an
+`Experiment`); the presets leave it off, as published.
