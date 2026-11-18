@@ -176,7 +176,7 @@ def test_the_context_seeds_the_search_starts():
 
 
 def test_spectral_asks_for_periodogram_starts(tmp_path, monkeypatch):
-    """--spectral N reaches the search settings; the presets keep 0.
+    """--spectral N and --breaks N reach the search settings; the presets keep 0.
 
     Parameters
     ----------
@@ -202,15 +202,15 @@ def test_spectral_asks_for_periodogram_starts(tmp_path, monkeypatch):
         ValueError
             Always, once the settings are kept.
         """
-        seen.append(experiment.spectral_starts)
+        seen.append((experiment.spectral_starts, experiment.break_starts))
         raise ValueError("recorded")
 
     monkeypatch.setattr(autostat.service, "analyse", record)
     path = tmp_path / "data.csv"
     pd.DataFrame({"t": np.arange(24.0), "y": np.arange(24.0)}).to_csv(path, index=False)
-    for extra in ([], ["--spectral", "3"]):
+    for extra in ([], ["--spectral", "3"], ["--breaks", "2"]):
         assert main([str(path), "--time", "t", *extra]) == EXIT_INVALID
-    assert seen == [0, 3]
+    assert seen == [(0, 0), (3, 0), (0, 2)]
 
 
 @pytest.mark.slow

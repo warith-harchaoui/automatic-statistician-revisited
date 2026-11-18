@@ -345,6 +345,7 @@ autostat data.csv --time date --value y --no-check --no-pdf --json
 autostat data.csv --time date --value y --context context.yaml
 autostat data.csv --time date --value y --context context.yaml --propose gemma3:12b
 autostat data.csv --time date --value y --spectral 3
+autostat data.csv --time date --value y --breaks 3
 ```
 
 The published configuration searches `--max-depth` levels and no fewer.
@@ -360,6 +361,13 @@ periodogram peaks: on forty series drawn from the grammar, the true period
 was found on 9 of 10 instead of 4
 ([doc/research/recovery](doc/research/recovery/README.md)). The presets
 leave it off, as published.
+`--breaks 3` runs a changepoint detector with the trend and the strongest
+cycle inside its cost and proposes a level shift at each of its three
+strongest dates; BIC decides. On a series with a jump, the search kept it
+on 5 seeds of 5 instead of 0; on a series without one the detector
+proposed nothing
+([doc/research/changepoints](doc/research/changepoints/README.md)). Off
+in the presets.
 
 The Python interface exposes each stage: `prepare` (dates to decimal years,
 long series binned), `search` with an `Experiment`, `describe` for the report,

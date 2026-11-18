@@ -370,6 +370,7 @@ autostat data.csv --time date --value y --no-check --no-pdf --json
 autostat data.csv --time date --value y --context contexte.yaml
 autostat data.csv --time date --value y --context contexte.yaml --propose gemma3:12b
 autostat data.csv --time date --value y --spectral 3
+autostat data.csv --time date --value y --breaks 3
 ```
 
 La configuration publiée cherche `--max-depth` niveaux, pas un de moins.
@@ -385,6 +386,13 @@ du périodogramme des données&nbsp;: sur quarante séries tirées de la
 grammaire, la vraie période est retrouvée 9 fois sur 10 au lieu de 4
 ([doc/research/recovery](doc/research/recovery/README.md)). Les
 préréglages ne l'activent pas, comme à la publication.
+`--breaks 3` lance un détecteur de ruptures qui garde la tendance et le cycle
+le plus fort dans son coût, puis propose un saut de niveau à chacune de ses
+trois dates les plus nettes&nbsp;; le BIC tranche. Sur une série avec un saut,
+la recherche l'a gardé 5 graines sur 5 au lieu de 0&nbsp;; sur une série sans
+saut, le détecteur n'a rien proposé
+([doc/research/changepoints](doc/research/changepoints/README.md)).
+Désactivé dans les préréglages.
 
 L'interface Python expose chaque étape&nbsp;: `prepare` (dates en années
 décimales, longues séries regroupées par paquets), `search` avec une
