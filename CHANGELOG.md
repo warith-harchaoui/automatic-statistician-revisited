@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- The extrapolation benchmark scores the 2026 port of ABCD at depth 5
+  (`abcd_2014_port`, `abcd_2014_port_mixture`): median standardised RMSE
+  1.51 for both, second of 26 behind chronos2 (1.47), against 2.12 for
+  the published 2014 predictions, better on 9 series of 13. The BIC
+  mixture changes little: same median, MASE 0.99 against 1.01, better on
+  4 series and worse on 3. Both 90 % intervals cover only 72 to 73 % of
+  the held-out tails (`benchmark/RESULTS.md`).
 - `--breaks N` (`Experiment.break_starts`, `autostat.breaks`): a PELT
   detector with a line and the periodogram's cycle inside its cost
   proposes a `CP(Zero, C)` shift at each of its N strongest dates, plus
