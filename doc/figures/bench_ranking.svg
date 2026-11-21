@@ -1,0 +1,326 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1118" viewBox="0 0 720 1118" font-family="Roboto, system-ui, sans-serif" role="img" aria-labelledby="fp-title fp-desc" data-ai-assisted="true"><metadata id="sprezzature-ai-disclosure"><x:xmpmeta xmlns:x="adobe:ns:meta/"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="" xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" Iptc4xmpExt:DigitalSourceType="http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia" xmp:CreatorTool="sprezzature by Deraison"><dc:description><rdf:Alt><rdf:li xml:lang="fr">généré avec l'aide de l'IA de sprezzature par deraison.ai</rdf:li><rdf:li xml:lang="en">generated with the help of sprezzature AI by deraison.ai</rdf:li><rdf:li xml:lang="x-default">généré avec l'aide de l'IA de sprezzature par deraison.ai / generated with the help of sprezzature AI by deraison.ai</rdf:li></rdf:Alt></dc:description></rdf:Description></rdf:RDF></x:xmpmeta></metadata>
+<title id="fp-title">Twenty-six methods on the thirteen series of 2014</title>
+<desc id="fp-desc">Forest plot of 26 rows. Each row shows its estimate as a box (area ∝ weight) with a 95% interval, on a logarithmic axis with a null rule at 1.0. The pooled diamond is centred at 1.95 (95% CI 1.83 to 2.07).</desc>
+<style>.row{cursor:pointer}.row .whisker,.row .cap{stroke:#6E6E73;stroke-width:1.6}.row:hover .whisker,.row:focus .whisker,.row:hover .cap,.row:focus .cap{stroke:#6E6E73;stroke-width:2.4}.row:hover .box,.row:focus .box,.row:hover .diamond,.row:focus .diamond,.row:hover .dot,.row:focus .dot{stroke:#FFFFFF;stroke-width:2.4}.row:focus{outline:none}.row:hover .rowbg,.row:focus .rowbg{fill:#F5F5F7}.tip{opacity:0;pointer-events:none;transition:opacity .12s ease}#row-0:hover~#rowtip-0,#row-0:focus~#rowtip-0{opacity:1}#row-1:hover~#rowtip-1,#row-1:focus~#rowtip-1{opacity:1}#row-2:hover~#rowtip-2,#row-2:focus~#rowtip-2{opacity:1}#row-3:hover~#rowtip-3,#row-3:focus~#rowtip-3{opacity:1}#row-4:hover~#rowtip-4,#row-4:focus~#rowtip-4{opacity:1}#row-5:hover~#rowtip-5,#row-5:focus~#rowtip-5{opacity:1}#row-6:hover~#rowtip-6,#row-6:focus~#rowtip-6{opacity:1}#row-7:hover~#rowtip-7,#row-7:focus~#rowtip-7{opacity:1}#row-8:hover~#rowtip-8,#row-8:focus~#rowtip-8{opacity:1}#row-9:hover~#rowtip-9,#row-9:focus~#rowtip-9{opacity:1}#row-10:hover~#rowtip-10,#row-10:focus~#rowtip-10{opacity:1}#row-11:hover~#rowtip-11,#row-11:focus~#rowtip-11{opacity:1}#row-12:hover~#rowtip-12,#row-12:focus~#rowtip-12{opacity:1}#row-13:hover~#rowtip-13,#row-13:focus~#rowtip-13{opacity:1}#row-14:hover~#rowtip-14,#row-14:focus~#rowtip-14{opacity:1}#row-15:hover~#rowtip-15,#row-15:focus~#rowtip-15{opacity:1}#row-16:hover~#rowtip-16,#row-16:focus~#rowtip-16{opacity:1}#row-17:hover~#rowtip-17,#row-17:focus~#rowtip-17{opacity:1}#row-18:hover~#rowtip-18,#row-18:focus~#rowtip-18{opacity:1}#row-19:hover~#rowtip-19,#row-19:focus~#rowtip-19{opacity:1}#row-20:hover~#rowtip-20,#row-20:focus~#rowtip-20{opacity:1}#row-21:hover~#rowtip-21,#row-21:focus~#rowtip-21{opacity:1}#row-22:hover~#rowtip-22,#row-22:focus~#rowtip-22{opacity:1}#row-23:hover~#rowtip-23,#row-23:focus~#rowtip-23{opacity:1}#row-24:hover~#rowtip-24,#row-24:focus~#rowtip-24{opacity:1}#row-25:hover~#rowtip-25,#row-25:focus~#rowtip-25{opacity:1}#row-26:hover~#rowtip-26,#row-26:focus~#rowtip-26{opacity:1}@media (prefers-reduced-motion:reduce){.tip{transition:none}}@media (prefers-contrast: more){
+  .box-sig{fill:#006800;}
+  .box-cross{fill:#004EC1;}
+  .diamond{fill:#9F3400;}
+}
+@media (forced-colors: active){
+  .box-sig{fill:CanvasText;}
+  .box-cross{fill:CanvasText;}
+  .diamond{fill:CanvasText;}
+}@media (prefers-color-scheme: dark){
+  [fill="#FFFFFF"]{fill:#0B0B0C;}
+  [fill="#1D1D1F"]{fill:#F2F2F7;}
+  [fill="#6E6E73"]{fill:#9C9CA3;}
+  [style*="multiply"]{mix-blend-mode:screen;}
+}</style>
+<rect width="720" height="1118" fill="#FFFFFF"/>
+<text x="24" y="36" font-size="18" font-weight="700" fill="#1D1D1F">Twenty-six methods on the thirteen series of 2014</text>
+<text x="24" y="58" font-size="12.5" fill="#6E6E73">Median standardised RMSE and its 95 % bootstrap interval. Blue: the port; orange: the published 2013 and 2014 models</text>
+<text x="24" y="92" font-size="11.5" font-weight="700" fill="#6E6E73">Method</text>
+<text x="546" y="92" font-size="11.5" font-weight="700" fill="#6E6E73">Median (95 %)</text>
+<line x1="231.7" y1="98.0" x2="231.7" y2="1034.0" stroke="#6E6E73" stroke-width="1.4"/>
+<g id="row-0" class="row hit" tabindex="0" role="img" aria-label="Chronos-2: Estimate 1.47 (95% CI 1.27–1.97), weight 6% — significant">
+<title>Chronos-2: Estimate 1.47 (95% CI 1.27–1.97), weight 6% — significant</title>
+<rect class="rowbg" x="18.0" y="116.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="137.0" font-size="13" fill="#1D1D1F">Chronos-2</text>
+<line class="whisker" x1="268.9" y1="133.0" x2="337.2" y2="133.0"/>
+<line class="cap" x1="268.9" y1="129.0" x2="268.9" y2="137.0"/>
+<line class="cap" x1="337.2" y1="129.0" x2="337.2" y2="137.0"/>
+<rect class="box box-sig" x="280.2" y="121.5" width="23.0" height="23.0" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="137.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">1.47 (1.27–1.97)</text>
+</g>
+<g id="row-1" class="row hit" tabindex="0" role="img" aria-label="ABCD port, best model: Estimate 1.51 (95% CI 1.30–2.15), weight 4% — significant">
+<title>ABCD port, best model: Estimate 1.51 (95% CI 1.30–2.15), weight 4% — significant</title>
+<rect class="rowbg" x="18.0" y="150.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="171.0" font-size="13" fill="#1D1D1F">ABCD port, best model</text>
+<line class="whisker" x1="272.6" y1="167.0" x2="350.8" y2="167.0"/>
+<line class="cap" x1="272.6" y1="163.0" x2="272.6" y2="171.0"/>
+<line class="cap" x1="350.8" y1="163.0" x2="350.8" y2="171.0"/>
+<rect class="box box-sig" x="285.6" y="156.7" width="20.5" height="20.5" rx="2.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="171.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">1.51 (1.30–2.15)</text>
+</g>
+<g id="row-2" class="row hit" tabindex="0" role="img" aria-label="ABCD port, BIC mixture: Estimate 1.51 (95% CI 1.38–2.15), weight 5% — significant">
+<title>ABCD port, BIC mixture: Estimate 1.51 (95% CI 1.38–2.15), weight 5% — significant</title>
+<rect class="rowbg" x="18.0" y="184.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="205.0" font-size="13" fill="#1D1D1F">ABCD port, BIC mixture</text>
+<line class="whisker" x1="281.8" y1="201.0" x2="350.8" y2="201.0"/>
+<line class="cap" x1="281.8" y1="197.0" x2="281.8" y2="205.0"/>
+<line class="cap" x1="350.8" y1="197.0" x2="350.8" y2="205.0"/>
+<rect class="box box-sig" x="284.5" y="189.6" width="22.8" height="22.8" rx="2.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="205.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">1.51 (1.38–2.15)</text>
+</g>
+<g id="row-3" class="row hit" tabindex="0" role="img" aria-label="Chronos-Bolt: Estimate 1.53 (95% CI 1.22–1.95), weight 5% — significant">
+<title>Chronos-Bolt: Estimate 1.53 (95% CI 1.22–1.95), weight 5% — significant</title>
+<rect class="rowbg" x="18.0" y="218.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="239.0" font-size="13" fill="#1D1D1F">Chronos-Bolt</text>
+<line class="whisker" x1="262.7" y1="235.0" x2="335.6" y2="235.0"/>
+<line class="cap" x1="262.7" y1="231.0" x2="262.7" y2="239.0"/>
+<line class="cap" x1="335.6" y1="231.0" x2="335.6" y2="239.0"/>
+<rect class="box box-sig" x="287.0" y="224.1" width="21.8" height="21.8" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="239.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">1.53 (1.22–1.95)</text>
+</g>
+<g id="row-4" class="row hit" tabindex="0" role="img" aria-label="Timestral 209M: Estimate 1.57 (95% CI 1.24–1.68), weight 9% — significant">
+<title>Timestral 209M: Estimate 1.57 (95% CI 1.24–1.68), weight 9% — significant</title>
+<rect class="rowbg" x="18.0" y="252.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="273.0" font-size="13" fill="#1D1D1F">Timestral 209M</text>
+<line class="whisker" x1="265.2" y1="269.0" x2="312.4" y2="269.0"/>
+<line class="cap" x1="265.2" y1="265.0" x2="265.2" y2="273.0"/>
+<line class="cap" x1="312.4" y1="265.0" x2="312.4" y2="273.0"/>
+<rect class="box box-sig" x="286.9" y="254.0" width="30.0" height="30.0" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="273.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">1.57 (1.24–1.68)</text>
+</g>
+<g id="row-5" class="row hit" tabindex="0" role="img" aria-label="KumoTabular: Estimate 1.68 (95% CI 1.23–2.29), weight 3% — significant">
+<title>KumoTabular: Estimate 1.68 (95% CI 1.23–2.29), weight 3% — significant</title>
+<rect class="rowbg" x="18.0" y="286.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="307.0" font-size="13" fill="#1D1D1F">KumoTabular</text>
+<line class="whisker" x1="263.9" y1="303.0" x2="360.6" y2="303.0"/>
+<line class="cap" x1="263.9" y1="299.0" x2="263.9" y2="307.0"/>
+<line class="cap" x1="360.6" y1="299.0" x2="360.6" y2="307.0"/>
+<rect class="box box-sig" x="303.9" y="294.4" width="17.1" height="17.1" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="307.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">1.68 (1.23–2.29)</text>
+</g>
+<g id="row-6" class="row hit" tabindex="0" role="img" aria-label="TimesFM 2.5: Estimate 1.72 (95% CI 1.54–2.19), weight 8% — significant">
+<title>TimesFM 2.5: Estimate 1.72 (95% CI 1.54–2.19), weight 8% — significant</title>
+<rect class="rowbg" x="18.0" y="320.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="341.0" font-size="13" fill="#1D1D1F">TimesFM 2.5</text>
+<line class="whisker" x1="298.9" y1="337.0" x2="353.7" y2="337.0"/>
+<line class="cap" x1="298.9" y1="333.0" x2="298.9" y2="341.0"/>
+<line class="cap" x1="353.7" y1="333.0" x2="353.7" y2="341.0"/>
+<rect class="box box-sig" x="302.5" y="323.4" width="27.1" height="27.1" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="341.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">1.72 (1.54–2.19)</text>
+</g>
+<g id="row-7" class="row hit" tabindex="0" role="img" aria-label="AutoARIMA: Estimate 1.79 (95% CI 1.47–2.80), weight 3% — significant">
+<title>AutoARIMA: Estimate 1.79 (95% CI 1.47–2.80), weight 3% — significant</title>
+<rect class="rowbg" x="18.0" y="354.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="375.0" font-size="13" fill="#1D1D1F">AutoARIMA</text>
+<line class="whisker" x1="291.7" y1="371.0" x2="391.9" y2="371.0"/>
+<line class="cap" x1="291.7" y1="367.0" x2="291.7" y2="375.0"/>
+<line class="cap" x1="391.9" y1="367.0" x2="391.9" y2="375.0"/>
+<rect class="box box-sig" x="314.0" y="362.7" width="16.6" height="16.6" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="375.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">1.79 (1.47–2.80)</text>
+</g>
+<g id="row-8" class="row hit" tabindex="0" role="img" aria-label="N-HiTS: Estimate 1.81 (95% CI 1.53–2.42), weight 5% — significant">
+<title>N-HiTS: Estimate 1.81 (95% CI 1.53–2.42), weight 5% — significant</title>
+<rect class="rowbg" x="18.0" y="388.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="409.0" font-size="13" fill="#1D1D1F">N-HiTS</text>
+<line class="whisker" x1="297.9" y1="405.0" x2="369.2" y2="405.0"/>
+<line class="cap" x1="297.9" y1="401.0" x2="297.9" y2="409.0"/>
+<line class="cap" x1="369.2" y1="401.0" x2="369.2" y2="409.0"/>
+<rect class="box box-sig" x="312.9" y="393.9" width="22.2" height="22.2" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="409.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">1.81 (1.53–2.42)</text>
+</g>
+<g id="row-9" class="row hit" tabindex="0" role="img" aria-label="TCI (2014): Estimate 1.88 (95% CI 1.57–3.12), weight 3% — significant">
+<title>TCI (2014): Estimate 1.88 (95% CI 1.57–3.12), weight 3% — significant</title>
+<rect class="rowbg" x="18.0" y="422.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="443.0" font-size="13" fill="#1D1D1F">TCI (2014)</text>
+<line class="whisker" x1="301.9" y1="439.0" x2="408.7" y2="439.0"/>
+<line class="cap" x1="301.9" y1="435.0" x2="301.9" y2="443.0"/>
+<line class="cap" x1="408.7" y1="435.0" x2="408.7" y2="443.0"/>
+<rect class="box box-sig" x="322.1" y="431.2" width="15.7" height="15.7" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="443.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">1.88 (1.57–3.12)</text>
+</g>
+<g id="row-10" class="row hit" tabindex="0" role="img" aria-label="AutoTheta: Estimate 1.89 (95% CI 1.65–2.35), weight 8% — significant">
+<title>AutoTheta: Estimate 1.89 (95% CI 1.65–2.35), weight 8% — significant</title>
+<rect class="rowbg" x="18.0" y="456.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="477.0" font-size="13" fill="#1D1D1F">AutoTheta</text>
+<line class="whisker" x1="309.6" y1="473.0" x2="364.7" y2="473.0"/>
+<line class="cap" x1="309.6" y1="469.0" x2="309.6" y2="477.0"/>
+<line class="cap" x1="364.7" y1="469.0" x2="364.7" y2="477.0"/>
+<rect class="box box-sig" x="317.2" y="459.5" width="27.0" height="27.0" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="477.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">1.89 (1.65–2.35)</text>
+</g>
+<g id="row-11" class="row hit" tabindex="0" role="img" aria-label="N-BEATS: Estimate 1.91 (95% CI 1.45–2.36), weight 5% — significant">
+<title>N-BEATS: Estimate 1.91 (95% CI 1.45–2.36), weight 5% — significant</title>
+<rect class="rowbg" x="18.0" y="490.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="511.0" font-size="13" fill="#1D1D1F">N-BEATS</text>
+<line class="whisker" x1="289.5" y1="507.0" x2="365.3" y2="507.0"/>
+<line class="cap" x1="289.5" y1="503.0" x2="289.5" y2="511.0"/>
+<line class="cap" x1="365.3" y1="503.0" x2="365.3" y2="511.0"/>
+<rect class="box box-sig" x="321.8" y="496.4" width="21.1" height="21.1" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="511.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">1.91 (1.45–2.36)</text>
+</g>
+<g id="row-12" class="row hit" tabindex="0" role="img" aria-label="AutoETS: Estimate 1.96 (95% CI 1.68–2.81), weight 4% — significant">
+<title>AutoETS: Estimate 1.96 (95% CI 1.68–2.81), weight 4% — significant</title>
+<rect class="rowbg" x="18.0" y="524.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="545.0" font-size="13" fill="#1D1D1F">AutoETS</text>
+<line class="whisker" x1="312.4" y1="541.0" x2="392.5" y2="541.0"/>
+<line class="cap" x1="312.4" y1="537.0" x2="312.4" y2="545.0"/>
+<line class="cap" x1="392.5" y1="537.0" x2="392.5" y2="545.0"/>
+<rect class="box box-sig" x="326.3" y="530.9" width="20.2" height="20.2" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="545.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">1.96 (1.68–2.81)</text>
+</g>
+<g id="row-13" class="row hit" tabindex="0" role="img" aria-label="LightGBM: Estimate 2.08 (95% CI 1.64–3.40), weight 2% — significant">
+<title>LightGBM: Estimate 2.08 (95% CI 1.64–3.40), weight 2% — significant</title>
+<rect class="rowbg" x="18.0" y="558.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="579.0" font-size="13" fill="#1D1D1F">LightGBM</text>
+<line class="whisker" x1="308.7" y1="575.0" x2="422.1" y2="575.0"/>
+<line class="cap" x1="308.7" y1="571.0" x2="308.7" y2="579.0"/>
+<line class="cap" x1="422.1" y1="571.0" x2="422.1" y2="579.0"/>
+<rect class="box box-sig" x="338.2" y="567.6" width="14.8" height="14.8" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="579.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">2.08 (1.64–3.40)</text>
+</g>
+<g id="row-14" class="row hit" tabindex="0" role="img" aria-label="Seasonal naive: Estimate 2.08 (95% CI 1.73–3.47), weight 3% — significant">
+<title>Seasonal naive: Estimate 2.08 (95% CI 1.73–3.47), weight 3% — significant</title>
+<rect class="rowbg" x="18.0" y="592.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="613.0" font-size="13" fill="#1D1D1F">Seasonal naive</text>
+<line class="whisker" x1="317.0" y1="609.0" x2="425.3" y2="609.0"/>
+<line class="cap" x1="317.0" y1="605.0" x2="317.0" y2="613.0"/>
+<line class="cap" x1="425.3" y1="605.0" x2="425.3" y2="613.0"/>
+<rect class="box box-sig" x="337.9" y="601.3" width="15.5" height="15.5" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="613.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">2.08 (1.73–3.47)</text>
+</g>
+<g id="row-15" class="row hit" tabindex="0" role="img" aria-label="ABCD, published 2014: Estimate 2.12 (95% CI 1.24–2.48), weight 3% — significant">
+<title>ABCD, published 2014: Estimate 2.12 (95% CI 1.24–2.48), weight 3% — significant</title>
+<rect class="rowbg" x="18.0" y="626.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="647.0" font-size="13" fill="#1D1D1F">ABCD, published 2014</text>
+<line class="whisker" x1="265.2" y1="643.0" x2="373.0" y2="643.0"/>
+<line class="cap" x1="265.2" y1="639.0" x2="265.2" y2="647.0"/>
+<line class="cap" x1="373.0" y1="639.0" x2="373.0" y2="647.0"/>
+<rect class="box box-sig" x="340.9" y="635.2" width="15.5" height="15.5" rx="2.5" fill="#FF8D28" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="647.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">2.12 (1.24–2.48)</text>
+</g>
+<g id="row-16" class="row hit" tabindex="0" role="img" aria-label="Spectral mixture (2014): Estimate 2.19 (95% CI 1.50–3.16), weight 2% — significant">
+<title>Spectral mixture (2014): Estimate 2.19 (95% CI 1.50–3.16), weight 2% — significant</title>
+<rect class="rowbg" x="18.0" y="660.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="681.0" font-size="13" fill="#1D1D1F">Spectral mixture (2014)</text>
+<line class="whisker" x1="294.8" y1="677.0" x2="410.7" y2="677.0"/>
+<line class="cap" x1="294.8" y1="673.0" x2="294.8" y2="681.0"/>
+<line class="cap" x1="410.7" y1="673.0" x2="410.7" y2="681.0"/>
+<rect class="box box-sig" x="346.4" y="669.7" width="14.5" height="14.5" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="681.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">2.19 (1.50–3.16)</text>
+</g>
+<g id="row-17" class="row hit" tabindex="0" role="img" aria-label="Naive: Estimate 2.35 (95% CI 2.08–3.75), weight 3% — significant">
+<title>Naive: Estimate 2.35 (95% CI 2.08–3.75), weight 3% — significant</title>
+<rect class="rowbg" x="18.0" y="694.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="715.0" font-size="13" fill="#1D1D1F">Naive</text>
+<line class="whisker" x1="345.7" y1="711.0" x2="437.4" y2="711.0"/>
+<line class="cap" x1="345.7" y1="707.0" x2="345.7" y2="715.0"/>
+<line class="cap" x1="437.4" y1="707.0" x2="437.4" y2="715.0"/>
+<rect class="box box-sig" x="355.7" y="702.0" width="17.9" height="17.9" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="715.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">2.35 (2.08–3.75)</text>
+</g>
+<g id="row-18" class="row hit" tabindex="0" role="img" aria-label="CKS, published 2013: Estimate 2.48 (95% CI 1.12–2.82), weight 1% — significant">
+<title>CKS, published 2013: Estimate 2.48 (95% CI 1.12–2.82), weight 1% — significant</title>
+<rect class="rowbg" x="18.0" y="728.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="749.0" font-size="13" fill="#1D1D1F">CKS, published 2013</text>
+<line class="whisker" x1="249.4" y1="745.0" x2="393.0" y2="745.0"/>
+<line class="cap" x1="249.4" y1="741.0" x2="249.4" y2="749.0"/>
+<line class="cap" x1="393.0" y1="741.0" x2="393.0" y2="749.0"/>
+<rect class="box box-sig" x="367.0" y="739.0" width="12.0" height="12.0" rx="2.5" fill="#FF8D28" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="749.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">2.48 (1.12–2.82)</text>
+</g>
+<g id="row-19" class="row hit" tabindex="0" role="img" aria-label="Eureqa (2014): Estimate 2.82 (95% CI 1.82–4.06), weight 2% — significant">
+<title>Eureqa (2014): Estimate 2.82 (95% CI 1.82–4.06), weight 2% — significant</title>
+<rect class="rowbg" x="18.0" y="762.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="783.0" font-size="13" fill="#1D1D1F">Eureqa (2014)</text>
+<line class="whisker" x1="324.9" y1="779.0" x2="449.7" y2="779.0"/>
+<line class="cap" x1="324.9" y1="775.0" x2="324.9" y2="783.0"/>
+<line class="cap" x1="449.7" y1="775.0" x2="449.7" y2="783.0"/>
+<rect class="box box-sig" x="386.2" y="772.2" width="13.6" height="13.6" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="783.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">2.82 (1.82–4.06)</text>
+</g>
+<g id="row-20" class="row hit" tabindex="0" role="img" aria-label="Changepoint (2014): Estimate 2.83 (95% CI 1.89–4.24), weight 2% — significant">
+<title>Changepoint (2014): Estimate 2.83 (95% CI 1.89–4.24), weight 2% — significant</title>
+<rect class="rowbg" x="18.0" y="796.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="817.0" font-size="13" fill="#1D1D1F">Changepoint (2014)</text>
+<line class="whisker" x1="330.8" y1="813.0" x2="456.5" y2="813.0"/>
+<line class="cap" x1="330.8" y1="809.0" x2="330.8" y2="817.0"/>
+<line class="cap" x1="456.5" y1="809.0" x2="456.5" y2="817.0"/>
+<rect class="box box-sig" x="386.8" y="806.3" width="13.5" height="13.5" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="817.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">2.83 (1.89–4.24)</text>
+</g>
+<g id="row-21" class="row hit" tabindex="0" role="img" aria-label="PySR: Estimate 2.87 (95% CI 1.94–3.29), weight 4% — significant">
+<title>PySR: Estimate 2.87 (95% CI 1.94–3.29), weight 4% — significant</title>
+<rect class="rowbg" x="18.0" y="830.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="851.0" font-size="13" fill="#1D1D1F">PySR</text>
+<line class="whisker" x1="334.8" y1="847.0" x2="417.0" y2="847.0"/>
+<line class="cap" x1="334.8" y1="843.0" x2="334.8" y2="851.0"/>
+<line class="cap" x1="417.0" y1="843.0" x2="417.0" y2="851.0"/>
+<rect class="box box-sig" x="385.9" y="837.1" width="19.7" height="19.7" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="851.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">2.87 (1.94–3.29)</text>
+</g>
+<g id="row-22" class="row hit" tabindex="0" role="img" aria-label="MKL (2014): Estimate 2.92 (95% CI 1.85–3.16), weight 4% — significant">
+<title>MKL (2014): Estimate 2.92 (95% CI 1.85–3.16), weight 4% — significant</title>
+<rect class="rowbg" x="18.0" y="864.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="885.0" font-size="13" fill="#1D1D1F">MKL (2014)</text>
+<line class="whisker" x1="327.4" y1="881.0" x2="410.7" y2="881.0"/>
+<line class="cap" x1="327.4" y1="877.0" x2="327.4" y2="885.0"/>
+<line class="cap" x1="410.7" y1="877.0" x2="410.7" y2="885.0"/>
+<rect class="box box-sig" x="388.7" y="871.3" width="19.5" height="19.5" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="885.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">2.92 (1.85–3.16)</text>
+</g>
+<g id="row-23" class="row hit" tabindex="0" role="img" aria-label="SE (2014): Estimate 3.20 (95% CI 2.72–5.35), weight 3% — significant">
+<title>SE (2014): Estimate 3.20 (95% CI 2.72–5.35), weight 3% — significant</title>
+<rect class="rowbg" x="18.0" y="898.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="919.0" font-size="13" fill="#1D1D1F">SE (2014)</text>
+<line class="whisker" x1="387.4" y1="915.0" x2="492.6" y2="915.0"/>
+<line class="cap" x1="387.4" y1="911.0" x2="387.4" y2="919.0"/>
+<line class="cap" x1="492.6" y1="911.0" x2="492.6" y2="919.0"/>
+<rect class="box box-sig" x="404.7" y="907.1" width="15.9" height="15.9" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="919.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">3.20 (2.72–5.35)</text>
+</g>
+<g id="row-24" class="row hit" tabindex="0" role="img" aria-label="Linear (2014): Estimate 3.20 (95% CI 1.96–5.84), weight 1% — significant">
+<title>Linear (2014): Estimate 3.20 (95% CI 1.96–5.84), weight 1% — significant</title>
+<rect class="rowbg" x="18.0" y="932.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="953.0" font-size="13" fill="#1D1D1F">Linear (2014)</text>
+<line class="whisker" x1="336.4" y1="949.0" x2="506.3" y2="949.0"/>
+<line class="cap" x1="336.4" y1="945.0" x2="336.4" y2="953.0"/>
+<line class="cap" x1="506.3" y1="945.0" x2="506.3" y2="953.0"/>
+<rect class="box box-sig" x="406.7" y="943.0" width="12.0" height="12.0" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="953.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">3.20 (1.96–5.84)</text>
+</g>
+<g id="row-25" class="row hit" tabindex="0" role="img" aria-label="gplearn: Estimate 3.60 (95% CI 2.18–4.48), weight 2% — significant">
+<title>gplearn: Estimate 3.60 (95% CI 2.18–4.48), weight 2% — significant</title>
+<rect class="rowbg" x="18.0" y="966.0" width="684.0" height="34.0" rx="7" fill="none"/>
+<text x="24" y="987.0" font-size="13" fill="#1D1D1F">gplearn</text>
+<line class="whisker" x1="353.0" y1="983.0" x2="465.0" y2="983.0"/>
+<line class="cap" x1="353.0" y1="979.0" x2="353.0" y2="987.0"/>
+<line class="cap" x1="465.0" y1="979.0" x2="465.0" y2="987.0"/>
+<rect class="box box-sig" x="423.5" y="975.5" width="15.0" height="15.0" rx="2.5" fill="#C7C7CC" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="546" y="987.0" font-size="12" font-family="Roboto Mono, monospace" fill="#1D1D1F">3.60 (2.18–4.48)</text>
+</g>
+<g id="rowtip-0" class="tip"><rect x="170.7" y="109.5" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="179.7" y="131" font-size="12.5" font-weight="700" fill="#1D1D1F">Chronos-2</text><text x="179.7" y="147" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 1.47 (95% CI 1.27-1.97)</text><text x="179.7" y="163" font-size="12.5" font-weight="400" fill="#6E6E73">weight 6% - significant</text></g>
+<g id="rowtip-1" class="tip"><rect x="174.8" y="144.7" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="183.8" y="166.2" font-size="12.5" font-weight="700" fill="#1D1D1F">ABCD port, best model</text><text x="183.8" y="182.2" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 1.51 (95% CI 1.30-2.15)</text><text x="183.8" y="198.2" font-size="12.5" font-weight="400" fill="#6E6E73">weight 4% - significant</text></g>
+<g id="rowtip-2" class="tip"><rect x="174.8" y="177.6" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="183.8" y="199.1" font-size="12.5" font-weight="700" fill="#1D1D1F">ABCD port, BIC mixture</text><text x="183.8" y="215.1" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 1.51 (95% CI 1.38-2.15)</text><text x="183.8" y="231.1" font-size="12.5" font-weight="400" fill="#6E6E73">weight 5% - significant</text></g>
+<g id="rowtip-3" class="tip"><rect x="176.9" y="212.1" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="185.9" y="233.6" font-size="12.5" font-weight="700" fill="#1D1D1F">Chronos-Bolt</text><text x="185.9" y="249.6" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 1.53 (95% CI 1.22-1.95)</text><text x="185.9" y="265.6" font-size="12.5" font-weight="400" fill="#6E6E73">weight 5% - significant</text></g>
+<g id="rowtip-4" class="tip"><rect x="180.9" y="242" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="189.9" y="263.5" font-size="12.5" font-weight="700" fill="#1D1D1F">Timestral 209M</text><text x="189.9" y="279.5" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 1.57 (95% CI 1.24-1.68)</text><text x="189.9" y="295.5" font-size="12.5" font-weight="400" fill="#6E6E73">weight 9% - significant</text></g>
+<g id="rowtip-5" class="tip"><rect x="191.4" y="282.4" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="200.4" y="303.9" font-size="12.5" font-weight="700" fill="#1D1D1F">KumoTabular</text><text x="200.4" y="319.9" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 1.68 (95% CI 1.23-2.29)</text><text x="200.4" y="335.9" font-size="12.5" font-weight="400" fill="#6E6E73">weight 3% - significant</text></g>
+<g id="rowtip-6" class="tip"><rect x="195.1" y="311.4" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="204.1" y="332.9" font-size="12.5" font-weight="700" fill="#1D1D1F">TimesFM 2.5</text><text x="204.1" y="348.9" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 1.72 (95% CI 1.54-2.19)</text><text x="204.1" y="364.9" font-size="12.5" font-weight="400" fill="#6E6E73">weight 8% - significant</text></g>
+<g id="rowtip-7" class="tip"><rect x="201.3" y="350.7" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="210.3" y="372.2" font-size="12.5" font-weight="700" fill="#1D1D1F">AutoARIMA</text><text x="210.3" y="388.2" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 1.79 (95% CI 1.47-2.80)</text><text x="210.3" y="404.2" font-size="12.5" font-weight="400" fill="#6E6E73">weight 3% - significant</text></g>
+<g id="rowtip-8" class="tip"><rect x="203" y="381.9" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="212" y="403.4" font-size="12.5" font-weight="700" fill="#1D1D1F">N-HiTS</text><text x="212" y="419.4" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 1.81 (95% CI 1.53-2.42)</text><text x="212" y="435.4" font-size="12.5" font-weight="400" fill="#6E6E73">weight 5% - significant</text></g>
+<g id="rowtip-9" class="tip"><rect x="208.9" y="419.2" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="217.9" y="440.7" font-size="12.5" font-weight="700" fill="#1D1D1F">TCI (2014)</text><text x="217.9" y="456.7" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 1.88 (95% CI 1.57-3.12)</text><text x="217.9" y="472.7" font-size="12.5" font-weight="400" fill="#6E6E73">weight 3% - significant</text></g>
+<g id="rowtip-10" class="tip"><rect x="209.8" y="447.5" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="218.8" y="469" font-size="12.5" font-weight="700" fill="#1D1D1F">AutoTheta</text><text x="218.8" y="485" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 1.89 (95% CI 1.65-2.35)</text><text x="218.8" y="501" font-size="12.5" font-weight="400" fill="#6E6E73">weight 8% - significant</text></g>
+<g id="rowtip-11" class="tip"><rect x="211.4" y="484.4" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="220.4" y="505.9" font-size="12.5" font-weight="700" fill="#1D1D1F">N-BEATS</text><text x="220.4" y="521.9" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 1.91 (95% CI 1.45-2.36)</text><text x="220.4" y="537.9" font-size="12.5" font-weight="400" fill="#6E6E73">weight 5% - significant</text></g>
+<g id="rowtip-12" class="tip"><rect x="215.4" y="518.9" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="224.4" y="540.4" font-size="12.5" font-weight="700" fill="#1D1D1F">AutoETS</text><text x="224.4" y="556.4" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 1.96 (95% CI 1.68-2.81)</text><text x="224.4" y="572.4" font-size="12.5" font-weight="400" fill="#6E6E73">weight 4% - significant</text></g>
+<g id="rowtip-13" class="tip"><rect x="224.7" y="555.6" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="233.7" y="577.1" font-size="12.5" font-weight="700" fill="#1D1D1F">LightGBM</text><text x="233.7" y="593.1" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 2.08 (95% CI 1.64-3.40)</text><text x="233.7" y="609.1" font-size="12.5" font-weight="400" fill="#6E6E73">weight 2% - significant</text></g>
+<g id="rowtip-14" class="tip"><rect x="224.7" y="589.3" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="233.7" y="610.8" font-size="12.5" font-weight="700" fill="#1D1D1F">Seasonal naive</text><text x="233.7" y="626.8" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 2.08 (95% CI 1.73-3.47)</text><text x="233.7" y="642.8" font-size="12.5" font-weight="400" fill="#6E6E73">weight 3% - significant</text></g>
+<g id="rowtip-15" class="tip"><rect x="227.6" y="623.2" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="236.6" y="644.7" font-size="12.5" font-weight="700" fill="#1D1D1F">ABCD, published 2014</text><text x="236.6" y="660.7" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 2.12 (95% CI 1.24-2.48)</text><text x="236.6" y="676.7" font-size="12.5" font-weight="400" fill="#6E6E73">weight 3% - significant</text></g>
+<g id="rowtip-16" class="tip"><rect x="232.7" y="657.7" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="241.7" y="679.2" font-size="12.5" font-weight="700" fill="#1D1D1F">Spectral mixture (2014)</text><text x="241.7" y="695.2" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 2.19 (95% CI 1.50-3.16)</text><text x="241.7" y="711.2" font-size="12.5" font-weight="400" fill="#6E6E73">weight 2% - significant</text></g>
+<g id="rowtip-17" class="tip"><rect x="243.7" y="690" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="252.7" y="711.5" font-size="12.5" font-weight="700" fill="#1D1D1F">Naive</text><text x="252.7" y="727.5" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 2.35 (95% CI 2.08-3.75)</text><text x="252.7" y="743.5" font-size="12.5" font-weight="400" fill="#6E6E73">weight 3% - significant</text></g>
+<g id="rowtip-18" class="tip"><rect x="252" y="727" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="261" y="748.5" font-size="12.5" font-weight="700" fill="#1D1D1F">CKS, published 2013</text><text x="261" y="764.5" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 2.48 (95% CI 1.12-2.82)</text><text x="261" y="780.5" font-size="12.5" font-weight="400" fill="#6E6E73">weight 1% - significant</text></g>
+<g id="rowtip-19" class="tip"><rect x="272" y="760.2" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="281" y="781.7" font-size="12.5" font-weight="700" fill="#1D1D1F">Eureqa (2014)</text><text x="281" y="797.7" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 2.82 (95% CI 1.82-4.06)</text><text x="281" y="813.7" font-size="12.5" font-weight="400" fill="#6E6E73">weight 2% - significant</text></g>
+<g id="rowtip-20" class="tip"><rect x="272.6" y="794.3" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="281.6" y="815.8" font-size="12.5" font-weight="700" fill="#1D1D1F">Changepoint (2014)</text><text x="281.6" y="831.8" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 2.83 (95% CI 1.89-4.24)</text><text x="281.6" y="847.8" font-size="12.5" font-weight="400" fill="#6E6E73">weight 2% - significant</text></g>
+<g id="rowtip-21" class="tip"><rect x="274.7" y="825.1" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="283.7" y="846.6" font-size="12.5" font-weight="700" fill="#1D1D1F">PySR</text><text x="283.7" y="862.6" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 2.87 (95% CI 1.94-3.29)</text><text x="283.7" y="878.6" font-size="12.5" font-weight="400" fill="#6E6E73">weight 4% - significant</text></g>
+<g id="rowtip-22" class="tip"><rect x="277.4" y="859.3" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="286.4" y="880.8" font-size="12.5" font-weight="700" fill="#1D1D1F">MKL (2014)</text><text x="286.4" y="896.8" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 2.92 (95% CI 1.85-3.16)</text><text x="286.4" y="912.8" font-size="12.5" font-weight="400" fill="#6E6E73">weight 4% - significant</text></g>
+<g id="rowtip-23" class="tip"><rect x="291.7" y="895.1" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="300.7" y="916.6" font-size="12.5" font-weight="700" fill="#1D1D1F">SE (2014)</text><text x="300.7" y="932.6" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 3.20 (95% CI 2.72-5.35)</text><text x="300.7" y="948.6" font-size="12.5" font-weight="400" fill="#6E6E73">weight 3% - significant</text></g>
+<g id="rowtip-24" class="tip"><rect x="291.7" y="931" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="300.7" y="952.5" font-size="12.5" font-weight="700" fill="#1D1D1F">Linear (2014)</text><text x="300.7" y="968.5" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 3.20 (95% CI 1.96-5.84)</text><text x="300.7" y="984.5" font-size="12.5" font-weight="400" fill="#6E6E73">weight 1% - significant</text></g>
+<g id="rowtip-25" class="tip"><rect x="310" y="963.5" width="242" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="319" y="985" font-size="12.5" font-weight="700" fill="#1D1D1F">gplearn</text><text x="319" y="1001" font-size="12.5" font-weight="400" fill="#6E6E73">Estimate 3.60 (95% CI 2.18-4.48)</text><text x="319" y="1017" font-size="12.5" font-weight="400" fill="#6E6E73">weight 2% - significant</text></g>
+<line x1="210.0" y1="1042.0" x2="528.0" y2="1042.0" stroke="#1D1D1F" stroke-width="1"/>
+<line x1="231.8" y1="1042.0" x2="231.8" y2="1047.0" stroke="#1D1D1F" stroke-width="1"/>
+<text x="231.8" y="1061.0" font-size="11" font-family="Roboto Mono, monospace" fill="#1D1D1F" text-anchor="middle">1</text>
+<line x1="294.8" y1="1042.0" x2="294.8" y2="1047.0" stroke="#1D1D1F" stroke-width="1"/>
+<text x="294.8" y="1061.0" font-size="11" font-family="Roboto Mono, monospace" fill="#1D1D1F" text-anchor="middle">1.5</text>
+<line x1="339.6" y1="1042.0" x2="339.6" y2="1047.0" stroke="#1D1D1F" stroke-width="1"/>
+<text x="339.6" y="1061.0" font-size="11" font-family="Roboto Mono, monospace" fill="#1D1D1F" text-anchor="middle">2</text>
+<line x1="402.7" y1="1042.0" x2="402.7" y2="1047.0" stroke="#1D1D1F" stroke-width="1"/>
+<text x="402.7" y="1061.0" font-size="11" font-family="Roboto Mono, monospace" fill="#1D1D1F" text-anchor="middle">3</text>
+<line x1="447.4" y1="1042.0" x2="447.4" y2="1047.0" stroke="#1D1D1F" stroke-width="1"/>
+<text x="447.4" y="1061.0" font-size="11" font-family="Roboto Mono, monospace" fill="#1D1D1F" text-anchor="middle">4</text>
+<line x1="510.5" y1="1042.0" x2="510.5" y2="1047.0" stroke="#1D1D1F" stroke-width="1"/>
+<text x="510.5" y="1061.0" font-size="11" font-family="Roboto Mono, monospace" fill="#1D1D1F" text-anchor="middle">6</text>
+<text x="369.0" y="1080.0" font-size="12" fill="#1D1D1F" text-anchor="middle">Median standardised RMSE, log scale (lower is better)</text>
+
+</svg>

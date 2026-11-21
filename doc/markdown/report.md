@@ -2,7 +2,7 @@
 title: "The Automatic Statistician, revisited"
 subtitle: "A technical report on the repository"
 author: "Warith Harchaoui"
-date: "9 November 2026"
+date: "21 November 2026"
 lang: en
 bibliography: ../references.bib
 link-citations: true
@@ -48,11 +48,16 @@ The main results:
   port matches AutoGP.jl to $10^{-12}$ or better. The comparison also turned
   up a surprise: the Hamiltonian moves of AutoGP.jl see only the gradient of
   the prior.
-- **The 2014 forecasts hold up in 2026.** On the thirteen series, 24 methods
-  are compared by mean standardised error. The published ABCD forecasts come
-  fifth by mean (2.05), behind three pre-trained foundation models and N-BEATS
-  [@ansari2025chronos2; @mistral2026timestral; @amazon2024chronosbolt;
-  @oreshkin2020nbeats]. They never fail badly: the worst series scores 4.00.
+- **The port, searched again, forecasts better than 2014.** On the thirteen
+  series, 26 methods are compared by median standardised error. The port,
+  searching five levels on each training part, comes second (1.51), behind
+  the foundation model Chronos-2 (1.47) [@ansari2025chronos2] and ahead of
+  every other foundation model. The published 2014 forecasts score 2.12. The
+  port beats them on 8 series of 13. Its worst series scores 3.30, against
+  4.00 in 2014. Averaging every structure searched, weighted by BIC, changes
+  little: same median.
+- **The 2014 forecasts still hold up.** The published ABCD forecasts never
+  fail badly: the worst series scores 4.00.
   Eureqa [@schmidt2009distilling], the symbolic-regression baseline of 2014,
   has a comparable median (2.82). Its mean climbs to 48.11 because of one
   series, where its formula extrapolates 590 times worse than the best
@@ -65,6 +70,11 @@ The main results:
   PySR and their successors read more easily. The structure search models
   noise and uncertainty. It also extrapolates somewhat better than PySR here.
   On smooth components, their formulas and ours complement each other.
+- **Three helpers find what the 2014 search misses.** Starting periods at
+  the peaks of the periodogram finds a true period on 9 synthetic series of
+  10, against 4. A changepoint detector's dates let the search keep a level
+  jump on 5 series of 5, against none. A language model's proposals find
+  that jump too, but guess dates badly when the context gives none.
 
 # The system
 
@@ -184,6 +194,9 @@ methods of 2026 on the same split:
 - LightGBM [@ke2017lightgbm] and deep networks [@oreshkin2020nbeats;
   @challu2023nhits], tuned by rolling-origin cross-validation on the
   training part only
+- the port itself, searching five levels on the training part of each
+  series, then forecasting with the best model or with the mixture of
+  every structure it scored, weighted by BIC
 - pre-trained foundation models, used zero-shot [@ansari2024chronos;
   @ansari2025chronos2; @das2024timesfm; @google2025timesfm25;
   @mistral2026timestral; @qu2026kumotabular].
@@ -196,6 +209,8 @@ the best one.
 | method | family | median | mean | series won |
 |---|---|---|---|---|
 | Chronos-2 | foundation | 1.47 | 1.65 | 1 |
+| **ABCD port, best model** | structure search (2026) | **1.51** | **1.86** | 0 |
+| **ABCD port, BIC mixture** | structure search (2026) | **1.51** | **1.85** | 0 |
 | Chronos-Bolt (base) | foundation | 1.53 | 1.70 | 1 |
 | Timestral 209M | foundation | 1.57 | 1.65 | 1 |
 | KumoTabular on lags | foundation | 1.68 | 2.50 | 2 |
@@ -213,16 +228,45 @@ the best one.
 | **PySR** [@cranmer2023pysr] | symbolic regression | **2.87** | **2.76** | 0 |
 | gplearn [@stephens2015gplearn] | symbolic regression | 3.60 | 8.84 | 0 |
 
-The table is abridged from `benchmark/RESULTS.md`, which lists all 24
-methods. Two readings matter.
+The table is abridged from `benchmark/RESULTS.md`, which lists all 26
+methods.
 
-First, foundation models, trained on large corpora, now extrapolate these
-series best. Chronos-2 has a median standardised error of 1.47 and ABCD
-2.12.
+![Every method's median standardised error, with its 95 % interval from a bootstrap over the thirteen series. Blue: the port; orange: the published 2013 and 2014 models. Larger boxes have narrower intervals.](../figures/bench_ranking.svg)
 
-Second, among the methods that fit one model to the series at hand, the
-structure search is the most reliable. Its mean (2.05) sits below its median
-(2.12), so no series goes badly. Eureqa's mean comes from a single series, monthly average
+Four readings matter.
+
+First, the port searched again beats its own past. The published ABCD
+forecasts score 2.12, the port 1.51. The grammar, the starts and the score
+are the same. The port searched five levels where 2014 searched ten.
+The main difference left is the optimiser: L-BFGS in `torch`, where GPML
+used conjugate gradients. This benchmark does not isolate its effect.
+
+![Standardised error of the published 2014 models and of the port, series by series. Green: the port does better; red: worse; grey: a tie.](../figures/bench_slope.svg)
+
+Second, the gain is not uniform. The port does much better on unemployment
+(1.40 against 3.45), airline (1.22 against 2.48) and wages (3.30 against
+4.00). It does worse on call centre (3.27 against 1.20) and births (1.51
+against 1.00). On call centre the evidence for the 2014 structure was
+already weak, a BIC gap of 1.9 to its best rival (see "The stopping
+criterion"). The port's shorter search kept another structure.
+
+Third, thirteen series cannot separate the leaders. The bootstrap intervals
+of Chronos-2, the port, the other foundation models and the classical
+methods overlap: 17 methods of 26 cannot be told apart from the leader. The
+foundation models may also have seen these public series, held-out tails
+included, during pretraining. Their rows are an upper bound.
+
+Fourth, averaging over structures changes little here. The BIC mixture has
+the same median as the best model. It lowers the error by more than 1 % on
+4 series (wheat by 13 %, radio by 9 %) and raises it on 2 (airline by 19 %,
+sulphuric by 5 %). On most series one structure takes almost all the
+weight, so the mixture is the best model. The 90 % intervals of both cover
+72 to 73 % of the held-out tails, Chronos-2's 80 %: the port's bands are too
+narrow.
+
+Among the methods that fit one model to the series at hand, the
+structure search is also the most reliable. The published 2014 mean (2.05)
+sits below its median (2.12), so no series goes badly. Eureqa's mean comes from a single series, monthly average
 daily calls, where its formula scores 590.55 against 1.20 for ABCD. Without
 that series, Eureqa's mean falls to 2.90.
 
@@ -520,19 +564,71 @@ lowest and carries the structure's posterior weight as a label. A sentence then 
 with the posterior on which structure comes first. With a single structure,
 the summary says there is no BIC to compare.
 
+# Helping the search find what it misses
+
+The 2014 search finds what its starts and its grammar let it reach. Three
+measurements in `doc/research/` test helpers that propose starting points.
+BIC still decides what is kept. An empty proposal changes nothing.
+
+## Periodogram starts
+
+`autostat.synthetic` draws series from the grammar itself, so the true
+structure is known. On forty such series the 2014 starts found 7 cycles of
+10 and the right period, within 5 %, on 4. The cause is the starts: they
+draw a period around one year, a week or a day. On monthly data only
+the year is in range. Starting half the periods at the highest peaks of the
+Lomb-Scargle periodogram (`--spectral N`) finds every cycle, the right
+period on 9 of 10. It invents none.
+
+![Cycles found and periods recovered on forty series drawn from the grammar, with the 2014 starts and with periodogram starts.](../figures/recovery_slope.svg)
+
+## A changepoint detector
+
+On a synthetic series with a level jump, the grammar alone never kept the
+jump in three levels: it smoothed it with an `SE` term. A detector (PELT
+with a line and the periodogram's cycle inside its cost) now proposes a
+`CP(Zero, C)` shift at each of its strongest dates (`--breaks N`). The
+search kept the jump on 5 series of 5, within 0.08 years of the truth.
+On three it ended on the true structure, 67 to 83 BIC below the grammar.
+On a series with a cycle and no jump the detector proposed nothing, so the
+search was unchanged. The cost: searches took 4.6 times as long.
+
+![Final BIC on five series with a level jump: the grammar alone, with periodogram starts, with the detector's dates.](../figures/breaks_slope.svg)
+
+Run on the thirteen series of 2014, the detector's strongest date falls
+within half a percent of the span from a published switch on solar,
+call centre and radio. On solar it finds both ends of the Maunder minimum
+window, which the 2014 search found by itself.
+
+## A language model's proposals
+
+`--propose gemma3:12b` asks a local language model for structures at every
+level, from the span, the business context and the best structure so far.
+They are fitted beside the grammar's and scored by the same BIC. On the
+jump family the proposals found the jump on 8 runs of 9 and lowered BIC by
+up to 77. On a quarterly cycle the effect was mixed. Told a date, the model
+writes it as `CP(a, b, 2014.5)`. Not told one, it guesses. Its guesses
+kept a window instead of the jump on two series of three. The detector does
+the same job from the data alone.
+
 # Limits
 
 - **Cost.** Exact GP inference grows with the cube of the number of points,
   so the series are binned to 1,000 points. The full airline search took 4.1
-  hours on six processes. Scalable bounds [@kim2018scaling] and Bayesian
-  optimisation over the grammar [@malkomes2016bayesian;
-  @bitzer2022structural] search with fewer evaluations. Neither is ported.
+  hours on six processes. The five-level searches of the benchmark took 30.5
+  hours of computation for the thirteen series. Scalable bounds
+  [@kim2018scaling] and Bayesian optimisation over the grammar
+  [@malkomes2016bayesian; @bitzer2022structural] search with fewer
+  evaluations. Neither is ported.
+- **Intervals.** The port's 90 % forecast intervals cover 72 % of the
+  held-out tails. The mixture over structures does not widen them enough.
 - **One input.** The search handles one time input. Multivariate grammars
   [@duvenaud2011additive] and structure shared across series
   [@hwang2016relational] are not ported.
 - **Formulas.** Without PySR, or when no short formula comes within 1 %,
   smooth components keep their covariance as their formula.
-- **Benchmark.** TabPFN-TS [@hoo2025tabpfnts] did not run because of its
+- **Benchmark.** Thirteen series cannot rank the leading methods: 17 of
+  26 are tied with the first. TabPFN-TS [@hoo2025tabpfnts] did not run because of its
   licence. AutoGP.jl, GPy-ABCD [@fletcher2021gpyabcd], AutoBNN
   [@koster2024autobnn] and Moirai [@woo2024moirai] did not install on the
   benchmark machine.

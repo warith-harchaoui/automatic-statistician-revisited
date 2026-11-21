@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640" font-family="Roboto, system-ui, sans-serif" role="img" aria-labelledby="slope-title slope-desc" data-ai-assisted="true"><metadata id="sprezzature-ai-disclosure"><x:xmpmeta xmlns:x="adobe:ns:meta/"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="" xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" Iptc4xmpExt:DigitalSourceType="http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia" xmp:CreatorTool="sprezzature by Deraison"><dc:description><rdf:Alt><rdf:li xml:lang="fr">généré avec l'aide de l'IA de sprezzature par deraison.ai</rdf:li><rdf:li xml:lang="en">generated with the help of sprezzature AI by deraison.ai</rdf:li><rdf:li xml:lang="x-default">généré avec l'aide de l'IA de sprezzature par deraison.ai / generated with the help of sprezzature AI by deraison.ai</rdf:li></rdf:Alt></dc:description></rdf:Description></rdf:RDF></x:xmpmeta></metadata>
+<title id="slope-title">The port beats the 2014 models on 8 series of 13</title>
+<desc id="slope-desc">Slope chart of 13 items across 2 periods. Hover or focus a line for its exact change.</desc>
+<style>.slope-line{transition:opacity .15s ease;}.slope-line:hover,.slope-line:focus{opacity:.55;outline:none;}.tip{opacity:0;pointer-events:none;transition:opacity .12s ease}#hit-0:hover~#tip-0,#hit-0:focus~#tip-0{opacity:1}#hit-1:hover~#tip-1,#hit-1:focus~#tip-1{opacity:1}#hit-2:hover~#tip-2,#hit-2:focus~#tip-2{opacity:1}#hit-3:hover~#tip-3,#hit-3:focus~#tip-3{opacity:1}#hit-4:hover~#tip-4,#hit-4:focus~#tip-4{opacity:1}#hit-5:hover~#tip-5,#hit-5:focus~#tip-5{opacity:1}#hit-6:hover~#tip-6,#hit-6:focus~#tip-6{opacity:1}#hit-7:hover~#tip-7,#hit-7:focus~#tip-7{opacity:1}#hit-8:hover~#tip-8,#hit-8:focus~#tip-8{opacity:1}#hit-9:hover~#tip-9,#hit-9:focus~#tip-9{opacity:1}#hit-10:hover~#tip-10,#hit-10:focus~#tip-10{opacity:1}#hit-11:hover~#tip-11,#hit-11:focus~#tip-11{opacity:1}#hit-12:hover~#tip-12,#hit-12:focus~#tip-12{opacity:1}@media (prefers-reduced-motion: reduce){.slope-line{transition:none;}.tip{transition:none}}</style>
+<rect width="640" height="640" fill="#FFFFFF"/>
+<text x="30" y="46" font-size="21" font-weight="700" fill="#1D1D1F" letter-spacing="-0.3">The port beats the 2014 models on 8 series of 13</text>
+<text x="30" y="70" font-size="13" fill="#6E6E73">Standardised RMSE per series, lower is better. Green: the port does better; red: worse (4); grey: a tie</text>
+<line x1="136.2" y1="118.0" x2="136.2" y2="580.0" stroke="#E5E5EA" stroke-width="1"/>
+<text x="136.2" y="102.0" font-size="13" font-weight="700" fill="#1D1D1F" text-anchor="middle">Published 2014</text>
+<line x1="503.8" y1="118.0" x2="503.8" y2="580.0" stroke="#E5E5EA" stroke-width="1"/>
+<text x="503.8" y="102.0" font-size="13" font-weight="700" fill="#1D1D1F" text-anchor="middle">Port, 2026</text>
+<g id="hit-4" class="slope-line hit" tabindex="0" role="img" aria-label="Temperature: 1.0 to 1.0 (+0.0)">
+<path d="M 136.2,535.3 L 503.8,535.3" fill="none" stroke="#B6B6B9" stroke-width="1.6" stroke-linecap="round"/>
+<circle cx="136.2" cy="535.3" r="3.5" fill="#B6B6B9" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="503.8" cy="535.3" r="3.5" fill="#B6B6B9" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<path d="M 509.8,535.3 L 513.8,545.2" fill="none" stroke="#B6B6B9" stroke-width="1"/>
+<g id="hit-0" class="slope-line hit" tabindex="0" role="img" aria-label="Airline: 2.5 to 1.2 (-1.3)">
+<path d="M 136.2,351.5 L 503.8,508.0" fill="none" stroke="#34C759" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="136.2" cy="351.5" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="503.8" cy="508.0" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<path d="M 130.2,351.5 L 126.2,348.9" fill="none" stroke="#34C759" stroke-width="1"/>
+<path d="M 509.8,508.0 L 513.8,515.2" fill="none" stroke="#34C759" stroke-width="1"/>
+<g id="hit-1" class="slope-line hit" tabindex="0" role="img" aria-label="Solar: 2.3 to 2.1 (-0.2)">
+<path d="M 136.2,372.6 L 503.8,392.5" fill="none" stroke="#34C759" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="136.2" cy="372.6" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="503.8" cy="392.5" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<path d="M 130.2,372.6 L 126.2,378.9" fill="none" stroke="#34C759" stroke-width="1"/>
+<g id="hit-2" class="slope-line hit" tabindex="0" role="img" aria-label="Mauna Loa: 2.4 to 1.9 (-0.4)">
+<path d="M 136.2,367.6 L 503.8,421.0" fill="none" stroke="#34C759" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="136.2" cy="367.6" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="503.8" cy="421.0" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<path d="M 130.2,367.6 L 126.2,363.9" fill="none" stroke="#34C759" stroke-width="1"/>
+<g id="hit-3" class="slope-line hit" tabindex="0" role="img" aria-label="Wheat: 1.2 to 1.3 (+0.1)">
+<path d="M 136.2,505.5 L 503.8,498.0" fill="none" stroke="#FF383C" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="136.2" cy="505.5" r="4.5" fill="#FF383C" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="503.8" cy="498.0" r="4.5" fill="#FF383C" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<path d="M 509.8,498.0 L 513.8,500.2" fill="none" stroke="#FF383C" stroke-width="1"/>
+<g id="hit-5" class="slope-line hit" tabindex="0" role="img" aria-label="Internet: 1.3 to 1.1 (-0.2)">
+<path d="M 136.2,496.8 L 503.8,517.9" fill="none" stroke="#34C759" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="136.2" cy="496.8" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="503.8" cy="517.9" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<path d="M 130.2,496.8 L 126.2,490.4" fill="none" stroke="#34C759" stroke-width="1"/>
+<path d="M 509.8,517.9 L 513.8,530.2" fill="none" stroke="#34C759" stroke-width="1"/>
+<g id="hit-6" class="slope-line hit" tabindex="0" role="img" aria-label="Call centre: 1.2 to 3.3 (+2.1)">
+<path d="M 136.2,510.5 L 503.8,253.4" fill="none" stroke="#FF383C" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="136.2" cy="510.5" r="4.5" fill="#FF383C" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="503.8" cy="253.4" r="4.5" fill="#FF383C" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<path d="M 130.2,510.5 L 126.2,520.4" fill="none" stroke="#FF383C" stroke-width="1"/>
+<path d="M 509.8,253.4 L 513.8,259.0" fill="none" stroke="#FF383C" stroke-width="1"/>
+<g id="hit-7" class="slope-line hit" tabindex="0" role="img" aria-label="Radio: 2.8 to 2.5 (-0.4)">
+<path d="M 136.2,308.0 L 503.8,351.5" fill="none" stroke="#34C759" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="136.2" cy="308.0" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="503.8" cy="351.5" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<g id="hit-8" class="slope-line hit" tabindex="0" role="img" aria-label="Gas: 2.1 to 2.0 (-0.1)">
+<path d="M 136.2,396.2 L 503.8,406.1" fill="none" stroke="#34C759" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="136.2" cy="396.2" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="503.8" cy="406.1" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<g id="hit-9" class="slope-line hit" tabindex="0" role="img" aria-label="Sulphuric: 1.3 to 1.4 (+0.1)">
+<path d="M 136.2,494.3 L 503.8,484.4" fill="none" stroke="#FF383C" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="136.2" cy="494.3" r="4.5" fill="#FF383C" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="503.8" cy="484.4" r="4.5" fill="#FF383C" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<path d="M 130.2,494.3 L 126.2,475.4" fill="none" stroke="#FF383C" stroke-width="1"/>
+<path d="M 509.8,484.4 L 513.8,470.2" fill="none" stroke="#FF383C" stroke-width="1"/>
+<g id="hit-10" class="slope-line hit" tabindex="0" role="img" aria-label="Unemployment: 3.5 to 1.4 (-2.1)">
+<path d="M 136.2,231.0 L 503.8,485.6" fill="none" stroke="#34C759" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="136.2" cy="231.0" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="503.8" cy="485.6" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<g id="hit-11" class="slope-line hit" tabindex="0" role="img" aria-label="Births: 1.0 to 1.5 (+0.5)">
+<path d="M 136.2,535.3 L 503.8,472.0" fill="none" stroke="#FF383C" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="136.2" cy="535.3" r="4.5" fill="#FF383C" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="503.8" cy="472.0" r="4.5" fill="#FF383C" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<path d="M 130.2,535.3 L 126.2,550.4" fill="none" stroke="#FF383C" stroke-width="1"/>
+<path d="M 509.8,472.0 L 513.8,455.2" fill="none" stroke="#FF383C" stroke-width="1"/>
+<g id="hit-12" class="slope-line hit" tabindex="0" role="img" aria-label="Wages: 4.0 to 3.3 (-0.7)">
+<path d="M 136.2,162.7 L 503.8,249.6" fill="none" stroke="#34C759" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="136.2" cy="162.7" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="503.8" cy="249.6" r="4.5" fill="#34C759" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<path d="M 509.8,249.6 L 513.8,244.0" fill="none" stroke="#34C759" stroke-width="1"/>
+<g class="end-labels first" data-placed="data"><text x="124.2" y="539.4" font-size="12" fill="#6E6E73" text-anchor="end">Temperature (1.0)</text><text x="124.2" y="352.9" font-size="12" fill="#22813A" font-weight="700" text-anchor="end">Airline (2.5)</text><text x="124.2" y="382.9" font-size="12" fill="#22813A" font-weight="700" text-anchor="end">Solar (2.3)</text><text x="124.2" y="367.9" font-size="12" fill="#22813A" font-weight="700" text-anchor="end">Mauna Loa (2.4)</text><text x="124.2" y="509.4" font-size="12" fill="#D93033" font-weight="700" text-anchor="end">Wheat (1.2)</text><text x="124.2" y="494.4" font-size="12" fill="#22813A" font-weight="700" text-anchor="end">Internet (1.3)</text><text x="124.2" y="524.4" font-size="12" fill="#D93033" font-weight="700" text-anchor="end">Call centre (1.2)</text><text x="124.2" y="312.0" font-size="12" fill="#22813A" font-weight="700" text-anchor="end">Radio (2.8)</text><text x="124.2" y="400.2" font-size="12" fill="#22813A" font-weight="700" text-anchor="end">Gas (2.1)</text><text x="124.2" y="479.4" font-size="12" fill="#D93033" font-weight="700" text-anchor="end">Sulphuric (1.3)</text><text x="124.2" y="235.0" font-size="12" fill="#22813A" font-weight="700" text-anchor="end">Unemployment (3.5)</text><text x="124.2" y="554.4" font-size="12" fill="#D93033" font-weight="700" text-anchor="end">Births (1.0)</text><text x="124.2" y="166.7" font-size="12" fill="#22813A" font-weight="700" text-anchor="end">Wages (4.0)</text></g>
+<g class="end-labels last" data-placed="data"><text x="515.8" y="549.1" font-size="12" fill="#6E6E73" text-anchor="start">Temperature (1.0)</text><text x="515.8" y="519.1" font-size="12" fill="#22813A" font-weight="700" text-anchor="start">Airline (1.2)</text><text x="515.8" y="395.5" font-size="12" fill="#22813A" font-weight="700" text-anchor="start">Solar (2.1)</text><text x="515.8" y="425.5" font-size="12" fill="#22813A" font-weight="700" text-anchor="start">Mauna Loa (1.9)</text><text x="515.8" y="504.1" font-size="12" fill="#D93033" font-weight="700" text-anchor="start">Wheat (1.3)</text><text x="515.8" y="534.1" font-size="12" fill="#22813A" font-weight="700" text-anchor="start">Internet (1.1)</text><text x="515.8" y="263.0" font-size="12" fill="#D93033" font-weight="700" text-anchor="start">Call centre (3.3)</text><text x="515.8" y="355.4" font-size="12" fill="#22813A" font-weight="700" text-anchor="start">Radio (2.5)</text><text x="515.8" y="410.5" font-size="12" fill="#22813A" font-weight="700" text-anchor="start">Gas (2.0)</text><text x="515.8" y="474.1" font-size="12" fill="#D93033" font-weight="700" text-anchor="start">Sulphuric (1.4)</text><text x="515.8" y="489.1" font-size="12" fill="#22813A" font-weight="700" text-anchor="start">Unemployment (1.4)</text><text x="515.8" y="459.1" font-size="12" fill="#D93033" font-weight="700" text-anchor="start">Births (1.5)</text><text x="515.8" y="248.0" font-size="12" fill="#22813A" font-weight="700" text-anchor="start">Wages (3.3)</text></g>
+<g id="tip-4" class="tip"><rect x="272.5" y="519.3" width="95" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="281.5" y="540.8" font-size="12.5" font-weight="700" fill="#1D1D1F">Temperature</text><text x="281.5" y="556.8" font-size="12.5" font-weight="400" fill="#6E6E73">1.0 to 1.0</text><text x="281.5" y="572.8" font-size="12.5" font-weight="400" fill="#6E6E73">+0.0 change</text></g>
+<g id="tip-0" class="tip"><rect x="272.5" y="413.7" width="95" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="281.5" y="435.2" font-size="12.5" font-weight="700" fill="#1D1D1F">Airline</text><text x="281.5" y="451.2" font-size="12.5" font-weight="400" fill="#6E6E73">2.5 to 1.2</text><text x="281.5" y="467.2" font-size="12.5" font-weight="400" fill="#6E6E73">-1.3 change</text></g>
+<g id="tip-1" class="tip"><rect x="272.5" y="366.5" width="95" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="281.5" y="388" font-size="12.5" font-weight="700" fill="#1D1D1F">Solar</text><text x="281.5" y="404" font-size="12.5" font-weight="400" fill="#6E6E73">2.3 to 2.1</text><text x="281.5" y="420" font-size="12.5" font-weight="400" fill="#6E6E73">-0.2 change</text></g>
+<g id="tip-2" class="tip"><rect x="272.5" y="378.3" width="95" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="281.5" y="399.8" font-size="12.5" font-weight="700" fill="#1D1D1F">Mauna Loa</text><text x="281.5" y="415.8" font-size="12.5" font-weight="400" fill="#6E6E73">2.4 to 1.9</text><text x="281.5" y="431.8" font-size="12.5" font-weight="400" fill="#6E6E73">-0.4 change</text></g>
+<g id="tip-3" class="tip"><rect x="272.5" y="485.8" width="95" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="281.5" y="507.3" font-size="12.5" font-weight="700" fill="#1D1D1F">Wheat</text><text x="281.5" y="523.3" font-size="12.5" font-weight="400" fill="#6E6E73">1.2 to 1.3</text><text x="281.5" y="539.3" font-size="12.5" font-weight="400" fill="#6E6E73">+0.1 change</text></g>
+<g id="tip-5" class="tip"><rect x="272.5" y="491.3" width="95" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="281.5" y="512.8" font-size="12.5" font-weight="700" fill="#1D1D1F">Internet</text><text x="281.5" y="528.8" font-size="12.5" font-weight="400" fill="#6E6E73">1.3 to 1.1</text><text x="281.5" y="544.8" font-size="12.5" font-weight="400" fill="#6E6E73">-0.2 change</text></g>
+<g id="tip-6" class="tip"><rect x="272.5" y="365.9" width="95" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="281.5" y="387.4" font-size="12.5" font-weight="700" fill="#1D1D1F">Call centre</text><text x="281.5" y="403.4" font-size="12.5" font-weight="400" fill="#6E6E73">1.2 to 3.3</text><text x="281.5" y="419.4" font-size="12.5" font-weight="400" fill="#6E6E73">+2.1 change</text></g>
+<g id="tip-7" class="tip"><rect x="272.5" y="313.8" width="95" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="281.5" y="335.2" font-size="12.5" font-weight="700" fill="#1D1D1F">Radio</text><text x="281.5" y="351.2" font-size="12.5" font-weight="400" fill="#6E6E73">2.8 to 2.5</text><text x="281.5" y="367.2" font-size="12.5" font-weight="400" fill="#6E6E73">-0.4 change</text></g>
+<g id="tip-8" class="tip"><rect x="272.5" y="385.2" width="95" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="281.5" y="406.7" font-size="12.5" font-weight="700" fill="#1D1D1F">Gas</text><text x="281.5" y="422.7" font-size="12.5" font-weight="400" fill="#6E6E73">2.1 to 2.0</text><text x="281.5" y="438.7" font-size="12.5" font-weight="400" fill="#6E6E73">-0.1 change</text></g>
+<g id="tip-9" class="tip"><rect x="272.5" y="473.3" width="95" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="281.5" y="494.8" font-size="12.5" font-weight="700" fill="#1D1D1F">Sulphuric</text><text x="281.5" y="510.8" font-size="12.5" font-weight="400" fill="#6E6E73">1.3 to 1.4</text><text x="281.5" y="526.8" font-size="12.5" font-weight="400" fill="#6E6E73">+0.1 change</text></g>
+<g id="tip-10" class="tip"><rect x="269" y="342.3" width="102" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="278" y="363.8" font-size="12.5" font-weight="700" fill="#1D1D1F">Unemployment</text><text x="278" y="379.8" font-size="12.5" font-weight="400" fill="#6E6E73">3.5 to 1.4</text><text x="278" y="395.8" font-size="12.5" font-weight="400" fill="#6E6E73">-2.1 change</text></g>
+<g id="tip-11" class="tip"><rect x="272.5" y="487.6" width="95" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="281.5" y="509.1" font-size="12.5" font-weight="700" fill="#1D1D1F">Births</text><text x="281.5" y="525.1" font-size="12.5" font-weight="400" fill="#6E6E73">1.0 to 1.5</text><text x="281.5" y="541.1" font-size="12.5" font-weight="400" fill="#6E6E73">+0.5 change</text></g>
+<g id="tip-12" class="tip"><rect x="272.5" y="190.2" width="95" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="281.5" y="211.7" font-size="12.5" font-weight="700" fill="#1D1D1F">Wages</text><text x="281.5" y="227.7" font-size="12.5" font-weight="400" fill="#6E6E73">4.0 to 3.3</text><text x="281.5" y="243.7" font-size="12.5" font-weight="400" fill="#6E6E73">-0.7 change</text></g>
+
+</svg>

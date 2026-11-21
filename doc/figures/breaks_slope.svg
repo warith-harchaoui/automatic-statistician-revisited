@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="500" viewBox="0 0 760 500" font-family="Roboto, system-ui, sans-serif" role="img" aria-labelledby="slope-title slope-desc" data-ai-assisted="true"><metadata id="sprezzature-ai-disclosure"><x:xmpmeta xmlns:x="adobe:ns:meta/"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="" xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" Iptc4xmpExt:DigitalSourceType="http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia" xmp:CreatorTool="sprezzature by Deraison"><dc:description><rdf:Alt><rdf:li xml:lang="fr">généré avec l'aide de l'IA de sprezzature par deraison.ai</rdf:li><rdf:li xml:lang="en">generated with the help of sprezzature AI by deraison.ai</rdf:li><rdf:li xml:lang="x-default">généré avec l'aide de l'IA de sprezzature par deraison.ai / generated with the help of sprezzature AI by deraison.ai</rdf:li></rdf:Alt></dc:description></rdf:Description></rdf:RDF></x:xmpmeta></metadata>
+<title id="slope-title">A detector's dates let the search keep the jump</title>
+<desc id="slope-desc">Slope chart of 5 items across 3 periods. Hover or focus a line for its exact change.</desc>
+<style>.slope-line{transition:opacity .15s ease;}.slope-line:hover,.slope-line:focus{opacity:.55;outline:none;}.tip{opacity:0;pointer-events:none;transition:opacity .12s ease}#hit-0:hover~#tip-0,#hit-0:focus~#tip-0{opacity:1}#hit-1:hover~#tip-1,#hit-1:focus~#tip-1{opacity:1}#hit-2:hover~#tip-2,#hit-2:focus~#tip-2{opacity:1}#hit-3:hover~#tip-3,#hit-3:focus~#tip-3{opacity:1}#hit-4:hover~#tip-4,#hit-4:focus~#tip-4{opacity:1}@media (prefers-reduced-motion: reduce){.slope-line{transition:none;}.tip{transition:none}}</style>
+<rect width="760" height="500" fill="#FFFFFF"/>
+<text x="30" y="46" font-size="21" font-weight="700" fill="#1D1D1F" letter-spacing="-0.3">A detector's dates let the search keep the jump</text>
+<text x="30" y="70" font-size="13" fill="#6E6E73">Final BIC of five series with a level jump, by what starts the search; lower is better</text>
+<line x1="97.0" y1="118.0" x2="97.0" y2="440.0" stroke="#E5E5EA" stroke-width="1"/>
+<text x="97.0" y="102.0" font-size="13" font-weight="700" fill="#1D1D1F" text-anchor="middle">Grammar alone</text>
+<line x1="380.0" y1="118.0" x2="380.0" y2="440.0" stroke="#E5E5EA" stroke-width="1"/>
+<text x="380.0" y="102.0" font-size="13" font-weight="700" fill="#1D1D1F" text-anchor="middle">Periodogram starts</text>
+<line x1="663.0" y1="118.0" x2="663.0" y2="440.0" stroke="#E5E5EA" stroke-width="1"/>
+<text x="663.0" y="102.0" font-size="13" font-weight="700" fill="#1D1D1F" text-anchor="middle">Detector dates</text>
+<g id="hit-0" class="slope-line hit" tabindex="0" role="img" aria-label="Seed 0: 494 to 483 (-11)">
+<path d="M 97.0,160.3 L 380.0,197.7 L 663.0,189.8" fill="none" stroke="#0088FF" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="97.0" cy="160.3" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="380.0" cy="197.7" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="663.0" cy="189.8" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<g id="hit-1" class="slope-line hit" tabindex="0" role="img" aria-label="Seed 1: 475 to 472 (-3)">
+<path d="M 97.0,212.7 L 380.0,215.9 L 663.0,221.1" fill="none" stroke="#0088FF" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="97.0" cy="212.7" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="380.0" cy="215.9" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="663.0" cy="221.1" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<g id="hit-2" class="slope-line hit" tabindex="0" role="img" aria-label="Seed 2: 489 to 407 (-83)">
+<path d="M 97.0,173.1 L 380.0,173.1 L 663.0,398.2" fill="none" stroke="#0088FF" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="97.0" cy="173.1" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="380.0" cy="173.1" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="663.0" cy="398.2" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<path d="M 669.0,398.2 L 673.0,396.0" fill="none" stroke="#0088FF" stroke-width="1"/>
+<g id="hit-3" class="slope-line hit" tabindex="0" role="img" aria-label="Seed 3: 498 to 431 (-67)">
+<path d="M 97.0,149.2 L 380.0,267.1 L 663.0,332.0" fill="none" stroke="#0088FF" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="97.0" cy="149.2" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="380.0" cy="267.1" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="663.0" cy="332.0" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<path d="M 91.0,149.2 L 87.0,144.0" fill="none" stroke="#0088FF" stroke-width="1"/>
+<g id="hit-4" class="slope-line hit" tabindex="0" role="img" aria-label="Seed 4: 486 to 403 (-83)">
+<path d="M 97.0,183.2 L 380.0,183.2 L 663.0,408.8" fill="none" stroke="#0088FF" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="97.0" cy="183.2" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="380.0" cy="183.2" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="663.0" cy="408.8" r="4.5" fill="#0088FF" stroke="#FFFFFF" stroke-width="1.5"/>
+</g>
+<path d="M 91.0,183.2 L 87.0,189.0" fill="none" stroke="#0088FF" stroke-width="1"/>
+<path d="M 669.0,408.8 L 673.0,411.0" fill="none" stroke="#0088FF" stroke-width="1"/>
+<g class="end-labels first" data-placed="data"><text x="85.0" y="162.9" font-size="12" fill="#0074D9" font-weight="700" text-anchor="end">Seed 0 (494)</text><text x="85.0" y="216.6" font-size="12" fill="#0074D9" font-weight="700" text-anchor="end">Seed 1 (475)</text><text x="85.0" y="177.9" font-size="12" fill="#0074D9" font-weight="700" text-anchor="end">Seed 2 (489)</text><text x="85.0" y="147.9" font-size="12" fill="#0074D9" font-weight="700" text-anchor="end">Seed 3 (498)</text><text x="85.0" y="192.9" font-size="12" fill="#0074D9" font-weight="700" text-anchor="end">Seed 4 (486)</text></g>
+<g class="end-labels last" data-placed="data"><text x="675.0" y="193.7" font-size="12" fill="#0074D9" font-weight="700" text-anchor="start">Seed 0 (483)</text><text x="675.0" y="225.1" font-size="12" fill="#0074D9" font-weight="700" text-anchor="start">Seed 1 (472)</text><text x="675.0" y="400.0" font-size="12" fill="#0074D9" font-weight="700" text-anchor="start">Seed 2 (407)</text><text x="675.0" y="336.0" font-size="12" fill="#0074D9" font-weight="700" text-anchor="start">Seed 3 (431)</text><text x="675.0" y="415.0" font-size="12" fill="#0074D9" font-weight="700" text-anchor="start">Seed 4 (403)</text></g>
+<g id="tip-0" class="tip"><rect x="336" y="159" width="88" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="345" y="180.5" font-size="12.5" font-weight="700" fill="#1D1D1F">Seed 0</text><text x="345" y="196.5" font-size="12.5" font-weight="400" fill="#6E6E73">494 to 483</text><text x="345" y="212.5" font-size="12.5" font-weight="400" fill="#6E6E73">-11 change</text></g>
+<g id="tip-1" class="tip"><rect x="336" y="200.9" width="88" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="345" y="222.4" font-size="12.5" font-weight="700" fill="#1D1D1F">Seed 1</text><text x="345" y="238.4" font-size="12.5" font-weight="400" fill="#6E6E73">475 to 472</text><text x="345" y="254.4" font-size="12.5" font-weight="400" fill="#6E6E73">-3 change</text></g>
+<g id="tip-2" class="tip"><rect x="336" y="269.7" width="88" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="345" y="291.2" font-size="12.5" font-weight="700" fill="#1D1D1F">Seed 2</text><text x="345" y="307.2" font-size="12.5" font-weight="400" fill="#6E6E73">489 to 407</text><text x="345" y="323.2" font-size="12.5" font-weight="400" fill="#6E6E73">-83 change</text></g>
+<g id="tip-3" class="tip"><rect x="336" y="224.6" width="88" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="345" y="246.1" font-size="12.5" font-weight="700" fill="#1D1D1F">Seed 3</text><text x="345" y="262.1" font-size="12.5" font-weight="400" fill="#6E6E73">498 to 431</text><text x="345" y="278.1" font-size="12.5" font-weight="400" fill="#6E6E73">-67 change</text></g>
+<g id="tip-4" class="tip"><rect x="336" y="280" width="88" height="62.5" rx="9" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="1.2"/><text x="345" y="301.5" font-size="12.5" font-weight="700" fill="#1D1D1F">Seed 4</text><text x="345" y="317.5" font-size="12.5" font-weight="400" fill="#6E6E73">486 to 403</text><text x="345" y="333.5" font-size="12.5" font-weight="400" fill="#6E6E73">-83 change</text></g>
+
+</svg>
