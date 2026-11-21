@@ -2,6 +2,26 @@
 
 ## Unreleased
 
+- `doc/research/optimiser`: why the port beats the 2014 forecasts. Given
+  the 2014 winners (`benchmark/published/searches_2014`, from
+  `gpss-research`), the port reproduces their BIC and their forecasts to
+  0.0003; refitting them with L-BFGS changes nothing (the 2014 optimiser
+  had converged). The port's depth-5 winners have the lower BIC on 6
+  series of 13 only, yet forecast better on 8: the gain comes from the
+  structures kept, and BIC on the training part does not rank
+  extrapolations.
+- `doc/research/calibration`: the port's 90 % intervals miss because the
+  forecasts are off-centre (mean standardised error above 0.5 in size on 8
+  series, spread 0.91), not because the bands are narrow. Widening on the
+  training part lifts coverage to 87 % but helps on 5 series and hurts on
+  5; a mixture tempered at T = 10 reaches 84 % and improves the interval
+  score on 8 series, T unchosen. The defaults stay.
+- `benchmark/run_2026.py`: `abcd_2014_port_spectral` and
+  `abcd_2014_port_breaks` rows (the periodogram starts, the detector's
+  dates), `--series` to run a subset first, `--suite recent` for a second
+  benchmark: thirteen public monthly series (FRED, NOAA, SILSO, GISTEMP)
+  trained on 2006 to 2025 and forecast over 2026, after the foundation
+  models' release (`benchmark/recent/`).
 - The extrapolation benchmark scores the 2026 port of ABCD at depth 5
   (`abcd_2014_port`, `abcd_2014_port_mixture`): median standardised RMSE
   1.51 for both, second of 26 behind chronos2 (1.47), against 2.12 for

@@ -1,0 +1,77 @@
+[
+  {
+    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCNS",
+    "retrieved": "2026-11-21T22:44:01+00:00",
+    "sha256": "0e1fc35d62c4b76698418b4e6a8f259ca23407a52bf3f5971597afe0388cadfc"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=UNRATENSA",
+    "retrieved": "2026-11-21T22:44:04+00:00",
+    "sha256": "26da5f830d7998f7f19688aa4b7b32c3089678063d46af63706bb391cc0de6d3"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PAYNSA",
+    "retrieved": "2026-11-21T22:44:07+00:00",
+    "sha256": "9f959ae42e9320d3befa7b87ae1c9ac9bfeda7480f6a284a130e9ceb1af388e9"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=HOUSTNSA",
+    "retrieved": "2026-11-21T22:44:12+00:00",
+    "sha256": "1a3c194602f859216c104cb19032b5cbf2d906746841931042663a3c4b295db3"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=TOTALNSA",
+    "retrieved": "2026-11-21T22:44:15+00:00",
+    "sha256": "db248aecc514a32df0f70fc9ec4de54d1f0a9d90f34cb0f07b83d7479438c806"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IPG2211A2N",
+    "retrieved": "2026-11-21T22:44:18+00:00",
+    "sha256": "1daeafb1d41fa881ad36dca0350319d6bea5e84ee5789b6fb8e978a0c63e4ec5"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IPN31152N",
+    "retrieved": "2026-11-21T22:44:21+00:00",
+    "sha256": "393cb952f7f69f558a3c45705f6400cf879ca55bbda5934b5ea04c1f107612c5"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=RSAFSNA",
+    "retrieved": "2026-11-21T22:44:25+00:00",
+    "sha256": "55cbae8fec14a310209420035f5687ef47b4ee21c30cd5ad3b034e0eb8d255db"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IPG3361T3N",
+    "retrieved": "2026-11-21T22:44:29+00:00",
+    "sha256": "9f3d5f95ec1db37aba1fd2b933b98975aa9eb5ef000e2748cf7cc220aa4aa109"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=APU000074714",
+    "retrieved": "2026-11-21T22:44:32+00:00",
+    "sha256": "62cbc6749a42c979e9d70c7eac17848ebe282507521f8f5ec862bda3d397f377"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=MCOILWTICO",
+    "retrieved": "2026-11-21T22:44:36+00:00",
+    "sha256": "fee4f983b2e949061982535e4d7a399602ddfdcbd12cb272770364f82fb5f3ab"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=GS10",
+    "retrieved": "2026-11-21T22:44:39+00:00",
+    "sha256": "018e609eb98c52ec8d2cf0ea9f8e1450c24974c31cca455cc19717a77703af78"
+  },
+  {
+    "url": "https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.csv",
+    "retrieved": "2026-11-21T22:44:42+00:00",
+    "sha256": "163cadae3baa6dec7d3ae066108b50d1018a78447b1b6fc2b6e3936465549d16"
+  },
+  {
+    "url": "https://www.sidc.be/SILSO/INFO/snmtotcsv.php",
+    "retrieved": "2026-11-21T22:44:45+00:00",
+    "sha256": "1cf8a1f6f28ff9ee479783d72fa323eb70a824056450ccf60d0152fa28abd72f"
+  },
+  {
+    "url": "https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv",
+    "retrieved": "2026-11-21T22:44:49+00:00",
+    "sha256": "a7b1939db2e7e484c798e925e0f07f8184356c52ac0e7ce264adcd0f25e81253"
+  }
+]

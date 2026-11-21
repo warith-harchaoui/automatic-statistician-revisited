@@ -18,6 +18,7 @@ htmlcov/
 # Reports and searches written by the command line and the scripts.
 autostat_*/
 results/
+results-recent/
 .venv-bench/
 benchmark/logs/
 # Local notes and scratch work, never versioned.

@@ -77,6 +77,14 @@ LOGGER = logging.getLogger("benchmark")
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 RESULTS = HERE / "results"
+#: The benchmark read: ``series.parquet`` (the thirteen series of 2014) or
+#: ``recent.parquet`` (thirteen series with their tails in 2026, built by
+#: ``recent/make_data.py``, whose results go to ``results-recent/``).
+SUITES = {
+    "2014": ("series.parquet", "results"),
+    "recent": ("recent.parquet", "results-recent"),
+}
+SUITE = "2014"
 
 #: Seasonal period, in samples, of each series. Monthly series repeat every
 #: 12 samples; the temperature series is sampled every 3 days (122 per year)
@@ -140,16 +148,20 @@ Forecast = tuple
 
 
 def load_series() -> list[Series]:
-    """Read the thirteen train and test splits from ``data/series.parquet``.
+    """Read the train and test splits of the current :data:`SUITE`.
 
     Returns
     -------
     list of Series
         In name order.
     """
-    table = pd.read_parquet(DATA / "series.parquet")
+    table = pd.read_parquet(DATA / SUITES[SUITE][0])
+    if "season" in table:
+        seasons = table.groupby("dataset")["season"].first().to_dict()
+    else:
+        seasons = SEASONS
     out = []
-    for name, season in sorted(SEASONS.items()):
+    for name, season in sorted(seasons.items()):
         part = table[table["dataset"] == name]
         train = part[part["split"] == "train"].sort_values("step")
         test = part[part["split"] == "test"].sort_values("step")
@@ -716,7 +728,20 @@ def kumo_lags(s: Series) -> Forecast:
 # Structure search (this repository)
 
 
-def _search(preset: str, n_jobs: int, max_depth: int, s: Series) -> Any:
+#: Helpers a structure-search row may switch on, by name: the periodogram's
+#: three highest peaks as period starts, or a level shift at each of the
+#: three strongest dates a changepoint detector finds (the settings of
+#: ``doc/research/recovery`` and ``doc/research/changepoints``).
+HELPERS = {
+    "": {},
+    "spectral": {"spectral_starts": 3},
+    "breaks": {"break_starts": 3},
+}
+
+
+def _search(
+    preset: str, n_jobs: int, max_depth: int, s: Series, helper: str = ""
+) -> Any:
     """Search the training part once, keeping the result for every row that reads it.
 
     The best-model row and the mixture row of a preset read the same search,
@@ -734,6 +759,9 @@ def _search(preset: str, n_jobs: int, max_depth: int, s: Series) -> Any:
         Search levels.
     s : Series
         One benchmark series.
+    helper : str, optional
+        A key of :data:`HELPERS`; its searches are kept apart, in
+        ``<preset>-depth<max_depth>-<helper>``.
 
     Returns
     -------
@@ -742,10 +770,13 @@ def _search(preset: str, n_jobs: int, max_depth: int, s: Series) -> Any:
     """
     from autostat import Experiment, SearchResult, search
 
-    path = RESULTS / "searches" / f"{preset}-depth{max_depth}" / f"{s.name}.json"
+    folder = f"{preset}-depth{max_depth}" + (f"-{helper}" if helper else "")
+    path = RESULTS / "searches" / folder / f"{s.name}.json"
     if path.exists():
         return SearchResult.load(path)
-    exp = getattr(Experiment, preset)(max_depth=max_depth, n_jobs=n_jobs)
+    exp = getattr(Experiment, preset)(
+        max_depth=max_depth, n_jobs=n_jobs, **HELPERS[helper]
+    )
     result = search(s.x_train, s.y_train, exp)
     path.parent.mkdir(parents=True, exist_ok=True)
     result.save(path)
@@ -753,7 +784,7 @@ def _search(preset: str, n_jobs: int, max_depth: int, s: Series) -> Any:
 
 
 def _autostat(
-    preset: str, n_jobs: int, max_depth: int, mixture: bool = False
+    preset: str, n_jobs: int, max_depth: int, mixture: bool = False, helper: str = ""
 ) -> Callable[[Series], Forecast]:
     """Wrap this repository's structure search.
 
@@ -768,6 +799,8 @@ def _autostat(
     mixture : bool, optional
         Forecast with every scored structure weighted by ``exp(-BIC / 2)``
         (:func:`autostat.mixture_posterior`) instead of the best model only.
+    helper : str, optional
+        A key of :data:`HELPERS`, switched on in the search.
 
     Returns
     -------
@@ -790,7 +823,7 @@ def _autostat(
         """
         from autostat import mixture_posterior, posterior
 
-        result = _search(preset, n_jobs, max_depth, s)
+        result = _search(preset, n_jobs, max_depth, s, helper)
         if mixture:
             models = [m for level in result.levels for m in level]
             mean, var = mixture_posterior(
@@ -869,6 +902,10 @@ def registry(n_jobs: int, max_depth: int) -> dict[str, Method]:
     methods["cks_2013_port_mixture"] = Method(
         "structure search", _autostat("cks_2013", n_jobs, max_depth, mixture=True)
     )
+    for helper in ("spectral", "breaks"):
+        methods[f"abcd_2014_port_{helper}"] = Method(
+            "structure search", _autostat("abcd_2014", n_jobs, max_depth, helper=helper)
+        )
     methods["pysr"] = Method("symbolic regression", pysr)
     methods["gplearn"] = Method("symbolic regression", gplearn)
     methods["operon"] = Method("symbolic regression", operon)
@@ -958,9 +995,26 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--max-depth", type=int, default=10, help="structure-search levels"
     )
+    parser.add_argument(
+        "--suite",
+        choices=sorted(SUITES),
+        default="2014",
+        help="the 2014 series, or the recent ones whose tails lie in 2026",
+    )
+    parser.add_argument(
+        "--series",
+        nargs="*",
+        help="run only these series, in this order (a later full run reads "
+        "their kept searches back)",
+    )
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stderr)
+    global SUITE, RESULTS
+    SUITE, RESULTS = args.suite, HERE / SUITES[args.suite][1]
     series = load_series()
+    if args.series:
+        by_name = {s.name: s for s in series}
+        series = [by_name[name] for name in args.series]
     methods = registry(args.n_jobs, args.max_depth)
     for name in args.methods or list(methods):
         run_method(name, methods[name], series)
