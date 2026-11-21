@@ -8,7 +8,7 @@
   0.0003; refitting them with L-BFGS changes nothing (the 2014 optimiser
   had converged). The port's depth-5 winners have the lower BIC on 6
   series of 13 only, yet forecast better on 8: the gain comes from the
-  structures kept, and BIC on the training part does not rank
+  structures kept; BIC on the training part does not rank
   extrapolations.
 - `doc/research/calibration`: the port's 90 % intervals miss because the
   forecasts are off-centre (mean standardised error above 0.5 in size on 8
